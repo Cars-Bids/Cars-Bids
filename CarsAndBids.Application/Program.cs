@@ -9,6 +9,7 @@ using CarsAndBids.Core.Interfaces;
 using System;
 using CarsAndBids.Data.Persistence;
 using CarsAndBids.Data.Entities;
+using CarsAndBids.API.Middleware;
 
 
 
@@ -94,6 +95,8 @@ app.UseCors(cfg =>
     cfg.AllowAnyMethod();
     cfg.AllowAnyOrigin();
 });
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseAuthorization();
 

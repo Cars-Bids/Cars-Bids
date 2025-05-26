@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Controllers\" />
 		<Folder Include="DependencyInjection\" />
 		<Folder Include="wwwroot\Files\" />
 		<Folder Include="Filters\" />
