@@ -20,7 +20,7 @@ namespace CarsAndBids.API.Middleware
             catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
-                context.Response.ContentType = "application/json";
+                context.Response.ContentType = "API/json";
                 var error = new { Message = "An error occurred.", Detail = ex.Message };
                 await context.Response.WriteAsync(JsonSerializer.Serialize(error));
             }

@@ -13,31 +13,19 @@ namespace CarsAndBids.Data.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
-        //public ApplicationDbContext() { }
-        //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        //    : base(options)
-        //{
-        //}
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
         public DbSet<Auction> Auctions { get; set; }
         public DbSet<Bid> Bids { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.NavigationBaseIncludeIgnored));
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseNpgsql("Host=ep-round-poetry-a25e8nz8-pooler.eu-central-1.aws.neon.tech;Database=neondb;Username=neondb_owner;Password=npg_KxuaC0oX6tci");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Налаштування індексів для оптимізації пошуку
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -51,7 +39,6 @@ namespace CarsAndBids.Data.Persistence
             modelBuilder.Entity<Comment>()
                 .HasIndex(c => c.AuctionId);
 
-            // Налаштування зв’язків
             modelBuilder.Entity<Auction>()
                 .HasOne(a => a.Seller)
                 .WithMany(u => u.Auctions)
