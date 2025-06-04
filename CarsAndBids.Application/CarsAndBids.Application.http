@@ -1,0 +1,6 @@
+@CarsAndBids.API_HostAddress = http://localhost:5042
+
+GET {{CarsAndBids.API_HostAddress}}/weatherforecast/
+Accept: API/json
+
+###
