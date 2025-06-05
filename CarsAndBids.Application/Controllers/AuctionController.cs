@@ -1,25 +1,23 @@
-﻿using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Interfaces;
+﻿using CarsAndBids.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CarsAndBids.API.Controllers
+namespace CarsAndBids.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuctionsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuctionsController : ControllerBase
+    private readonly IAuctionService _auctionService;
+
+    public AuctionsController(IAuctionService auctionService)
     {
-        private readonly IAuctionService _auctionService;
+        _auctionService = auctionService;
+    }
 
-        public AuctionsController(IAuctionService auctionService)
-        {
-            _auctionService = auctionService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuctionDto>>> GetAll()
-        {
-            var auctions = await _auctionService.GetAllAsync();
-            return Ok(auctions);
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var auctions = await _auctionService.GetAllAsync();
+        return Ok(auctions);
     }
 }
