@@ -1,11 +1,14 @@
-﻿using CarsAndBids.Core.Interfaces;
+﻿using System.Text;
+using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Services;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
 using CarsAndBids.Data.Persistence;
 using CarsAndBids.Data.Persistence.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace CarsAndBids.API.DependencyInjection;
@@ -21,61 +24,72 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
+        services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
 
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        
+        var signingKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(
+                configuration["JwtSettings:SecretKey"]
+                ?? throw new NullReferenceException("JwtSettings:SecretKey")
+            )
+        );
 
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = signingKey,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+        
+        services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition(
+                "Bearer",
+                new OpenApiSecurityScheme
+                {
+                    Description = "Jwt Auth header using the Bearer scheme",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                }
+            );
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme {
+                        Reference = new OpenApiReference {
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    },
+                    new List<string>()
+                }
+            });
+        });
+        
         services.AddIdentity<User, IdentityRole<int>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-
-        // var jwtOpts = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>()!;
-        // services.AddSingleton(_ => jwtOpts!);
-        // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //     .AddJwtBearer(o =>
-        //     {
-        //         o.TokenValidationParameters = new TokenValidationParameters
-        //         {
-        //             ValidateIssuer = false,
-        //             ValidateAudience = false,
-        //             ValidateLifetime = true,
-        //             ValidateIssuerSigningKey = true,
-        //             ValidIssuer = jwtOpts.Issuer,
-        //             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOpts.Key)),
-        //             ClockSkew = TimeSpan.Zero
-        //         };
-        //     });
-
-        services.AddSwaggerGen(options =>
-        {
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-            {
-                Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = "Bearer"
-            });
-
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
-        });
-        });
-
+        
         services.AddSingleton<IWebHostEnvironment>(environment);
         // services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IFileService>(provider =>

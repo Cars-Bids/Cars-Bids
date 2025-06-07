@@ -19,8 +19,9 @@ namespace CarsAndBids.API.Middleware
             }
             catch (Exception ex)
             {
+                Console.WriteLine("error");
                 context.Response.StatusCode = 500;
-                context.Response.ContentType = "API/json";
+                context.Response.ContentType = "application/json";
                 var error = new { Message = "An error occurred.", Detail = ex.Message };
                 await context.Response.WriteAsync(JsonSerializer.Serialize(error));
             }

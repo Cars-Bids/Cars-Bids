@@ -1,0 +1,30 @@
+using CarsAndBids.Data.Enums;
+
+namespace CarsAndBids.Data.Entities;
+
+public class Car
+{
+    public int Id { get; set; }
+    public int Year { get; set; }
+    public string Vin { get; set; }
+    public string Description { get; set; }
+    public string ExteriorColor { get; set; }
+    public string InteriorColor { get; set; }
+    public int Mileage { get; set; }
+    public string Location { get; set; }
+    public DrivetrainType Drivetrain { get; set; }
+    public string Engine { get; set; }
+    public TransmissionType TransmissionType { get; set; }
+    public int Speeds { get; set; }
+    public bool IsApproved { get; set; } = false;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public int OwnerId { get; set; }
+    public int BodyStyleId { get; set; }
+    public int ModelId { get; set; }
+
+    public User Owner { get; set; }
+    public BodyStyle BodyStyle { get; set; }
+    public Model Model { get; set; }
+    public ICollection<Auction> Auctions { get; set; }
+    public ICollection<CarImage> Images { get; set; }
+}

@@ -1,9 +1,10 @@
 ﻿using CarsAndBids.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarsAndBids.Core.Services;
 
-public class FileService : IFileService
+public class FileService: IFileService
 {
     private readonly string _rootPath;
     private readonly string _folderName;

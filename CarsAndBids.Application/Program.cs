@@ -1,5 +1,6 @@
 using CarsAndBids.API.DependencyInjection;
 using CarsAndBids.API.Middleware;
+using CarsAndBids.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ app.UseCors(cfg =>
     cfg.AllowAnyOrigin();
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 // app.Use(async (context, next) =>

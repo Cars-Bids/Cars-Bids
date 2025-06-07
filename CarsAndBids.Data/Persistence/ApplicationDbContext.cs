@@ -7,99 +7,29 @@ namespace CarsAndBids.Data.Persistence;
 
 public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
+    public ApplicationDbContext() {}
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
 
+    public DbSet<Make> Makes { get; set; }
+    public DbSet<Model> Models { get; set; }
+    public DbSet<BodyStyle> BodyStyles { get; set; }
+    public DbSet<Car> Cars { get; set; }
+    public DbSet<PendingCar> PendingCars { get; set; }
     public DbSet<Auction> Auctions { get; set; }
     public DbSet<Bid> Bids { get; set; }
+    public DbSet<CarImage> CarImages { get; set; }
     public DbSet<Comment> Comments { get; set; }
-    public DbSet<Category> Categories { get; set; }
+    public DbSet<Chat> Chats { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<ChatAttachment> ChatAttachments { get; set; }
+    public DbSet<Question> Questions { get; set; }
+    public DbSet<Answer> Answers { get; set; }
+    public DbSet<Wishlist> Wishlists { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email)
-            .IsUnique();
-
-        modelBuilder.Entity<Auction>()
-            .HasIndex(a => new { a.Make, a.Model, a.Year });
-
-        modelBuilder.Entity<Bid>()
-            .HasIndex(b => b.AuctionId);
-
-        modelBuilder.Entity<Comment>()
-            .HasIndex(c => c.AuctionId);
-
-        modelBuilder.Entity<Auction>()
-            .HasOne(a => a.Seller)
-            .WithMany(u => u.Auctions)
-            .HasForeignKey(a => a.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Bid>()
-            .HasOne(b => b.Auction)
-            .WithMany(a => a.Bids)
-            .HasForeignKey(b => b.AuctionId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Bid>()
-            .HasOne(b => b.Bidder)
-            .WithMany(u => u.Bids)
-            .HasForeignKey(b => b.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Comment>()
-            .HasOne(c => c.Auction)
-            .WithMany(a => a.Comments)
-            .HasForeignKey(c => c.AuctionId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Comment>()
-            .HasOne(c => c.Author)
-            .WithMany(u => u.Comments)
-            .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.Email)
-            .IsRequired();
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.PasswordHash)
-            .IsRequired();
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.ProfilePictureUrl)
-            .IsRequired(false);
-
-        modelBuilder.Entity<Auction>()
-            .Property(a => a.Make)
-            .IsRequired();
-
-        modelBuilder.Entity<Auction>()
-            .Property(a => a.Model)
-            .IsRequired();
-
-        modelBuilder.Entity<Auction>()
-            .Property(a => a.Description)
-            .IsRequired(false);
-
-        modelBuilder.Entity<Auction>()
-            .Property(a => a.Status)
-            .IsRequired()
-            .HasDefaultValue("Draft");
-
-        modelBuilder.Entity<Auction>()
-            .Property(a => a.VIN)
-            .IsRequired(false);
-
-        modelBuilder.Entity<Auction>()
-            .Property(a => a.Location)
-            .IsRequired(false);
-
-        modelBuilder.Entity<Comment>()
-            .Property(c => c.Content)
-            .IsRequired();
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }
