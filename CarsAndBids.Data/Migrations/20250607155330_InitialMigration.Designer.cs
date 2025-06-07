@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CarsAndBids.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250606201545_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250607155330_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -565,6 +565,33 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("CarsAndBids.Data.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpiresOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("CarsAndBids.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -1013,6 +1040,17 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CarsAndBids.Data.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CarsAndBids.Data.Entities.Wishlist", b =>
                 {
                     b.HasOne("CarsAndBids.Data.Entities.Auction", "Auction")
@@ -1153,6 +1191,8 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("PendingCars");
 
                     b.Navigation("Questions");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Wishlists");
                 });

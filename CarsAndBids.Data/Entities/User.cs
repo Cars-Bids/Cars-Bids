@@ -18,4 +18,6 @@ public class User : IdentityUser<int>
     public ICollection<Question> Questions { get; set; }
     public ICollection<Answer> Answers { get; set; }
     public ICollection<Wishlist> Wishlists { get; set; }
+    public ICollection<RefreshToken> RefreshTokens { get; set; }
+    
 }
