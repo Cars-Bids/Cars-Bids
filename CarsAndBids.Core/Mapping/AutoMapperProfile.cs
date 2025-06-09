@@ -11,6 +11,12 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Auction, AuctionDto>().ReverseMap();
         CreateMap<Category, CategoryDto>().ReverseMap();
+        CreateMap<PendingCar, PendingCarDto>().ReverseMap();
+        CreateMap<BodyStyle, BodyStyleDto>().ReverseMap();
+        CreateMap<Make, MakeDto>().ReverseMap();
+        CreateMap<Model, ModelDto>().ReverseMap();
+        CreateMap<Car, CarDto>().ReverseMap();
+        CreateMap<User, ProfileDto>().ReverseMap();
 
         CreateMap<RegisterCommand, User>();
     }

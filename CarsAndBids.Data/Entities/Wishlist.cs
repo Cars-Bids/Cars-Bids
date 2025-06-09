@@ -7,6 +7,6 @@ public class Wishlist
     public int AuctionId { get; set; }
     public DateTime AddedAt { get; set; } = DateTime.UtcNow;
 
-    public User User { get; set; }
-    public Auction Auction { get; set; }
+    public User? User { get; set; }
+    public Auction? Auction { get; set; }
 }

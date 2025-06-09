@@ -25,6 +25,16 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
+        services.AddScoped<IGenericRepository<PendingCar>, GenericRepository<PendingCar>>();
+        services.AddScoped<IGenericRepository<BodyStyle>, GenericRepository<BodyStyle>>();
+        services.AddScoped<IGenericRepository<Make>, GenericRepository<Make>>();
+        services.AddScoped<IGenericRepository<Model>, GenericRepository<Model>>();
+        services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
+        services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+
+
+
+
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
@@ -33,7 +43,9 @@ public static class ServiceCollectionExtensions
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        
+
+        services.AddHttpContextAccessor();
+
         var signingKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(
                 configuration["JwtSettings:SecretKey"]
@@ -54,6 +66,7 @@ public static class ServiceCollectionExtensions
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
@@ -91,7 +104,7 @@ public static class ServiceCollectionExtensions
             .AddDefaultTokenProviders();
         
         services.AddSingleton<IWebHostEnvironment>(environment);
-        // services.AddScoped<IAuthService, AuthService>();
+        
         services.AddScoped<IFileService>(provider =>
         {
             var config = provider.GetRequiredService<IConfiguration>();
