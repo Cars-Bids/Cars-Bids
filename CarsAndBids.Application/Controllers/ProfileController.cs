@@ -1,0 +1,34 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using CarsAndBids.Core.CQRS.Profile;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+namespace CarsAndBids.API.Controllers;
+
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ApiController]
+[Route("api/[controller]")]
+public class ProfileController(IMediator mediator) : ControllerBase
+{
+
+    [HttpGet]
+    public async Task<IActionResult> GetProfile()
+    {
+        var result = await mediator.Send(new GetProfileByIdQuery());
+        return result is null ? NotFound() : Ok(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateProfileCommand request)
+    {
+        try
+        {
+            await mediator.Send(request);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { error = e.Message });
+        }
+    }
+}

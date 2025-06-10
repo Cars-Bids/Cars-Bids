@@ -1,32 +1,33 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using CarsAndBids.Core.CQRS.Categories;
+using CarsAndBids.Core.CQRS.Models;
+using CarsAndBids.Core.DTOs;
+
 
 namespace CarsAndBids.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoryController(IMediator mediator) : ControllerBase
+public class ModelController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var res = await mediator.Send(new GetAllCategoriesQuery());
-        return Ok(res);
+        var result = await mediator.Send(new GetAllModelsQuery());
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        var res = await mediator.Send(new GetCategoryByIdQuery { Id = id });
-        
-        return res is null
+        var result = await mediator.Send(new GetModelByIdQuery { Id = id });
+        return result is null
             ? NotFound()
-            : Ok(res);
+            : Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm] CreateCategoryCommand request)
+    public async Task<IActionResult> Create([FromBody] CreateModelCommand request)
     {
         try
         {
@@ -39,12 +40,26 @@ public class CategoryController(IMediator mediator) : ControllerBase
         }
     }
 
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateModelCommand request)
+    {
+        try
+        {
+            await mediator.Send(request);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { error = e.Message });
+        }
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
     {
         try
         {
-            await mediator.Send(new DeleteCategoryByIdCommand { Id = id });
+            await mediator.Send(new DeleteModelByIdCommand { Id = id });
             return Ok();
         }
         catch (Exception e)

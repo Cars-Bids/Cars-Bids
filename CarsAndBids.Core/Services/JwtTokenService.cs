@@ -17,21 +17,23 @@ public class JwtTokenService(IConfiguration configuration,
     {
         var claims = new List<Claim>
         {
+            new Claim("nameid", user.Id.ToString()),
             new("email", user.Email ?? ""),
-            new("username", user.UserName ?? "")
+            new("username", user.UserName ?? ""),
         };
         var roles = await userManager.GetRolesAsync(user);
 
         foreach (var role in roles)
             claims.Add(new("roles", role));
 
-        var key = Encoding.UTF8.GetBytes(configuration.GetValue<string>("JwtSettings:SecretKey"));
+        var key = Encoding.UTF8.GetBytes(configuration.GetValue<string>("JwtSettings:SecretKey")!);
 
         var signinKey = new SymmetricSecurityKey(key);
 
         var signinCredential = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256);
 
         var jwt = new JwtSecurityToken(
+            issuer: configuration["JwtSettings:Issuer"],
             signingCredentials: signinCredential,
             expires: (DateTime.Now.AddDays(configuration.GetValue<int>("JwtSettings:AccessTokenExpiration"))).ToUniversalTime(),
             claims: claims);

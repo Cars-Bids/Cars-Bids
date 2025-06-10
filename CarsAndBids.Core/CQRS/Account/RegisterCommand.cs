@@ -1,23 +1,22 @@
 using AutoMapper;
 using CarsAndBids.Core.Constants;
-using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+
 
 namespace CarsAndBids.Core.CQRS.Account;
 
 public class RegisterCommand : IRequest
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public IFormFile Image { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? Username { get; set; }
+    public string? Email { get; set; }
+    public string? Password { get; set; }
+    public IFormFile? Image { get; set; }
 }
 
 public class RegisterCommandHandler(IFileService fileService,
@@ -27,7 +26,7 @@ public class RegisterCommandHandler(IFileService fileService,
 {
     public async Task Handle(RegisterCommand cmd, CancellationToken cancellationToken)
     {
-            var user = await userManager.FindByEmailAsync(cmd.Email);
+            var user = await userManager.FindByEmailAsync(cmd.Email!);
             if (user is not null) 
                 throw new Exception($"User with {cmd.Email} already exist!");
 
@@ -36,7 +35,7 @@ public class RegisterCommandHandler(IFileService fileService,
             newUser.ProfilePictureUrl = cmd.Image is null ? null : 
                 await fileService.SaveImage(cmd.Image);
             
-            var result = await userManager.CreateAsync(newUser, cmd.Password);
+            var result = await userManager.CreateAsync(newUser, cmd.Password!);
             
             if (result.Succeeded)
                 await userManager.AddToRoleAsync(newUser, Roles.User);

@@ -11,6 +11,6 @@ public class Bid
     public decimal BidAmount { get; set; }
     public DateTime BidTime { get; set; } = DateTime.UtcNow;
 
-    public Auction Auction { get; set; }
-    public User User { get; set; }
+    public Auction? Auction { get; set; }
+    public User? User { get; set; }
 }
