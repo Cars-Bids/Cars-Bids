@@ -21,6 +21,7 @@ public class GetProfileByIdHandler(
     public async Task<ProfileDto?> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
         int userId = int.Parse(httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
         var profile = await repository.GetByIdAsync(userId);
 
         return profile is null

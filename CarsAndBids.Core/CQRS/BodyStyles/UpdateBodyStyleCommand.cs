@@ -6,24 +6,24 @@ using MediatR;
 
 namespace CarsAndBids.Core.CQRS.BodyStyles;
 
-public class UpdateBodyStyleCommand : IRequest<BodyStyleDto>
+public class UpdateBodyStyleCommand : IRequest
 {
-    public required BodyStyleDto BodyStyle { get; set; }
+    public int Id { get; set; }
+    public string? StyleName { get; set; }
 }
 
 public class UpdateBodyStyleCommandHandler(
     IGenericRepository<BodyStyle> repository,
     IMapper mapper
-    ) : IRequestHandler<UpdateBodyStyleCommand, BodyStyleDto>
+    ) : IRequestHandler<UpdateBodyStyleCommand>
 {
-    public async Task<BodyStyleDto> Handle(UpdateBodyStyleCommand cmd, CancellationToken cancellationToken)
+    public async Task Handle(UpdateBodyStyleCommand cmd, CancellationToken cancellationToken)
     {
-        var existingBodyStyle = await repository.GetByIdAsync(cmd.BodyStyle.Id);
+        var existingBodyStyle = await repository.GetByIdAsync(cmd.Id);
 
-        mapper.Map(cmd.BodyStyle, existingBodyStyle);
+        mapper.Map(cmd, existingBodyStyle);
 
         await repository.UpdateAsync(existingBodyStyle!);
-
-        return mapper.Map<BodyStyleDto>(existingBodyStyle);
+        return;
     }
 }

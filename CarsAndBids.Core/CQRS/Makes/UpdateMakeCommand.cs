@@ -6,24 +6,25 @@ using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Makes;
 
-public class UpdateMakeCommand : IRequest<MakeDto>
+public class UpdateMakeCommand : IRequest
 {
-    public required MakeDto Make { get; set; }
+    public int Id { get; set; }
+    public string? Name { get; set; }
 }
 
 public class UpdateMakeCommandHandler(
     IGenericRepository<Make> repository,
     IMapper mapper
-    ) : IRequestHandler<UpdateMakeCommand, MakeDto>
+    ) : IRequestHandler<UpdateMakeCommand>
 {
-    public async Task<MakeDto> Handle(UpdateMakeCommand cmd, CancellationToken cancellationToken)
+    public async Task Handle(UpdateMakeCommand cmd, CancellationToken cancellationToken)
     {
-        var existingMake = await repository.GetByIdAsync(cmd.Make.Id);
+        var existingMake = await repository.GetByIdAsync(cmd.Id);
 
-        mapper.Map(cmd.Make, existingMake);
+        mapper.Map(cmd, existingMake);
 
         await repository.UpdateAsync(existingMake!);
 
-        return mapper.Map<MakeDto>(existingMake);
+        return;
     }
 }

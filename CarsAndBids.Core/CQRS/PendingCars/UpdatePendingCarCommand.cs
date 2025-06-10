@@ -1,73 +1,60 @@
 ﻿using AutoMapper;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Data.Entities;
+using CarsAndBids.Data.Enums;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CarsAndBids.Core.CQRS.PendingCars;
 
-public class UpdatePendingCarCommand : IRequest<PendingCarDto>
+public class UpdatePendingCarCommand : IRequest
 {
-    public required PendingCarDto PendingCar { get; set; }
+    public int Id { get; set; }
+    public int Year { get; set; }
+    public string? Vin { get; set; }
+    public string? ExteriorColor { get; set; }
+    public string? InteriorColor { get; set; }
+    public int Mileage { get; set; }
+    public string? Location { get; set; }
+    public DrivetrainType Drivetrain { get; set; }
+    public string? Engine { get; set; }
+    public TransmissionType TransmissionType { get; set; }
+    public int Speeds { get; set; }
+    public string? Modifications { get; set; }
+    public string? Flaws { get; set; }
+    public int ModelId { get; set; }
+    public int BodyStyleId { get; set; }
 }
 
 public class UpdatePendingCarCommandHandler(
     IGenericRepository<PendingCar> repository,
     IHttpContextAccessor httpContextAccessor,
     IMapper mapper
-    ) : IRequestHandler<UpdatePendingCarCommand, PendingCarDto>
+    ) : IRequestHandler<UpdatePendingCarCommand>
 {
-    public async Task<PendingCarDto> Handle(UpdatePendingCarCommand cmd, CancellationToken cancellationToken)
+    public async Task Handle(UpdatePendingCarCommand cmd, CancellationToken cancellationToken)
     {
-        // Отримуємо HttpContext
-        var httpContext = httpContextAccessor.HttpContext;
-        if (httpContext == null)
+        int ownerId = int.Parse(httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var existingPendingCar = await repository.GetByIdAsync(cmd.Id);
+
+        if (existingPendingCar == null)
         {
-            throw new Exception("HttpContext is null.");
+            throw new KeyNotFoundException($"Pending car with ID {cmd.Id} not found.");
         }
 
-        // Отримуємо об'єкт ClaimsPrincipal (користувача)
-        var user = httpContext.User;
-        if (user == null)
-        {
-            throw new Exception("User is null.");
-        }
-
-        // Шукаємо клейму з типом NameIdentifier
-        var nameIdentifierClaim = user.FindFirst(ClaimTypes.NameIdentifier);
-        if (nameIdentifierClaim == null)
-        {
-            throw new Exception("Claim 'NameIdentifier' not found.");
-        }
-
-        // Отримуємо значення клейми
-        var nameIdentifierValue = nameIdentifierClaim.Value;
-
-        // Перетворюємо значення в int
-        int ownerId = int.Parse(nameIdentifierValue);
-
-        var existingPendingCar = await repository.GetByIdAsync(cmd.PendingCar.Id);
-
-        if (existingPendingCar?.OwnerId != ownerId)
+        if (existingPendingCar.OwnerId != ownerId)
         {
             throw new UnauthorizedAccessException("You are not the owner of this car.");
         }
 
-        mapper.Map(cmd.PendingCar, existingPendingCar);
+        mapper.Map(cmd, existingPendingCar);
 
-        try
-        {
-            await repository.UpdateAsync(existingPendingCar);
-        }
-        catch (DbUpdateException ex)
-        {
-            Console.WriteLine("EF ERROR: " + ex.InnerException?.Message);
-            throw;
-        }
+        await repository.UpdateAsync(existingPendingCar);
 
-        return mapper.Map<PendingCarDto>(existingPendingCar);
+        return;
+        
     }
 }

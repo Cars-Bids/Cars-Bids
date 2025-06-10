@@ -45,8 +45,8 @@ public class MakeController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var updated = await mediator.Send(request);
-            return Ok(updated);
+            await mediator.Send(request);
+            return Ok();
         }
         catch (Exception e)
         {

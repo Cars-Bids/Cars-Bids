@@ -32,8 +32,8 @@ public class PendingCarController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var created = await mediator.Send(request);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            await mediator.Send(request);
+            return Created();
         }
         catch (Exception e)
         {
@@ -46,8 +46,8 @@ public class PendingCarController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var updated = await mediator.Send(request);
-            return Ok(updated);
+            await mediator.Send(request);
+            return Ok();
         }
         catch (Exception e)
         {

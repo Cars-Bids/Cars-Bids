@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.CQRS.Categories;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;

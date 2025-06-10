@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using CarsAndBids.Core.CQRS.Profile;
-using CarsAndBids.Core.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 namespace CarsAndBids.API.Controllers;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
 public class ProfileController(IMediator mediator) : ControllerBase
@@ -21,8 +23,8 @@ public class ProfileController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var updated = await mediator.Send(request);
-            return Ok(updated);
+            await mediator.Send(request);
+            return Ok();
         }
         catch (Exception e)
         {

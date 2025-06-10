@@ -5,24 +5,26 @@ using CarsAndBids.Data.Interfaces;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Models;
-public class UpdateModelCommand : IRequest<ModelDto>
+public class UpdateModelCommand : IRequest
 {
-    public required ModelDto Model { get; set; }
+    public int Id { get; set; }
+    public int MakeId { get; set; }
+    public string? Name { get; set; }
 }
 
 public class UpdateModelCommandHandler(
     IGenericRepository<Model> repository,
     IMapper mapper
-    ) : IRequestHandler<UpdateModelCommand, ModelDto>
+    ) : IRequestHandler<UpdateModelCommand>
 {
-    public async Task<ModelDto> Handle(UpdateModelCommand cmd, CancellationToken cancellationToken)
+    public async Task Handle(UpdateModelCommand cmd, CancellationToken cancellationToken)
     {
-        var existingModel = await repository.GetByIdAsync(cmd.Model.Id);
+        var existingModel = await repository.GetByIdAsync(cmd.Id);
 
-        mapper.Map(cmd.Model, existingModel);
+        mapper.Map(cmd, existingModel);
 
         await repository.UpdateAsync(existingModel!);
 
-        return mapper.Map<ModelDto>(existingModel);
+        return;
     }
 }

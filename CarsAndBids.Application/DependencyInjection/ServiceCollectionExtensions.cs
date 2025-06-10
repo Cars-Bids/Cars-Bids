@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Claims;
+using System.Text;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Services;
 using CarsAndBids.Data.Entities;
@@ -23,7 +24,6 @@ public static class ServiceCollectionExtensions
         services.AddAutoMapper(typeof(Core.Mapping.AutoMapperProfile));
 
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
-        services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
         services.AddScoped<IGenericRepository<PendingCar>, GenericRepository<PendingCar>>();
         services.AddScoped<IGenericRepository<BodyStyle>, GenericRepository<BodyStyle>>();
@@ -71,7 +71,8 @@ public static class ServiceCollectionExtensions
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = signingKey,
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.Zero,
+                    NameClaimType = ClaimTypes.NameIdentifier
                 };
             });
         
