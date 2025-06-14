@@ -105,15 +105,8 @@ public static class ServiceCollectionExtensions
             .AddDefaultTokenProviders();
         
         services.AddSingleton<IWebHostEnvironment>(environment);
-        
-        services.AddScoped<IFileService>(provider =>
-        {
-            var config = provider.GetRequiredService<IConfiguration>();
-            var env = provider.GetRequiredService<IWebHostEnvironment>();
-            var folderName = config.GetValue<string>("FileStorage:FolderName") ?? "Files";
-            var maxFileSize = config.GetValue<long>("FileStorage:MaxFileSize", 5 * 1024 * 1024);
-            return new FileService(env.WebRootPath, folderName, maxFileSize);
-        });
+
+        services.AddScoped<IFileService, FileService>();
 
 
         return services;

@@ -33,7 +33,7 @@ public class RegisterCommandHandler(IFileService fileService,
             var newUser = mapper.Map<User>(cmd);
             
             newUser.ProfilePictureUrl = cmd.Image is null ? null : 
-                await fileService.SaveImage(cmd.Image);
+                await fileService.UploadImageAsync(cmd.Image);
             
             var result = await userManager.CreateAsync(newUser, cmd.Password!);
             
