@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.DTOs;
+using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Enums;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
+using System.Net;
 
 namespace CarsAndBids.Core.CQRS.Cars;
 
@@ -38,12 +38,11 @@ public class UpdateCarCommandHandler(
     public async Task Handle(UpdateCarCommand cmd, CancellationToken cancellationToken)
     {
 
-        var existingCar = await repository.GetByIdAsync(cmd.Id);
+        var existingCar = await repository.GetByIdAsync(cmd.Id)
+            ?? throw new HttpException($"Car with id [{cmd.Id}] not found!", HttpStatusCode.NotFound);
 
         mapper.Map(cmd, existingCar);
 
-        await repository.UpdateAsync(existingCar!);
-
-        return;
+        await repository.UpdateAsync(existingCar);
     }
 }

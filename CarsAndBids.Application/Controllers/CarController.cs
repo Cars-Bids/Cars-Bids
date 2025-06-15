@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using CarsAndBids.Core.CQRS.Cars;
-using CarsAndBids.Core.DTOs;
-
 
 namespace CarsAndBids.API.Controllers;
 
@@ -21,50 +19,27 @@ public class CarController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         var result = await mediator.Send(new GetCarByIdQuery { Id = id });
-        return result is null
-            ? NotFound()
-            : Ok(result);
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateCarCommand request)
+    public async Task<IActionResult> Create([FromForm] CreateCarCommand request)
     {
-        try
-        {
-            await mediator.Send(request);
-            return Created();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { error = e.Message });
-        }
+        await mediator.Send(request);
+        return Created();
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateCarCommand request)
+    public async Task<IActionResult> Update([FromForm] UpdateCarCommand request)
     {
-        try
-        {
-            await mediator.Send(request);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { error = e.Message });
-        }
+        await mediator.Send(request);
+        return Ok();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
     {
-        try
-        {
-            await mediator.Send(new DeleteCarByIdCommand { Id = id });
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { error = e.Message });
-        }
+        await mediator.Send(new DeleteCarByIdCommand { Id = id });
+        return Ok();
     }
 }

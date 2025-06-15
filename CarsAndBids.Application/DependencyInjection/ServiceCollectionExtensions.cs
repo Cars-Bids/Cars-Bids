@@ -1,16 +1,19 @@
-﻿using System.Security.Claims;
-using System.Text;
+﻿using CarsAndBids.API.Filters;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Services;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
 using CarsAndBids.Data.Persistence;
 using CarsAndBids.Data.Persistence.Repositories;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
+using System.Text;
 
 namespace CarsAndBids.API.DependencyInjection;
 
@@ -32,18 +35,25 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
         services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 
-
-
-
-
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
         services.AddControllers();
+
+        //Validation
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
+        services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddMvc(options =>
+        {
+            options.Filters.Add<ValidationFilter>();
+        });
+
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-
         services.AddHttpContextAccessor();
 
         var signingKey = new SymmetricSecurityKey(
