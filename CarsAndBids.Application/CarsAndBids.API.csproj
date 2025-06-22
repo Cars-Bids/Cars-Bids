@@ -7,13 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Filters\**" />
-	  <Content Remove="Filters\**" />
-	  <EmbeddedResource Remove="Filters\**" />
-	  <None Remove="Filters\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="MediatR" Version="12.5.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.5" />

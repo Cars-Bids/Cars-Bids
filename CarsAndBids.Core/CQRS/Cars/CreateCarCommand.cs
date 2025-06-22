@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.DTOs;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Enums;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace CarsAndBids.Core.CQRS.Cars;
 
@@ -43,7 +41,5 @@ public class CreateCarCommandHandler(
         car.CreatedAt = DateTime.UtcNow;
 
         await repository.InsertAsync(car);
-
-        return;
     }
 }

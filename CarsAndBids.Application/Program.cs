@@ -1,6 +1,5 @@
-using CarsAndBids.API.DependencyInjection;
 using CarsAndBids.API.Middleware;
-using CarsAndBids.Data.Entities;
+using CarsAndBids.API.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,10 +7,10 @@ builder.Services.AddApplicationServices(builder.Configuration, builder.Environme
 
 var app = builder.Build();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
-
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseStaticFiles();
 app.UseHttpsRedirection();
