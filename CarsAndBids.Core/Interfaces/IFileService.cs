@@ -4,7 +4,10 @@ namespace CarsAndBids.Core.Interfaces;
 
 public interface IFileService
 {
-    Task<string> SaveImage(IFormFile file);
-    void DeleteImage(string path);
-    Task<IList<string>> SaveImages(List<IFormFile> files);
+    Task<string> UploadImageAsync(IFormFile file);
+    Task<List<string>> UploadImagesAsync(IList<IFormFile> files);
+    Task<bool> DeleteImageAsync(string publicId);
+    Task<bool> DeleteImagesAsync(IList<string> publicIds);
+    Task<bool> DeleteImageByUrlAsync(string url);
+    Task<bool> DeleteImagesByUrlsAsync(IList<string> urls);
 }
