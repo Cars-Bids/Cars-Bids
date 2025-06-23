@@ -28,10 +28,10 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
-        services.AddScoped<IGenericRepository<PendingCar>, GenericRepository<PendingCar>>();
         services.AddScoped<IGenericRepository<BodyStyle>, GenericRepository<BodyStyle>>();
         services.AddScoped<IGenericRepository<Make>, GenericRepository<Make>>();
         services.AddScoped<IGenericRepository<Model>, GenericRepository<Model>>();
+        services.AddScoped<IGenericRepository<CarImage>, GenericRepository<CarImage>>();
         services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
         services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 

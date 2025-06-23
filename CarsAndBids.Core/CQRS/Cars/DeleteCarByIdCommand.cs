@@ -9,11 +9,20 @@ public class DeleteCarByIdCommand : IRequest
 }
 
 public class DeleteCarByIdHandler(
-    IGenericRepository<Car> repository
+    IGenericRepository<Car> carRepository,
+    IGenericRepository<CarImage> carImageRepository
     ) : IRequestHandler<DeleteCarByIdCommand>
 {
     public async Task Handle(DeleteCarByIdCommand cmd, CancellationToken cancellationToken)
     {
-        await repository.DeleteAsync(cmd.Id);
+        var carImages = await carImageRepository.GetAsync(
+            filter: ci => ci.CarId == cmd.Id);
+
+        foreach (var carImage in carImages)
+        {
+            await carImageRepository.DeleteAsync(carImage.Id);
+        }
+
+        await carRepository.DeleteAsync(cmd.Id);
     }
 }

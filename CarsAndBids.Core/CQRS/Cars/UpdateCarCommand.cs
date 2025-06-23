@@ -23,7 +23,9 @@ public class UpdateCarCommand : IRequest
     public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int Speeds { get; set; }
-    public bool IsApproved { get; set; }
+    public CarStatus Status { get; set; }
+    public int OwnerId { get; set; }
+    public int AssingId { get; set; }
     public int BodyStyleId { get; set; }
     public int ModelId { get; set; }
     public List<IFormFile>? NewImages { get; set; }

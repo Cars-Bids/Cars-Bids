@@ -8,5 +8,4 @@ public class Model
 
     public Make? Make { get; set; }
     public ICollection<Car>? Cars { get; set; }
-    public ICollection<PendingCar>? PendingCars { get; set; }
 }

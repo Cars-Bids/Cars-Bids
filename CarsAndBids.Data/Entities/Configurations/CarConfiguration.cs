@@ -38,12 +38,17 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
             .HasConversion<string>()
             .HasMaxLength(50);
         
-        builder.Property(c => c.IsApproved)
-            .HasDefaultValue(false);
-        
+        builder.Property(c => c.Status)
+            .HasConversion<string>()
+            .HasMaxLength(50);
+
         builder.Property(c => c.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
+
+        builder.HasOne(c => c.Assing)
+            .WithMany(u => u.AssingCars)
+            .HasForeignKey(c => c.AssingId);
+
         builder.HasOne(c => c.Owner)
             .WithMany(u => u.OwnedCars)
             .HasForeignKey(c => c.OwnerId);

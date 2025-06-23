@@ -16,12 +16,14 @@ public class Car
     public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int Speeds { get; set; }
-    public bool IsApproved { get; set; } = false;
+    public CarStatus Status { get; set; } = CarStatus.inPending;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public int? AssingId { get; set; }
     public int OwnerId { get; set; }
     public int BodyStyleId { get; set; }
     public int ModelId { get; set; }
 
+    public User? Assing { get; set; }
     public User? Owner { get; set; }
     public BodyStyle? BodyStyle { get; set; }
     public Model? Model { get; set; }
