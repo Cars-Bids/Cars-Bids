@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using CarsAndBids.Core.Services;
 using CarsAndBids.Core.Interfaces;
+using System.Security.Claims;
 namespace CarsAndBids.Core.CQRS.Cars;
 
 public class CreateCarCommand : IRequest
@@ -21,9 +22,7 @@ public class CreateCarCommand : IRequest
     public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int Speeds { get; set; }
-    public CarStatus Status { get; set; }
-    public int OwnerId { get; set; }
-    public int AssingId { get; set; }
+    public int? AssingId { get; set; }
     public int BodyStyleId { get; set; }
     public int ModelId { get; set; }
     public IFormFile? MainImage { get; set; }
@@ -36,6 +35,7 @@ public class CreateCarCommandHandler(
     IGenericRepository<Car> carRepository,
     IGenericRepository<CarImage> carImageRepository,
     IMapper mapper,
+    IHttpContextAccessor httpContextAccessor,
     IFileService fileService
     ) : IRequestHandler<CreateCarCommand>
 {
@@ -44,13 +44,17 @@ public class CreateCarCommandHandler(
     {
 
         var car = mapper.Map<Car>(cmd);
+        int ownerId = int.Parse(httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        car.OwnerId = ownerId;
+        car.Status = CarStatus.inPending;
         await carRepository.InsertAsync(car);
 
         int orderNumber = 1;
 
         if (cmd.MainImage != null)
         {
-            var ImageUrl = await fileService.SaveImage(cmd.MainImage);
+            var ImageUrl = await fileService.UploadImageAsync(cmd.MainImage);
             await carImageRepository.InsertAsync(new CarImage
             {
                 CarId = car.Id,
@@ -64,7 +68,7 @@ public class CreateCarCommandHandler(
 
         if (cmd.ExteriorImages != null)
         {
-            var ImageUrls = await fileService.SaveImages(cmd.ExteriorImages);
+            var ImageUrls = await fileService.UploadImagesAsync(cmd.ExteriorImages);
             foreach (var url in ImageUrls)
             {
                 await carImageRepository.InsertAsync(new CarImage
@@ -80,7 +84,7 @@ public class CreateCarCommandHandler(
 
         if (cmd.InteriorImages != null)
         {
-            var ImageUrls = await fileService.SaveImages(cmd.InteriorImages);
+            var ImageUrls = await fileService.UploadImagesAsync(cmd.InteriorImages);
             foreach (var url in ImageUrls)
             {
                 await carImageRepository.InsertAsync(new CarImage
@@ -96,7 +100,7 @@ public class CreateCarCommandHandler(
 
         if (cmd.OtherImages != null)
         {
-            var ImageUrls = await fileService.SaveImages(cmd.OtherImages);
+            var ImageUrls = await fileService.UploadImagesAsync(cmd.OtherImages);
             foreach (var url in ImageUrls)
             {
                 await carImageRepository.InsertAsync(new CarImage

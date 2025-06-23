@@ -17,11 +17,11 @@ public class CarDto
     public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int Speeds { get; set; }
-    public CarStatus Status { get; set; }
+    public CarStatus Status { get; set; }   
     public DateTime CreatedAt { get; set; }
     public int? AssingId { get; set; }
     public int OwnerId { get; set; }
     public int BodyStyleId { get; set; }
     public int ModelId { get; set; }
-    public ICollection<CarImage>? Images { get; set; }
+    public ICollection<CarImageDto>? Images { get; set; }
 }

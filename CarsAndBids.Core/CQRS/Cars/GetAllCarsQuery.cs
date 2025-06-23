@@ -12,13 +12,36 @@ public class GetAllCarsQuery : IRequest<List<CarDto>>
 
 public class GetAllCarsHandler(
     IMapper mapper,
-    IGenericRepository<Car> repository
+    IGenericRepository<Car> carRepository,
+    IGenericRepository<CarImage> carImageRepository
     ) : IRequestHandler<GetAllCarsQuery, List<CarDto>>
 {
     public async Task<List<CarDto>> Handle(GetAllCarsQuery request, CancellationToken cancellationToken)
     {
-        var cars = await repository.GetAsync();
+        var cars = await carRepository.GetAsync();
 
-        return mapper.Map<List<CarDto>>(cars);
+        var allImages = await carImageRepository.GetAsync();
+
+        var imagesByCarId = allImages
+            .GroupBy(img => img.CarId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        var carDtos = mapper.Map<List<CarDto>>(cars);
+        var carImageDtos = mapper.Map<List<CarImageDto>>(allImages);
+
+
+        foreach (var carDto in carDtos)
+        {
+            if (imagesByCarId.TryGetValue(carDto.Id, out var images))
+            {
+                carDto.Images = mapper.Map<List<CarImageDto>>(images);
+            }
+            else
+            {
+                carDto.Images = new List<CarImageDto>();
+            }
+        }
+
+        return carDtos;
     }
 }

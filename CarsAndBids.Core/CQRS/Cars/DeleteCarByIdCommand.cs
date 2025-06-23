@@ -1,4 +1,5 @@
-﻿using CarsAndBids.Data.Entities;
+﻿using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
 
@@ -10,18 +11,17 @@ public class DeleteCarByIdCommand : IRequest
 
 public class DeleteCarByIdHandler(
     IGenericRepository<Car> carRepository,
-    IGenericRepository<CarImage> carImageRepository
+    IGenericRepository<CarImage> carImageRepository,
+    IFileService fileService
     ) : IRequestHandler<DeleteCarByIdCommand>
 {
     public async Task Handle(DeleteCarByIdCommand cmd, CancellationToken cancellationToken)
     {
-        var carImages = await carImageRepository.GetAsync(
-            filter: ci => ci.CarId == cmd.Id);
+        var urls = (await carImageRepository.GetAsync(filter: ci => ci.CarId == cmd.Id))
+            .Select(ci => ci.ImageUrl)
+            .ToList();
 
-        foreach (var carImage in carImages)
-        {
-            await carImageRepository.DeleteAsync(carImage.Id);
-        }
+        await fileService.DeleteImagesByUrlsAsync(urls!);
 
         await carRepository.DeleteAsync(cmd.Id);
     }
