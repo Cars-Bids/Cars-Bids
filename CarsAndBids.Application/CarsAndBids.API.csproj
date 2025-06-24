@@ -34,4 +34,8 @@
 		<ProjectReference Include="..\CarsAndBids.Data\CarsAndBids.Data.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Hubs\" />
+	</ItemGroup>
+
 </Project>

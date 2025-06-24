@@ -12,6 +12,8 @@ app.UseSwaggerUI();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
+//app.MapHub<ChatHub>("/chatHub");
+
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 

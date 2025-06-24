@@ -26,6 +26,8 @@ public static class ServiceCollectionExtensions
 
         services.AddAutoMapper(typeof(Core.Mapping.AutoMapperProfile));
 
+        services.AddSignalR();
+
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
         services.AddScoped<IGenericRepository<BodyStyle>, GenericRepository<BodyStyle>>();
@@ -83,6 +85,18 @@ public static class ServiceCollectionExtensions
                     IssuerSigningKey = signingKey,
                     ClockSkew = TimeSpan.Zero,
                     NameClaimType = ClaimTypes.NameIdentifier
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var token = context.Request.Query["access_token"];
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
         
