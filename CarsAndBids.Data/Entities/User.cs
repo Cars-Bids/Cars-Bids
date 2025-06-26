@@ -9,8 +9,9 @@ public class User : IdentityUser<int>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? ProfilePictureUrl { get; set; }
 
+
+    public ICollection<Car>? AssingCars { get; set; }
     public ICollection<Car>? OwnedCars { get; set; }
-    public ICollection<PendingCar>? PendingCars { get; set; }
     public ICollection<Auction>? Auctions { get; set; }
     public ICollection<Bid>? Bids { get; set; }
     public ICollection<Comment>? Comments { get; set; }

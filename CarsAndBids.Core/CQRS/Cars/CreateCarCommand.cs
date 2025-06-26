@@ -4,7 +4,9 @@ using CarsAndBids.Data.Enums;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-
+using CarsAndBids.Core.Services;
+using CarsAndBids.Core.Interfaces;
+using System.Security.Claims;
 namespace CarsAndBids.Core.CQRS.Cars;
 
 public class CreateCarCommand : IRequest
@@ -20,16 +22,21 @@ public class CreateCarCommand : IRequest
     public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int Speeds { get; set; }
-    public bool IsApproved { get; set; }
+    public int? AssingId { get; set; }
     public int BodyStyleId { get; set; }
     public int ModelId { get; set; }
-    public List<IFormFile>? Images { get; set; }
+    public IFormFile? MainImage { get; set; }
+    public List<IFormFile>? ExteriorImages { get; set; }
+    public List<IFormFile>? InteriorImages { get; set; }
+    public List<IFormFile>? OtherImages { get; set; }
 }
 
-
 public class CreateCarCommandHandler(
-    IGenericRepository<Car> repository,
-    IMapper mapper
+    IGenericRepository<Car> carRepository,
+    IGenericRepository<CarImage> carImageRepository,
+    IMapper mapper,
+    IHttpContextAccessor httpContextAccessor,
+    IFileService fileService
     ) : IRequestHandler<CreateCarCommand>
 {
     
@@ -37,9 +44,77 @@ public class CreateCarCommandHandler(
     {
 
         var car = mapper.Map<Car>(cmd);
+        int ownerId = int.Parse(httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        car.OwnerId = ownerId;
+        car.Status = CarStatus.inPending;
+        await carRepository.InsertAsync(car);
+
+        int orderNumber = 1;
+
+        if (cmd.MainImage != null)
+        {
+            var ImageUrl = await fileService.UploadImageAsync(cmd.MainImage);
+            await carImageRepository.InsertAsync(new CarImage
+            {
+                CarId = car.Id,
+                ImageUrl = ImageUrl,
+                ImageCategory = ImageCategory.Main,
+                OrderNumber = orderNumber++,
+                UploadedAt = DateTime.UtcNow
+            });
+
+        }
+
+        if (cmd.ExteriorImages != null)
+        {
+            var ImageUrls = await fileService.UploadImagesAsync(cmd.ExteriorImages);
+            foreach (var url in ImageUrls)
+            {
+                await carImageRepository.InsertAsync(new CarImage
+                {
+                    CarId = car.Id,
+                    ImageUrl = url,
+                    ImageCategory = ImageCategory.Exterior,
+                    OrderNumber = orderNumber++,
+                    UploadedAt = DateTime.UtcNow
+                });
+            }
+        }
+
+        if (cmd.InteriorImages != null)
+        {
+            var ImageUrls = await fileService.UploadImagesAsync(cmd.InteriorImages);
+            foreach (var url in ImageUrls)
+            {
+                await carImageRepository.InsertAsync(new CarImage
+                {
+                    CarId = car.Id,
+                    ImageUrl = url,
+                    ImageCategory = ImageCategory.Interior,
+                    OrderNumber = orderNumber++,
+                    UploadedAt = DateTime.UtcNow
+                });
+            }
+        }
+
+        if (cmd.OtherImages != null)
+        {
+            var ImageUrls = await fileService.UploadImagesAsync(cmd.OtherImages);
+            foreach (var url in ImageUrls)
+            {
+                await carImageRepository.InsertAsync(new CarImage
+                {
+                    CarId = car.Id,
+                    ImageUrl = url,
+                    ImageCategory = ImageCategory.Other,
+                    OrderNumber = orderNumber++,
+                    UploadedAt = DateTime.UtcNow
+                });
+            }
+        }
 
         car.CreatedAt = DateTime.UtcNow;
 
-        await repository.InsertAsync(car);
     }
 }

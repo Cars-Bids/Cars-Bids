@@ -2,7 +2,6 @@
 using CarsAndBids.Data.Entities;
 using AutoMapper;
 using CarsAndBids.Core.CQRS.Account;
-using CarsAndBids.Core.CQRS.PendingCars;
 using CarsAndBids.Core.CQRS.BodyStyles;
 using CarsAndBids.Core.CQRS.Makes;
 using CarsAndBids.Core.CQRS.Models;
@@ -17,10 +16,6 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Auction, AuctionDto>().ReverseMap();
 
-        CreateMap<PendingCar, PendingCarDto>().ReverseMap();
-        CreateMap<PendingCar, UpdatePendingCarCommand>().ReverseMap();
-        CreateMap<PendingCar, CreatePendingCarCommand>().ReverseMap();
-
         CreateMap<BodyStyle, BodyStyleDto>().ReverseMap();
         CreateMap<BodyStyle, UpdateBodyStyleCommand>().ReverseMap();
         CreateMap<BodyStyle, CreateBodyStyleCommand>().ReverseMap();
@@ -32,6 +27,8 @@ public class AutoMapperProfile : Profile
         CreateMap<Model, ModelDto>().ReverseMap();
         CreateMap<Model, UpdateModelCommand>().ReverseMap();
         CreateMap<Model, CreateModelCommand>().ReverseMap();
+
+        CreateMap<CarImage, CarImageDto>().ReverseMap();
 
         CreateMap<Car, CarDto>().ReverseMap();
         CreateMap<Car, UpdateCarCommand>().ReverseMap();

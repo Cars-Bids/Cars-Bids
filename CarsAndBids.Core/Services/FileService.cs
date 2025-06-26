@@ -21,7 +21,7 @@ public class FileService: IFileService
     public FileService(IConfiguration configuration)
     {
         var cloudinarySettings = configuration.GetSection("Cloudinary");
-        cloudName = cloudinarySettings["CloudName"];
+        cloudName = cloudinarySettings["CloudName"]!;
         var account = new Account(
             cloudinarySettings["CloudName"],
             cloudinarySettings["ApiKey"],

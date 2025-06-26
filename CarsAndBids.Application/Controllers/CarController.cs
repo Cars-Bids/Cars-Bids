@@ -1,16 +1,19 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using CarsAndBids.Core.CQRS.Cars;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarsAndBids.API.Controllers;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
 public class CarController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAll()
-    {
+    {   
         var result = await mediator.Send(new GetAllCarsQuery());
         return Ok(result);
     }

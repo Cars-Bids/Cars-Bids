@@ -14,7 +14,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     public DbSet<Model> Models { get; set; }
     public DbSet<BodyStyle> BodyStyles { get; set; }
     public DbSet<Car> Cars { get; set; }
-    public DbSet<PendingCar> PendingCars { get; set; }
     public DbSet<Auction> Auctions { get; set; }
     public DbSet<Bid> Bids { get; set; }
     public DbSet<CarImage> CarImages { get; set; }

@@ -6,5 +6,4 @@ public class BodyStyle
     public string? StyleName { get; set; }
 
     public ICollection<Car>? Cars { get; set; }
-    public ICollection<PendingCar>? PendingCars { get; set; }
 }

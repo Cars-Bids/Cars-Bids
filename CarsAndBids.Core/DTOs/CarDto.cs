@@ -1,4 +1,5 @@
-﻿using CarsAndBids.Data.Enums;
+﻿using CarsAndBids.Data.Entities;
+using CarsAndBids.Data.Enums;
 
 namespace CarsAndBids.Core.DTOs;
 
@@ -16,10 +17,11 @@ public class CarDto
     public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int Speeds { get; set; }
-    public bool IsApproved { get; set; }
+    public CarStatus Status { get; set; }   
     public DateTime CreatedAt { get; set; }
+    public int? AssingId { get; set; }
     public int OwnerId { get; set; }
     public int BodyStyleId { get; set; }
     public int ModelId { get; set; }
-    public List<CarImageDto> Images { get; set; } = new List<CarImageDto>();
+    public ICollection<CarImageDto>? Images { get; set; }
 }
