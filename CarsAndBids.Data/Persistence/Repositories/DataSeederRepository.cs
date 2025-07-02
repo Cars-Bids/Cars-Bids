@@ -1,7 +1,6 @@
 ﻿using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
-using CarsAndBids.Data.Persistence.NewFolder.Seed;
-using CarsAndBids.Data.Persistence.SeedData;
+using CarsAndBids.Data.Persistence.Seed;
 using Microsoft.AspNetCore.Identity;
 
 namespace CarsAndBids.Data.Persistence.Repositories;

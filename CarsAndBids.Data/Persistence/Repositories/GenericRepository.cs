@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using Ardalis.Specification.EntityFrameworkCore;
+using Ardalis.Specification;
 using CarsAndBids.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,10 +17,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         this.dbSet = context.Set<TEntity>();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAsync(
-        Expression<Func<TEntity, bool>>? filter = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = "")
+    public async Task<IEnumerable<TEntity>> GetAsync(
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            string includeProperties = "",
+            CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = dbSet;
 
@@ -35,12 +38,36 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
         if (orderBy != null)
         {
-            return await orderBy(query).ToListAsync();
+            return await orderBy(query).ToListAsync(cancellationToken);
         }
-        else
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    // Метод для специфікацій
+    public async Task<object?> GetWithSpecificationAsync(
+        ISpecification<TEntity>? spec = null,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = dbSet;
+
+        if (spec != null)
         {
-            return await query.ToListAsync();
+            query = SpecificationEvaluator.Default.GetQuery(query, spec);
+
+            if (spec.GetType().IsGenericType && spec.GetType().GetGenericTypeDefinition() == typeof(Specification<,>))
+            {
+                if (spec is ISingleResultSpecification)
+                {
+                    return await query.SingleOrDefaultAsync(cancellationToken);
+                }
+                return await query.ToListAsync(cancellationToken);
+            }
+
+            return await query.ToListAsync(cancellationToken);
         }
+
+        return await query.ToListAsync(cancellationToken);
     }
 
     public virtual async Task<TEntity?> GetByIdAsync(object id)

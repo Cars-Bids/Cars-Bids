@@ -2,7 +2,7 @@
 using CarsAndBids.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarsAndBids.Data.Persistence.SeedData;
+namespace CarsAndBids.Data.Persistence.Seed;
 
 public class BodyStyleSeed(
     IGenericRepository<BodyStyle> bodyStyleRepository
