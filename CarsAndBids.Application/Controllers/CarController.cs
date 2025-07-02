@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using CarsAndBids.Core.CQRS.Cars;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CarsAndBids.API.Controllers;
 
@@ -28,6 +30,8 @@ public class CarController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] CreateCarCommand request)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        request.OwnerId = userId;
         await mediator.Send(request);
         return Created();
     }

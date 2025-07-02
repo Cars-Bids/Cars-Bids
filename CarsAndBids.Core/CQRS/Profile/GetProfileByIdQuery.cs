@@ -4,25 +4,22 @@ using CarsAndBids.Core.DTOs;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 
 namespace CarsAndBids.Core.CQRS.Profile;
 
 public class GetProfileByIdQuery : IRequest<ProfileDto?>
 {
+    public int UserId { get; set; }
 }
 
 public class GetProfileByIdHandler(
     IMapper mapper,
-    IGenericRepository<User> repository,
-    IHttpContextAccessor httpContextAccessor
+    IGenericRepository<User> repository
     ) : IRequestHandler<GetProfileByIdQuery, ProfileDto?>
 {
     public async Task<ProfileDto?> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
-        int userId = int.Parse(httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        var profile = await repository.GetByIdAsync(userId);
+        var profile = await repository.GetByIdAsync(request.UserId);
 
         return profile is null
             ? null

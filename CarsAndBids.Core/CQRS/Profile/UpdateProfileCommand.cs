@@ -10,6 +10,7 @@ namespace CarsAndBids.Core.CQRS.Profile;
 
 public class UpdateProfileCommand : IRequest
 {
+    public int UserId { get; set; }
     public string? Username { get; set; }
     public string? Email { get; set; }
     public string? FirstName { get; set; }
@@ -19,25 +20,21 @@ public class UpdateProfileCommand : IRequest
 
 public class UpdateProfileCommandHandler(
     IGenericRepository<User> repository,
-    IHttpContextAccessor httpContextAccessor,
     IMapper mapper
-    ) : IRequestHandler<UpdateProfileCommand>
+) : IRequestHandler<UpdateProfileCommand>
 {
     public async Task Handle(UpdateProfileCommand cmd, CancellationToken cancellationToken)
     {
-        int userId = int.Parse(httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var existingUser = await repository.GetByIdAsync(cmd.UserId);
 
-        var existingUser = await repository.GetByIdAsync(userId);
-
-        if (existingUser?.Id != userId)
+        if (existingUser == null)
         {
-            throw new UnauthorizedAccessException("This is not your profile.");
+            throw new KeyNotFoundException("User not found.");
         }
 
         mapper.Map(cmd, existingUser);
 
         await repository.UpdateAsync(existingUser);
-
-        return;
     }
 }
+
