@@ -1,4 +1,5 @@
 ﻿using CarsAndBids.API.Filters;
+using CarsAndBids.Core.Hubs;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Services;
 using CarsAndBids.Data.Entities;
@@ -38,6 +39,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+
+        services.AddSignalR();
+        services.AddHostedService<AuctionHostedService>();
 
         services.AddControllers();
 
@@ -117,7 +121,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWebHostEnvironment>(environment);
 
         services.AddScoped<IFileService, FileService>();
-
 
         return services;
     }
