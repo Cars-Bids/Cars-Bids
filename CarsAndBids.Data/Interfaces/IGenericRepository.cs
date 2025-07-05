@@ -11,9 +11,9 @@ public interface IGenericRepository<TEntity> where TEntity : class
         string includeProperties = "",
         CancellationToken cancellationToken = default);
 
-    Task<object?> GetWithSpecificationAsync(
-        ISpecification<TEntity>? spec = null,
-        CancellationToken cancellationToken = default);
+    Task<List<TEntity>> ListAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default);
+    Task<TEntity?> SingleOrDefaultAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default);
+
 
     Task<TEntity?> GetByIdAsync(object id);
     Task InsertAsync(TEntity entity);

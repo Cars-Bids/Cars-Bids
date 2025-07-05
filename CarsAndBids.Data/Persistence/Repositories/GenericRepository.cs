@@ -44,30 +44,16 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await query.ToListAsync(cancellationToken);
     }
 
-    // Метод для специфікацій
-    public async Task<object?> GetWithSpecificationAsync(
-        ISpecification<TEntity>? spec = null,
-        CancellationToken cancellationToken = default)
+    public async Task<List<TEntity>> ListAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
     {
-        IQueryable<TEntity> query = dbSet;
-
-        if (spec != null)
-        {
-            query = SpecificationEvaluator.Default.GetQuery(query, spec);
-
-            if (spec.GetType().IsGenericType && spec.GetType().GetGenericTypeDefinition() == typeof(Specification<,>))
-            {
-                if (spec is ISingleResultSpecification)
-                {
-                    return await query.SingleOrDefaultAsync(cancellationToken);
-                }
-                return await query.ToListAsync(cancellationToken);
-            }
-
-            return await query.ToListAsync(cancellationToken);
-        }
-
+        IQueryable<TEntity> query = SpecificationEvaluator.Default.GetQuery(dbSet.AsQueryable(), spec);
         return await query.ToListAsync(cancellationToken);
+    }
+
+    public async Task<TEntity?> SingleOrDefaultAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = SpecificationEvaluator.Default.GetQuery(dbSet.AsQueryable(), spec);
+        return await query.SingleOrDefaultAsync(cancellationToken);
     }
 
     public virtual async Task<TEntity?> GetByIdAsync(object id)

@@ -22,7 +22,7 @@ public class DeleteCarByIdHandler(
         var filter = (Expression<Func<CarImage, bool>>)(ci => ci.CarId == cmd.Id);
         var selector = (Expression<Func<CarImage, string>>)(ci => ci.ImageUrl);
         var spec = new SelectByPropertySpec<CarImage, string>(filter, selector);
-        var result = await carImageRepository.GetWithSpecificationAsync(spec);
+        var result = await carImageRepository.ListAsync(spec);
         var urls = (result as IEnumerable<string>)?.ToList() ?? new List<string>();
 
         await fileService.DeleteImagesByUrlsAsync(urls!);
