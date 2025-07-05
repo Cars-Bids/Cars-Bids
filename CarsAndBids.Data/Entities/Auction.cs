@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using CarsAndBids.Data.Enums;
+﻿using CarsAndBids.Data.Enums;
 
 namespace CarsAndBids.Data.Entities;
 
@@ -11,6 +9,7 @@ public class Auction
     public int SellerId { get; set; }
     public decimal StartPrice { get; set; }
     public decimal CurrentPrice { get; set; }
+    public string? CurrentBidder { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public AuctionStatus Status { get; set; } = AuctionStatus.Pending;

@@ -9,6 +9,7 @@ public class AuctionDto
     public string? Description { get; set; }
     public decimal StartingPrice { get; set; }
     public decimal CurrentBid { get; set; }
+    public string? CurrentBidder { get; set; }
     public DateTime EndTime { get; set; }
     public int Mileage { get; set; }
     public string? Status { get; set; }
