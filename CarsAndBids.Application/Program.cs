@@ -1,5 +1,6 @@
 using CarsAndBids.API.Middleware;
 using CarsAndBids.API.DependencyInjection;
+using CarsAndBids.API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,6 @@ app.UseSwaggerUI();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
-//app.MapHub<ChatHub>("/chatHub");
 
 app.UseStaticFiles();
 app.UseHttpsRedirection();
@@ -32,6 +32,8 @@ app.UseAuthorization();
 //     Console.WriteLine("Request path: " + context.Request.Path);
 //     await next.Invoke();
 // });
+
+app.MapHub<ChatHub>("/hub/chat");
 
 app.MapControllers();
 

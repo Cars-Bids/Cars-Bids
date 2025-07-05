@@ -6,6 +6,7 @@ using CarsAndBids.Core.CQRS.BodyStyles;
 using CarsAndBids.Core.CQRS.Makes;
 using CarsAndBids.Core.CQRS.Models;
 using CarsAndBids.Core.CQRS.Cars;
+using CarsAndBids.Core.CQRS.Chat;
 using CarsAndBids.Core.CQRS.Profile;
 
 namespace CarsAndBids.Core.Mapping;
@@ -36,6 +37,9 @@ public class AutoMapperProfile : Profile
 
         CreateMap<User, ProfileDto>().ReverseMap();
         CreateMap<User, UpdateProfileCommand>().ReverseMap();
+
+        CreateMap<ChatMessage, ChatMessageDto>().ReverseMap();
+        CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
 
         
 

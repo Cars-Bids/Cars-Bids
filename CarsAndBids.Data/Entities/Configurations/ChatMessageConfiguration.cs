@@ -25,6 +25,6 @@ public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage>
         
         builder.HasOne(cm => cm.User)
             .WithMany(u => u.ChatMessages)
-            .HasForeignKey(cm => cm.UserId);
+            .HasForeignKey(cm => cm.SenderId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using CarsAndBids.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CarsAndBids.Data.Persistence.Repositories;
 
@@ -53,6 +54,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         await dbSet.AddAsync(entity);
         await context.SaveChangesAsync();
     }
+    
+    public virtual async Task InsertRangeAsync(IEnumerable<TEntity> entities)
+    {
+        await dbSet.AddRangeAsync(entities);
+        await context.SaveChangesAsync();
+    }
 
     public virtual async Task DeleteAsync(object id)
     {
@@ -76,11 +83,49 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         dbSet.Remove(entityToDelete);
         await context.SaveChangesAsync();
     }
+    
+    public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entities)
+    {
+        foreach (var entity in entities)
+        {
+            if (context.Entry(entity).State == EntityState.Detached)
+            {
+                dbSet.Attach(entity);
+            }
+        }
+
+        dbSet.RemoveRange(entities);
+        await context.SaveChangesAsync();
+    }
 
     public virtual async Task UpdateAsync(TEntity entityToUpdate)
     {
         dbSet.Attach(entityToUpdate);
         context.Entry(entityToUpdate).State = EntityState.Modified;
         await context.SaveChangesAsync();
+    }
+    
+    public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
+    {
+        foreach (var entity in entities)
+        {
+            dbSet.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+        }
+
+        await context.SaveChangesAsync();
+    }
+    
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
+    {
+        return await context.Database.BeginTransactionAsync();
+    }
+    public async Task CommitAsync(IDbContextTransaction transaction)
+    {
+        await transaction.CommitAsync();
+    }
+    public async Task RollbackAsync(IDbContextTransaction transaction)
+    {
+        await transaction.RollbackAsync();
     }
 }

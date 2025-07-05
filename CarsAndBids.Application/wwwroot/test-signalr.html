@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Chat Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.js"></script>
+</head>
+<body>
+<h2>SignalR Test</h2>
+<label>JWT Token:</label><br/>
+<textarea id="token" rows="4" cols="100"></textarea><br/><br/>
+
+<label>Chat ID:</label><br/>
+<input type="number" id="chatId" value="1"/><br/><br/>
+
+<label>Message:</label><br/>
+<input type="text" id="message"/><br/><br/>
+
+<button onclick="connect()">Connect</button>
+<button onclick="joinChat()">Join Chat</button>
+<button onclick="sendMessage()">Send Message</button>
+<button onclick="leaveChat()">Leave Chat</button>
+
+<h3>Output:</h3>
+<pre id="output"></pre>
+
+<script>
+    let connection;
+
+    function log(msg) {
+        document.getElementById("output").textContent += msg + '\n';
+    }
+
+    async function connect() {
+        const token = document.getElementById("token").value;
+
+        connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:5042/hub/chat", {
+                accessTokenFactory: () => token
+            })
+            .configureLogging(signalR.LogLevel.Information)
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ReceiveChatHistory", (messages) => {
+            log("Chat History:");
+            log(JSON.stringify(messages, null, 2));
+        });
+
+        connection.on("ReceiveMessage", (message) => {
+            log("New message received:");
+            log(JSON.stringify(message, null, 2));
+        });
+
+        connection.on("EditMessage", (editedMessage) => {
+            log("Message edited:");
+            log(JSON.stringify(editedMessage, null, 2));
+        });
+
+        connection.on("DeleteMessage", (messageId) => {
+            log(`Message deleted: ID ${messageId}`);
+        });
+
+        connection.on("AttachmentsDeleted", (ids) => {
+            log(`Attachments deleted: ${ids.join(", ")}`);
+        });
+
+        try {
+            await connection.start();
+            log("Connected to SignalR hub.");
+        } catch (err) {
+            log("Connection error: " + err.toString());
+        }
+    }
+
+    async function joinChat() {
+        const chatId = parseInt(document.getElementById("chatId").value);
+        await connection.invoke("JoinChat", chatId);
+        log("Joined chat " + chatId);
+    }
+
+    async function sendMessage() {
+        const chatId = parseInt(document.getElementById("chatId").value);
+        const message = document.getElementById("message").value;
+
+        try {
+            await connection.invoke("SendMessage", chatId, message, []); // Без images
+            log("Message sent.");
+        } catch (err) {
+            log("SendMessage error: " + err.toString());
+        }
+    }
+
+    async function leaveChat() {
+        const chatId = parseInt(document.getElementById("chatId").value);
+        try {
+            await connection.invoke("LeaveChat", chatId);
+            log("Left chat " + chatId);
+        } catch (err) {
+            log("LeaveChat error: " + err.toString());
+        }
+    }
+
+</script>
+</body>
+</html>

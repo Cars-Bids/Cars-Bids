@@ -11,13 +11,6 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
         
         builder.Property(c => c.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-        builder.HasOne(c => c.User1)
-            .WithMany(u => u.Chats)
-            .HasForeignKey(c => c.User1Id);
         
-        builder.HasOne(c => c.User2)
-            .WithMany(u => u.Chats)
-            .HasForeignKey(c => c.User2Id);
     }
 }

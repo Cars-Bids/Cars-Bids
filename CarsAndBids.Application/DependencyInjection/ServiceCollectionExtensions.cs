@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CarsAndBids.API.DependencyInjection;
 
@@ -25,9 +26,8 @@ public static class ServiceCollectionExtensions
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddAutoMapper(typeof(Core.Mapping.AutoMapperProfile));
-
         services.AddSignalR();
-
+        
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
         services.AddScoped<IGenericRepository<BodyStyle>, GenericRepository<BodyStyle>>();
@@ -36,7 +36,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<CarImage>, GenericRepository<CarImage>>();
         services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
         services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+        services.AddScoped<IGenericRepository<Chat>, GenericRepository<Chat>>();
+        services.AddScoped<IGenericRepository<ChatMessage>, GenericRepository<ChatMessage>>();
+        services.AddScoped<IGenericRepository<ChatAttachment>, GenericRepository<ChatAttachment>>();
 
+        services.AddScoped<IFileService, FileService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
@@ -84,14 +88,15 @@ public static class ServiceCollectionExtensions
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = signingKey,
                     ClockSkew = TimeSpan.Zero,
-                    NameClaimType = ClaimTypes.NameIdentifier
+                    NameClaimType = "nameid"
                 };
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
                         var token = context.Request.Query["access_token"];
-                        if (!string.IsNullOrEmpty(token))
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(token) && path.StartsWithSegments("/hub"))
                         {
                             context.Token = token;
                         }
@@ -129,8 +134,8 @@ public static class ServiceCollectionExtensions
             .AddDefaultTokenProviders();
         
         services.AddSingleton<IWebHostEnvironment>(environment);
+        services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
-        services.AddScoped<IFileService, FileService>();
 
 
         return services;

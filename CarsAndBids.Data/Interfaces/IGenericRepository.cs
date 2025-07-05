@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CarsAndBids.Data.Interfaces;
 
@@ -11,7 +12,13 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
     Task<TEntity?> GetByIdAsync(object id);
     Task InsertAsync(TEntity entity);
+    Task InsertRangeAsync(IEnumerable<TEntity> entities);
     Task DeleteAsync(object id);
     Task DeleteAsync(TEntity entity);
+    Task DeleteRangeAsync(IEnumerable<TEntity> entities);
     Task UpdateAsync(TEntity entity);
+    Task UpdateRangeAsync(IEnumerable<TEntity> entities);
+    Task<IDbContextTransaction> BeginTransactionAsync();
+    Task CommitAsync(IDbContextTransaction transaction);
+    Task RollbackAsync(IDbContextTransaction transaction);
 }
