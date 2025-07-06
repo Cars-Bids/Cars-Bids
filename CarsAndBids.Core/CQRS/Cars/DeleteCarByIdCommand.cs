@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using CarsAndBids.Core.Interfaces;
+﻿using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
 using CarsAndBids.Data.Persistence.Repositories.Specification;
@@ -19,14 +18,12 @@ public class DeleteCarByIdHandler(
 {
     public async Task Handle(DeleteCarByIdCommand cmd, CancellationToken cancellationToken)
     {
-        var filter = (Expression<Func<CarImage, bool>>)(ci => ci.CarId == cmd.Id);
-        var selector = (Expression<Func<CarImage, string>>)(ci => ci.ImageUrl);
-        var spec = new SelectByPropertySpec<CarImage, string>(filter, selector);
-        var result = await carImageRepository.ListAsync(spec);
-        var urls = (result as IEnumerable<string>)?.ToList() ?? new List<string>();
+        var car = await carRepository.GetByIdAsync(cmd.Id);
+        if (car == null)
+            throw new ArgumentException($"Car with ID {cmd.Id} not found.");
 
-        await fileService.DeleteImagesByUrlsAsync(urls!);
-
+        await fileService.DeleteImagesByUrlsAsync(
+            await carImageRepository.GetListBySpec(new CarImagesByCarIdSpec(cmd.Id), cancellationToken));
         await carRepository.DeleteAsync(cmd.Id);
     }
 }

@@ -1,6 +1,7 @@
 using CarsAndBids.API.Middleware;
 using CarsAndBids.API.DependencyInjection;
 using CarsAndBids.Data.Persistence;
+using CarsAndBids.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,10 +35,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
-{
-    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-    await seeder.SeedAsync();
-}
+await app.SeedDataAsync();
 
 app.Run();

@@ -16,5 +16,7 @@ namespace CarsAndBids.Data.Persistence
             await seederRepository.SeedBodyStylesAsync(context);
 
         }
+
     }
+
 }
