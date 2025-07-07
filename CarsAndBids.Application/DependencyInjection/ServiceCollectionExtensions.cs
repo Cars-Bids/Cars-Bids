@@ -1,4 +1,5 @@
 ﻿using CarsAndBids.API.Filters;
+using CarsAndBids.Core.Hubs;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Services;
 using CarsAndBids.Data.Entities;
@@ -25,9 +26,13 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddScoped<DataSeeder>();
+
+
         services.AddAutoMapper(typeof(Core.Mapping.AutoMapperProfile));
-        services.AddSignalR();
-        
+      
+        services.AddScoped<IDataSeederRepository, DataSeederRepository>();
+      
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
         services.AddScoped<IGenericRepository<BodyStyle>, GenericRepository<BodyStyle>>();
@@ -44,6 +49,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+
+        services.AddSignalR();
+        services.AddHostedService<AuctionHostedService>();
 
         services.AddControllers();
 
@@ -135,7 +143,6 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton<IWebHostEnvironment>(environment);
         services.AddSingleton<IUserIdProvider, UserIdProvider>();
-
 
 
         return services;

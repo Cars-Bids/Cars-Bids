@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using Ardalis.Specification.EntityFrameworkCore;
+using Ardalis.Specification;
 using CarsAndBids.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -16,10 +18,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         this.dbSet = context.Set<TEntity>();
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAsync(
+    public async Task<IEnumerable<TEntity>> GetAsync(
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = "")
+        string includeProperties = "",
+        CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = dbSet;
 
@@ -36,12 +39,25 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
         if (orderBy != null)
         {
-            return await orderBy(query).ToListAsync();
+            return await orderBy(query).ToListAsync(cancellationToken);
         }
-        else
-        {
-            return await query.ToListAsync();
-        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<TResult>> GetListBySpec<TResult>(ISpecification<TEntity, TResult> specification, CancellationToken cancellationToken = default)
+    {
+        return await ApplySpecification(specification).ToListAsync(cancellationToken);
+    }
+
+    public async Task<TResult?> GetItemBySpec<TResult>(ISpecification<TEntity, TResult> specification, CancellationToken cancellationToken = default)
+    {
+        return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    private IQueryable<TResult> ApplySpecification<TResult>(ISpecification<TEntity, TResult> specification)
+    {
+        return SpecificationEvaluator.Default.GetQuery(dbSet.AsQueryable(), specification);
     }
 
     public virtual async Task<TEntity?> GetByIdAsync(object id)
@@ -104,7 +120,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         context.Entry(entityToUpdate).State = EntityState.Modified;
         await context.SaveChangesAsync();
     }
-    
+
     public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
     {
         foreach (var entity in entities)

@@ -5,6 +5,7 @@ using CarsAndBids.Core.Services;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Enums;
 using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Net;
@@ -48,7 +49,7 @@ public class UpdateCarCommandHandler(
     IGenericRepository<CarImage> carImageRepository,
     IMapper mapper,
     IFileService fileService
-    ) : IRequestHandler<UpdateCarCommand>
+) : IRequestHandler<UpdateCarCommand>
 {
     public async Task Handle(UpdateCarCommand cmd, CancellationToken cancellationToken)
     {
@@ -60,8 +61,8 @@ public class UpdateCarCommandHandler(
 
         if (cmd.ImagesToDelete != null && cmd.ImagesToDelete.Any())
         {
-            var imagesToDelete = await carImageRepository.GetAsync(
-                filter: img => img.CarId == cmd.Id && cmd.ImagesToDelete.Contains(img.ImageUrl!));
+            var spec = new CarImagesByCarIdAndUrlsSpec(cmd.Id, cmd.ImagesToDelete);
+            var imagesToDelete = await carImageRepository.GetListBySpec<CarImage>(spec, cancellationToken);
 
             if (imagesToDelete.Any())
             {
@@ -78,9 +79,8 @@ public class UpdateCarCommandHandler(
         {
             foreach (var update in cmd.ImagesToUpdate)
             {
-                var image = (await carImageRepository.GetAsync(
-                    filter: img => img.CarId == cmd.Id && img.ImageUrl == update.ImageUrl))
-                    .FirstOrDefault()
+                var spec = new CarImageByCarIdAndUrlSpec(cmd.Id, update.ImageUrl!);
+                var image = await carImageRepository.GetItemBySpec<CarImage>(spec, cancellationToken)
                     ?? throw new HttpException($"Image with URL [{update.ImageUrl}] not found!", HttpStatusCode.NotFound);
 
                 image.OrderNumber = update.OrderNumber;
@@ -89,8 +89,8 @@ public class UpdateCarCommandHandler(
             }
         }
 
-        int maxOrderNumber = (await carImageRepository.GetAsync(filter: img => img.CarId == cmd.Id))
-            .Select(img => img.OrderNumber)
+        var maxOrderSpec = new CarImagesMaxOrderNumberSpec(cmd.Id);
+        int maxOrderNumber = (await carImageRepository.GetListBySpec<int>(maxOrderSpec, cancellationToken))
             .DefaultIfEmpty(0)
             .Max() + 1;
 

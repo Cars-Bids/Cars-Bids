@@ -3,6 +3,7 @@ using System;
 using CarsAndBids.Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CarsAndBids.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250705160428_Add_CurrentBidder")]
+    partial class Add_CurrentBidder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +35,6 @@ namespace CarsAndBids.Data.Migrations
 
                     b.Property<string>("AnswerText")
                         .IsRequired()
-                        .HasMaxLength(300)
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
@@ -100,8 +102,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarId")
-                        .IsUnique();
+                    b.HasIndex("CarId");
 
                     b.HasIndex("SellerId");
 
@@ -174,16 +175,12 @@ namespace CarsAndBids.Data.Migrations
                     b.Property<int>("BodyStyleId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ChatId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Drivetrain")
@@ -192,22 +189,18 @@ namespace CarsAndBids.Data.Migrations
                         .HasColumnType("character varying(10)");
 
                     b.Property<string>("Engine")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("ExteriorColor")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("InteriorColor")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -246,9 +239,6 @@ namespace CarsAndBids.Data.Migrations
                     b.HasIndex("AssingId");
 
                     b.HasIndex("BodyStyleId");
-
-                    b.HasIndex("ChatId")
-                        .IsUnique();
 
                     b.HasIndex("ModelId");
 
@@ -367,14 +357,14 @@ namespace CarsAndBids.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("SenderId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ChatMessages");
                 });
@@ -500,7 +490,6 @@ namespace CarsAndBids.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Token")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
@@ -545,12 +534,10 @@ namespace CarsAndBids.Data.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -579,7 +566,6 @@ namespace CarsAndBids.Data.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ProfilePictureUrl")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
@@ -631,21 +617,6 @@ namespace CarsAndBids.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Wishlists");
-                });
-
-            modelBuilder.Entity("ChatUser", b =>
-                {
-                    b.Property<int>("ChatsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ParticipantsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ChatsId", "ParticipantsId");
-
-                    b.HasIndex("ParticipantsId");
-
-                    b.ToTable("ChatUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -802,8 +773,8 @@ namespace CarsAndBids.Data.Migrations
             modelBuilder.Entity("CarsAndBids.Data.Entities.Auction", b =>
                 {
                     b.HasOne("CarsAndBids.Data.Entities.Car", "Car")
-                        .WithOne("Auction")
-                        .HasForeignKey("CarsAndBids.Data.Entities.Auction", "CarId")
+                        .WithMany("Auctions")
+                        .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -849,12 +820,6 @@ namespace CarsAndBids.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.Chat", "Chat")
-                        .WithOne("Car")
-                        .HasForeignKey("CarsAndBids.Data.Entities.Car", "ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CarsAndBids.Data.Entities.Model", "Model")
                         .WithMany("Cars")
                         .HasForeignKey("ModelId")
@@ -870,8 +835,6 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("Assing");
 
                     b.Navigation("BodyStyle");
-
-                    b.Navigation("Chat");
 
                     b.Navigation("Model");
 
@@ -910,7 +873,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasOne("CarsAndBids.Data.Entities.User", "User")
                         .WithMany("ChatMessages")
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -998,21 +961,6 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ChatUser", b =>
-                {
-                    b.HasOne("CarsAndBids.Data.Entities.Chat", null)
-                        .WithMany()
-                        .HasForeignKey("ChatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CarsAndBids.Data.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("ParticipantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -1082,15 +1030,13 @@ namespace CarsAndBids.Data.Migrations
 
             modelBuilder.Entity("CarsAndBids.Data.Entities.Car", b =>
                 {
-                    b.Navigation("Auction");
+                    b.Navigation("Auctions");
 
                     b.Navigation("Images");
                 });
 
             modelBuilder.Entity("CarsAndBids.Data.Entities.Chat", b =>
                 {
-                    b.Navigation("Car");
-
                     b.Navigation("Messages");
                 });
 
