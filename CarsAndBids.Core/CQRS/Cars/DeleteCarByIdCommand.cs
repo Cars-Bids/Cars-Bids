@@ -1,7 +1,7 @@
 ﻿using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
-using CarsAndBids.Data.Persistence.Repositories.Specification;
+using CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Cars;
@@ -24,6 +24,7 @@ public class DeleteCarByIdHandler(
 
         await fileService.DeleteImagesByUrlsAsync(
             await carImageRepository.GetListBySpec(new CarImagesByCarIdSpec(cmd.Id), cancellationToken));
+
         await carRepository.DeleteAsync(cmd.Id);
     }
 }

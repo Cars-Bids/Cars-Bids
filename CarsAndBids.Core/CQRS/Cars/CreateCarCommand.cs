@@ -4,9 +4,7 @@ using CarsAndBids.Data.Enums;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using CarsAndBids.Core.Services;
 using CarsAndBids.Core.Interfaces;
-using System.Security.Claims;
 namespace CarsAndBids.Core.CQRS.Cars;
 
 public class CreateCarCommand : IRequest

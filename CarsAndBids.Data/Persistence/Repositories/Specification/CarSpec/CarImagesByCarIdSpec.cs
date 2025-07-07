@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using CarsAndBids.Data.Entities;
 
-namespace CarsAndBids.Data.Persistence.Repositories.Specification;
+namespace CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
 
 public class CarImagesByCarIdSpec : Specification<CarImage, string>
 {
