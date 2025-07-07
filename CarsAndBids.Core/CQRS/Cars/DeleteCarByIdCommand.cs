@@ -1,6 +1,7 @@
 ﻿using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Data.Entities;
 using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Cars;
@@ -17,11 +18,12 @@ public class DeleteCarByIdHandler(
 {
     public async Task Handle(DeleteCarByIdCommand cmd, CancellationToken cancellationToken)
     {
-        var urls = (await carImageRepository.GetAsync(filter: ci => ci.CarId == cmd.Id))
-            .Select(ci => ci.ImageUrl)
-            .ToList();
+        var car = await carRepository.GetByIdAsync(cmd.Id);
+        if (car == null)
+            throw new ArgumentException($"Car with ID {cmd.Id} not found.");
 
-        await fileService.DeleteImagesByUrlsAsync(urls!);
+        await fileService.DeleteImagesByUrlsAsync(
+            await carImageRepository.GetListBySpec(new CarImagesByCarIdSpec(cmd.Id), cancellationToken));
 
         await carRepository.DeleteAsync(cmd.Id);
     }

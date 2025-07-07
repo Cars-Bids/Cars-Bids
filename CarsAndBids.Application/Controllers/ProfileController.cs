@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CarsAndBids.Core.CQRS.Profile;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 namespace CarsAndBids.API.Controllers;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -14,7 +15,8 @@ public class ProfileController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProfile()
     {
-        var result = await mediator.Send(new GetProfileByIdQuery());
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await mediator.Send(new GetProfileByIdQuery { UserId = userId });
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -23,6 +25,9 @@ public class ProfileController(IMediator mediator) : ControllerBase
     {
         try
         {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            request.UserId = userId;
+
             await mediator.Send(request);
             return Ok();
         }

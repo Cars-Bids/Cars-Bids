@@ -4,13 +4,12 @@ using CarsAndBids.Data.Enums;
 using CarsAndBids.Data.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using CarsAndBids.Core.Services;
 using CarsAndBids.Core.Interfaces;
-using System.Security.Claims;
 namespace CarsAndBids.Core.CQRS.Cars;
 
 public class CreateCarCommand : IRequest
 {
+    public int OwnerId { get; set; }
     public int Year { get; set; }
     public string? Vin { get; set; }
     public string? Description { get; set; }
@@ -35,7 +34,6 @@ public class CreateCarCommandHandler(
     IGenericRepository<Car> carRepository,
     IGenericRepository<CarImage> carImageRepository,
     IMapper mapper,
-    IHttpContextAccessor httpContextAccessor,
     IFileService fileService
     ) : IRequestHandler<CreateCarCommand>
 {
@@ -44,10 +42,9 @@ public class CreateCarCommandHandler(
     {
 
         var car = mapper.Map<Car>(cmd);
-        int ownerId = int.Parse(httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        car.OwnerId = ownerId;
+        car.OwnerId = cmd.OwnerId;
         car.Status = CarStatus.inPending;
+
         await carRepository.InsertAsync(car);
 
         int orderNumber = 1;

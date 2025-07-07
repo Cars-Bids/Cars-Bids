@@ -25,7 +25,12 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddScoped<DataSeeder>();
+
+
         services.AddAutoMapper(typeof(Core.Mapping.AutoMapperProfile));
+
+        services.AddScoped<IDataSeederRepository, DataSeederRepository>();
 
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();

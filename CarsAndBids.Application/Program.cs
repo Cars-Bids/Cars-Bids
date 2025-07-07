@@ -1,4 +1,6 @@
 using CarsAndBids.API.DependencyInjection;
+using CarsAndBids.Data.Persistence;
+using CarsAndBids.API.Extensions;
 using CarsAndBids.API.Middleware;
 using CarsAndBids.Core.Hubs;
 
@@ -35,5 +37,7 @@ app.MapHub<AuctionHub>("/auctionHub").RequireAuthorization();
 // });
 
 app.MapControllers();
+
+await app.SeedDataAsync();
 
 app.Run();
