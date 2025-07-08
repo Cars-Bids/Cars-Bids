@@ -10,6 +10,7 @@ public class AnswerConfiguration : IEntityTypeConfiguration<Answer>
         builder.HasKey(a => a.Id);
         
         builder.Property(a => a.AnswerText)
+            .HasMaxLength(300)
             .HasColumnType("text")
             .IsRequired();
         

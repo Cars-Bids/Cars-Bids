@@ -60,5 +60,9 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.HasOne(c => c.Model)
             .WithMany(m => m.Cars)
             .HasForeignKey(c => c.ModelId);
+
+        builder.HasOne(c => c.Chat)
+            .WithOne(c => c.Car)
+            .HasForeignKey<Car>(c => c.ChatId);
     }
 }

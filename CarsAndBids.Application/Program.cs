@@ -1,4 +1,5 @@
 using CarsAndBids.API.DependencyInjection;
+using CarsAndBids.API.Hubs;
 using CarsAndBids.Data.Persistence;
 using CarsAndBids.API.Extensions;
 using CarsAndBids.API.Middleware;
@@ -14,6 +15,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
+
 
 app.UseStaticFiles();
 app.UseHttpsRedirection();
@@ -35,6 +37,8 @@ app.MapHub<AuctionHub>("/auctionHub").RequireAuthorization();
 //     Console.WriteLine("Request path: " + context.Request.Path);
 //     await next.Invoke();
 // });
+
+app.MapHub<ChatHub>("/hub/chat");
 
 app.MapControllers();
 

@@ -16,8 +16,8 @@ public class Auction
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? ApprovedAt { get; set; }
 
-    public Car? Car { get; set; }
-    public User? Seller { get; set; }
+    public Car Car { get; set; } = null!;
+    public User Seller { get; set; } = null!;
     public ICollection<Bid>? Bids { get; set; }
     public ICollection<Comment>? Comments { get; set; }
     public ICollection<Question>? Questions { get; set; }

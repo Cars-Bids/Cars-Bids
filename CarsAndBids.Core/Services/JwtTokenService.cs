@@ -35,7 +35,7 @@ public class JwtTokenService(IConfiguration configuration,
         var jwt = new JwtSecurityToken(
             issuer: configuration["JwtSettings:Issuer"],
             signingCredentials: signinCredential,
-            expires: (DateTime.Now.AddDays(configuration.GetValue<int>("JwtSettings:AccessTokenExpiration"))).ToUniversalTime(),
+            expires: (DateTime.Now.AddMinutes(configuration.GetValue<int>("JwtSettings:AccessTokenExpiration"))).ToUniversalTime(),
             claims: claims);
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);

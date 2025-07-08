@@ -21,10 +21,10 @@ public class AuctionConfiguration : IEntityTypeConfiguration<Auction>
         
         builder.Property(a => a.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
+
         builder.HasOne(a => a.Car)
-            .WithMany(c => c.Auctions)
-            .HasForeignKey(a => a.CarId);
+            .WithOne(c => c.Auction)
+            .HasForeignKey<Auction>(a => a.CarId);
         
         builder.HasOne(a => a.Seller)
             .WithMany(u => u.Auctions)

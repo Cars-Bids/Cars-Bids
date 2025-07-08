@@ -4,11 +4,10 @@ namespace CarsAndBids.Data.Entities;
 
 public class User : IdentityUser<int>
 {
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public string? ProfilePictureUrl { get; set; }
-
+    public string ProfilePictureUrl { get; set; } = null!;
 
     public ICollection<Car>? AssingCars { get; set; }
     public ICollection<Car>? OwnedCars { get; set; }
@@ -20,5 +19,6 @@ public class User : IdentityUser<int>
     public ICollection<Answer>? Answers { get; set; }
     public ICollection<Wishlist>? Wishlists { get; set; }
     public ICollection<RefreshToken>? RefreshTokens { get; set; }
+    public ICollection<Chat>? Chats { get; set; }
     
 }

@@ -11,5 +11,6 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
         
         builder.Property(c => c.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        
     }
 }
