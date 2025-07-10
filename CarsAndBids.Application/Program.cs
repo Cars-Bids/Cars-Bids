@@ -3,7 +3,6 @@ using CarsAndBids.API.Hubs;
 using CarsAndBids.Data.Persistence;
 using CarsAndBids.API.Extensions;
 using CarsAndBids.API.Middleware;
-using CarsAndBids.Core.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 

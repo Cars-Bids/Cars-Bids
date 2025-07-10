@@ -27,9 +27,5 @@
 		<ProjectReference Include="..\CarsAndBids.Data\CarsAndBids.Data.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Services\" />
-	</ItemGroup>
-
 
 </Project>

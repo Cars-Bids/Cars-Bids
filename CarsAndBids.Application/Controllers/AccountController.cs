@@ -1,4 +1,5 @@
-using CarsAndBids.Core.CQRS.Account;
+using CarsAndBids.Core.Commands.Account;
+using CarsAndBids.Core.Queries.Account;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

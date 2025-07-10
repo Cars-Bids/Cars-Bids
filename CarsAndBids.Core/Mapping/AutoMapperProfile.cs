@@ -1,13 +1,13 @@
 ﻿using CarsAndBids.Core.DTOs;
-using CarsAndBids.Data.Entities;
+using CarsAndBids.Core.Entities;
 using AutoMapper;
-using CarsAndBids.Core.CQRS.Account;
-using CarsAndBids.Core.CQRS.BodyStyles;
-using CarsAndBids.Core.CQRS.Makes;
-using CarsAndBids.Core.CQRS.Models;
-using CarsAndBids.Core.CQRS.Cars;
-using CarsAndBids.Core.CQRS.Chat;
-using CarsAndBids.Core.CQRS.Profile;
+using CarsAndBids.Core.Commands.BodyStyles;
+using CarsAndBids.Core.Commands.Makes;
+using CarsAndBids.Core.Commands.Models;
+using CarsAndBids.Core.Commands.Cars;
+using CarsAndBids.Core.Commands.Profile;
+using CarsAndBids.Core.Commands.Chat;
+using CarsAndBids.Core.Commands.Account;
 
 namespace CarsAndBids.Core.Mapping;
 

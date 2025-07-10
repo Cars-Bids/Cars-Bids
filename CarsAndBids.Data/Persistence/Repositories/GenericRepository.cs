@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Ardalis.Specification.EntityFrameworkCore;
 using Ardalis.Specification;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

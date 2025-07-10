@@ -1,9 +1,6 @@
 ﻿using CarsAndBids.API.Filters;
-using CarsAndBids.Core.Hubs;
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Services;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Data.Services;
 using CarsAndBids.Data.Persistence;
 using CarsAndBids.Data.Persistence.Repositories;
 using FluentValidation;
@@ -16,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.SignalR;
+using CarsAndBids.Data.Persistence.Seed;
+using CarsAndBids.Core.Entities;
 
 namespace CarsAndBids.API.DependencyInjection;
 

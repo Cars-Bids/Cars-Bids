@@ -1,4 +1,4 @@
-﻿using CarsAndBids.Data.Enums;
+﻿using CarsAndBids.Core.Enums;
 
 namespace CarsAndBids.Core.DTOs;
 

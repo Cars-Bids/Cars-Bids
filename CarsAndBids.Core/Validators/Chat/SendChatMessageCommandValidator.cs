@@ -1,4 +1,4 @@
-using CarsAndBids.Core.CQRS.Chat;
+using CarsAndBids.Core.Commands.Chat;
 using FluentValidation;
 
 namespace CarsAndBids.Core.Validators.Chat;

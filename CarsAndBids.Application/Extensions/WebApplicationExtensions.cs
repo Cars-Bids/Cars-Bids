@@ -1,4 +1,4 @@
-﻿using CarsAndBids.Data.Persistence;
+﻿using CarsAndBids.Data.Persistence.Seed;
 
 namespace CarsAndBids.API.Extensions;
 

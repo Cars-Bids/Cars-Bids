@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Cars;
+using CarsAndBids.Core.Commands.Cars;
 
 namespace CarsAndBids.Core.Validators.Cars;
 
