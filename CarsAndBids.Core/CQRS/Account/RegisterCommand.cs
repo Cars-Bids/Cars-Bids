@@ -1,7 +1,7 @@
 using AutoMapper;
 using CarsAndBids.Core.Constants;
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Data.Entities;
+using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

@@ -1,5 +1,5 @@
 ﻿using CarsAndBids.Core.DTOs;
-using CarsAndBids.Data.Enums;
+using CarsAndBids.Core.Enums;
 
 namespace CarsAndBids.Core.Interfaces;
 

@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Enums;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Enums;
+using CarsAndBids.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using CarsAndBids.Core.Interfaces;
 namespace CarsAndBids.Core.CQRS.Cars;
 
 public class CreateCarCommand : IRequest

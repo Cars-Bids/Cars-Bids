@@ -1,9 +1,7 @@
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.VisualBasic;
 
 namespace CarsAndBids.Core.CQRS.Chat;
 

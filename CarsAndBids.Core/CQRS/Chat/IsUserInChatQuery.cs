@@ -1,7 +1,7 @@
 using System.Net;
 using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Interfaces;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Chat;
@@ -13,7 +13,7 @@ public class IsUserInChatQuery : IRequest<bool>
 }
 
 public class IsUserInChatQueryHandler(IGenericRepository<User> userRepository,
-                                      IGenericRepository<Data.Entities.Chat> chatRepository) : IRequestHandler<IsUserInChatQuery, bool>
+                                      IGenericRepository<Entities.Chat> chatRepository) : IRequestHandler<IsUserInChatQuery, bool>
 {
     public async Task<bool> Handle(IsUserInChatQuery request, CancellationToken cancellationToken)                         // TODO: needs to be reworked
     {                                                                                                                      // (retrieving list when using only 1 object)

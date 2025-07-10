@@ -1,14 +1,9 @@
 using System.Collections.Concurrent;
-using System.Net;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Chat;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.SignalR;
 
 namespace CarsAndBids.API.Hubs;

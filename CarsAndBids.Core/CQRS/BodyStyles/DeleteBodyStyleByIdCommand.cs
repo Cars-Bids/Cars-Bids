@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Interfaces;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.BodyStyles;

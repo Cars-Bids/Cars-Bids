@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Services;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Enums;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Enums;
 using CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -62,7 +60,7 @@ public class UpdateCarCommandHandler(
         if (cmd.ImagesToDelete != null && cmd.ImagesToDelete.Any())
         {
             var spec = new CarImagesByCarIdAndUrlsSpec(cmd.Id, cmd.ImagesToDelete);
-            var imagesToDelete = await carImageRepository.GetListBySpec<CarImage>(spec, cancellationToken);
+            var imagesToDelete = await carImageRepository.GetListBySpec(spec, cancellationToken);
 
             if (imagesToDelete.Any())
             {
@@ -80,7 +78,7 @@ public class UpdateCarCommandHandler(
             foreach (var update in cmd.ImagesToUpdate)
             {
                 var spec = new CarImageByCarIdAndUrlSpec(cmd.Id, update.ImageUrl!);
-                var image = await carImageRepository.GetItemBySpec<CarImage>(spec, cancellationToken)
+                var image = await carImageRepository.GetItemBySpec(spec, cancellationToken)
                     ?? throw new HttpException($"Image with URL [{update.ImageUrl}] not found!", HttpStatusCode.NotFound);
 
                 image.OrderNumber = update.OrderNumber;
@@ -90,7 +88,7 @@ public class UpdateCarCommandHandler(
         }
 
         var maxOrderSpec = new CarImagesMaxOrderNumberSpec(cmd.Id);
-        int maxOrderNumber = (await carImageRepository.GetListBySpec<int>(maxOrderSpec, cancellationToken))
+        int maxOrderNumber = (await carImageRepository.GetListBySpec(maxOrderSpec, cancellationToken))
             .DefaultIfEmpty(0)
             .Max() + 1;
 

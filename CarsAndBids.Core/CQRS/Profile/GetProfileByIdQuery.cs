@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using CarsAndBids.Core.DTOs;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Interfaces;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Profile;

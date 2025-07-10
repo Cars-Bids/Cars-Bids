@@ -1,14 +1,10 @@
-using System.Net;
 using AutoMapper;
 using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarsAndBids.Core.CQRS.Chat;
 
@@ -20,7 +16,7 @@ public class SendChatMessageCommand : IRequest<ChatMessageDto>
     public List<IFormFile>? Attachments { get; set; }
 }
 
-public class SendChatMessageCommandHandler(IGenericRepository<Data.Entities.Chat> chatRepository,
+public class SendChatMessageCommandHandler(IGenericRepository<Entities.Chat> chatRepository,
                                            IGenericRepository<User> userRepository,
                                            IGenericRepository<ChatMessage> chatMessageRepository,
                                            IGenericRepository<ChatAttachment> chatAttachmentRepository,

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Interfaces;
 using MediatR;
 using System.Net;
 

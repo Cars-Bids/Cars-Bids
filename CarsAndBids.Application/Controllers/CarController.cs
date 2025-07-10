@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using CarsAndBids.Core.CQRS.Cars;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using CarsAndBids.Core.CQRS.Cars;
 
 namespace CarsAndBids.API.Controllers;
 

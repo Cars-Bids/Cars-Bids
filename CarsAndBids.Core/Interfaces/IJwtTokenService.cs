@@ -1,4 +1,4 @@
-using CarsAndBids.Data.Entities;
+using CarsAndBids.Core.Entities;
 
 namespace CarsAndBids.Core.Interfaces;
 

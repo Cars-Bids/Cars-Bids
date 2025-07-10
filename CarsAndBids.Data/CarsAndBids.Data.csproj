@@ -22,4 +22,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CarsAndBids.Core\CarsAndBids.Core.csproj" />
+  </ItemGroup>
+
 </Project>

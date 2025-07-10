@@ -1,6 +1,5 @@
 ﻿using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
 using CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
 using MediatR;
 

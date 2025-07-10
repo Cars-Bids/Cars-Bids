@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CarsAndBids.Core.DTOs;
-using CarsAndBids.Data.Entities;
-using CarsAndBids.Data.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;

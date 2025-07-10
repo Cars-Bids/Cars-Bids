@@ -22,7 +22,7 @@ namespace CarsAndBids.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Answer", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Answer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,7 +56,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Answers");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Auction", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Auction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Auctions");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Bid", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Bid", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,7 +139,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Bids");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.BodyStyle", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.BodyStyle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -160,7 +160,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("BodyStyles");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Car", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Car", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -260,7 +260,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.CarImage", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.CarImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -296,7 +296,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("CarImages");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Chat", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Chat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -314,7 +314,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.ChatAttachment", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.ChatAttachment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -342,7 +342,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("ChatAttachments");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.ChatMessage", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.ChatMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -379,7 +379,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("ChatMessages");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Comment", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -411,7 +411,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Make", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Make", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -432,7 +432,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Makes");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Model", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Model", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -458,7 +458,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Question", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -490,7 +490,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.RefreshToken", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -517,7 +517,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.User", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -604,7 +604,7 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Wishlist", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Wishlist", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -780,15 +780,15 @@ namespace CarsAndBids.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Answer", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Answer", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Question", "Question")
+                    b.HasOne("CarsAndBids.Core.Entities.Question", "Question")
                         .WithOne("Answer")
-                        .HasForeignKey("CarsAndBids.Data.Entities.Answer", "QuestionId")
+                        .HasForeignKey("CarsAndBids.Core.Entities.Answer", "QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "User")
                         .WithMany("Answers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -799,15 +799,15 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Auction", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Auction", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Car", "Car")
+                    b.HasOne("CarsAndBids.Core.Entities.Car", "Car")
                         .WithOne("Auction")
-                        .HasForeignKey("CarsAndBids.Data.Entities.Auction", "CarId")
+                        .HasForeignKey("CarsAndBids.Core.Entities.Auction", "CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "Seller")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "Seller")
                         .WithMany("Auctions")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -818,15 +818,15 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Bid", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Bid", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Auction", "Auction")
+                    b.HasOne("CarsAndBids.Core.Entities.Auction", "Auction")
                         .WithMany("Bids")
                         .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "User")
                         .WithMany("Bids")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -837,31 +837,31 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Car", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Car", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.User", "Assing")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "Assing")
                         .WithMany("AssingCars")
                         .HasForeignKey("AssingId");
 
-                    b.HasOne("CarsAndBids.Data.Entities.BodyStyle", "BodyStyle")
+                    b.HasOne("CarsAndBids.Core.Entities.BodyStyle", "BodyStyle")
                         .WithMany("Cars")
                         .HasForeignKey("BodyStyleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.Chat", "Chat")
+                    b.HasOne("CarsAndBids.Core.Entities.Chat", "Chat")
                         .WithOne("Car")
-                        .HasForeignKey("CarsAndBids.Data.Entities.Car", "ChatId")
+                        .HasForeignKey("CarsAndBids.Core.Entities.Car", "ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.Model", "Model")
+                    b.HasOne("CarsAndBids.Core.Entities.Model", "Model")
                         .WithMany("Cars")
                         .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "Owner")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "Owner")
                         .WithMany("OwnedCars")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -878,9 +878,9 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.CarImage", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.CarImage", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Car", "Car")
+                    b.HasOne("CarsAndBids.Core.Entities.Car", "Car")
                         .WithMany("Images")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -889,9 +889,9 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.ChatAttachment", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.ChatAttachment", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.ChatMessage", "Message")
+                    b.HasOne("CarsAndBids.Core.Entities.ChatMessage", "Message")
                         .WithMany("Attachments")
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -900,15 +900,15 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("Message");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.ChatMessage", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.ChatMessage", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Chat", "Chat")
+                    b.HasOne("CarsAndBids.Core.Entities.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "User")
                         .WithMany("ChatMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -919,15 +919,15 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Comment", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Comment", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Auction", "Auction")
+                    b.HasOne("CarsAndBids.Core.Entities.Auction", "Auction")
                         .WithMany("Comments")
                         .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -938,9 +938,9 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Model", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Model", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Make", "Make")
+                    b.HasOne("CarsAndBids.Core.Entities.Make", "Make")
                         .WithMany("Models")
                         .HasForeignKey("MakeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -949,15 +949,15 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("Make");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Question", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Question", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Auction", "Auction")
+                    b.HasOne("CarsAndBids.Core.Entities.Auction", "Auction")
                         .WithMany("Questions")
                         .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "User")
                         .WithMany("Questions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -968,9 +968,9 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.RefreshToken", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -979,15 +979,15 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Wishlist", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Wishlist", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Auction", "Auction")
+                    b.HasOne("CarsAndBids.Core.Entities.Auction", "Auction")
                         .WithMany("Wishlists")
                         .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", "User")
+                    b.HasOne("CarsAndBids.Core.Entities.User", "User")
                         .WithMany("Wishlists")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1000,13 +1000,13 @@ namespace CarsAndBids.Data.Migrations
 
             modelBuilder.Entity("ChatUser", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.Chat", null)
+                    b.HasOne("CarsAndBids.Core.Entities.Chat", null)
                         .WithMany()
                         .HasForeignKey("ChatsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", null)
+                    b.HasOne("CarsAndBids.Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("ParticipantsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1024,7 +1024,7 @@ namespace CarsAndBids.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.User", null)
+                    b.HasOne("CarsAndBids.Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1033,7 +1033,7 @@ namespace CarsAndBids.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.User", null)
+                    b.HasOne("CarsAndBids.Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1048,7 +1048,7 @@ namespace CarsAndBids.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarsAndBids.Data.Entities.User", null)
+                    b.HasOne("CarsAndBids.Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1057,14 +1057,14 @@ namespace CarsAndBids.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("CarsAndBids.Data.Entities.User", null)
+                    b.HasOne("CarsAndBids.Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Auction", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Auction", b =>
                 {
                     b.Navigation("Bids");
 
@@ -1075,46 +1075,46 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("Wishlists");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.BodyStyle", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.BodyStyle", b =>
                 {
                     b.Navigation("Cars");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Car", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Car", b =>
                 {
                     b.Navigation("Auction");
 
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Chat", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Chat", b =>
                 {
                     b.Navigation("Car");
 
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.ChatMessage", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.ChatMessage", b =>
                 {
                     b.Navigation("Attachments");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Make", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Make", b =>
                 {
                     b.Navigation("Models");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Model", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Model", b =>
                 {
                     b.Navigation("Cars");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.Question", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.Question", b =>
                 {
                     b.Navigation("Answer");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Data.Entities.User", b =>
+            modelBuilder.Entity("CarsAndBids.Core.Entities.User", b =>
                 {
                     b.Navigation("Answers");
 
