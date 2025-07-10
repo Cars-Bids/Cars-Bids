@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using CarsAndBids.Core.Queries.Cars;
-using CarsAndBids.Core.Commands.Cars;
+using CarsAndBids.Core.CQRS.Cars;
 
 namespace CarsAndBids.API.Controllers;
 

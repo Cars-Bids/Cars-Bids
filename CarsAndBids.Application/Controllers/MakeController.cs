@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Queries.Makes;
-using CarsAndBids.Core.Commands.Makes;
+using CarsAndBids.Core.CQRS.Makes;
 
 
 namespace CarsAndBids.API.Controllers;

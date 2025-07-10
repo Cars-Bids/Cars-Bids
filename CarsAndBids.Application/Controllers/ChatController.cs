@@ -1,5 +1,5 @@
 using CarsAndBids.API.Hubs;
-using CarsAndBids.Core.Commands.Chat;
+using CarsAndBids.Core.CQRS.Chat;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

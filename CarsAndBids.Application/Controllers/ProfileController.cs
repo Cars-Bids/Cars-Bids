@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using CarsAndBids.Core.Commands.Profile;
-using CarsAndBids.Core.Queries.Profile;
+using CarsAndBids.Core.CQRS.Profile;
 namespace CarsAndBids.API.Controllers;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
