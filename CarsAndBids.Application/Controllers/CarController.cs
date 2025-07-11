@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Cars;
+using CarsAndBids.Core.CQRS.BodyStyles;
 
 namespace CarsAndBids.API.Controllers;
 
@@ -13,9 +14,14 @@ namespace CarsAndBids.API.Controllers;
 public class CarController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {   
-        var result = await mediator.Send(new GetAllCarsQuery());
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var result = await mediator.Send(new GetAllCarsQuery
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        });
+
         return Ok(result);
     }
 

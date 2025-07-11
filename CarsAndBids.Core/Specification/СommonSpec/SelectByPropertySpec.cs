@@ -2,7 +2,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace CarsAndBids.Data.Persistence.Repositories.Specification;
+namespace CarsAndBids.Core.Specification.СommonSpec;
 
 public class SelectByPropertySpec<TEntity, TResult> : Specification<TEntity, TResult>
     where TEntity : class
