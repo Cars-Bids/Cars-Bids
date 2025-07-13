@@ -1,4 +1,5 @@
-﻿using CarsAndBids.Core.Entities;
+﻿using AutoMapper;
+using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
 
@@ -10,14 +11,13 @@ public class CreateBodyStyleCommand : IRequest
 }
 
 public class CreateBodyStyleCommandHandler(
+    IMapper mapper,
     IGenericRepository<BodyStyle> repository
     ) : IRequestHandler<CreateBodyStyleCommand>
 {
     public async Task Handle(CreateBodyStyleCommand cmd, CancellationToken cancellationToken)
     {
-        await repository.InsertAsync(new BodyStyle
-        {
-            StyleName = cmd.StyleName
-        });
+        var bodyStyle = mapper.Map<BodyStyle>(cmd);
+        await repository.InsertAsync(bodyStyle);
     }
 }
