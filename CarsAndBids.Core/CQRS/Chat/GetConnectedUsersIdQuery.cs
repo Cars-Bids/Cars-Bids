@@ -11,6 +11,7 @@ public class GetConnectedUsersIdQuery : IRequest<List<int>>
     public List<int> TargetUserIds { get; set; }
 }
 
+//Get users where current user have connections with others to notify them
 public class GetConnectedUsersIdQueryHandler(IGenericRepository<Entities.Chat> chatRepository) : IRequestHandler<GetConnectedUsersIdQuery, List<int>>
 {
     public async Task<List<int>> Handle(GetConnectedUsersIdQuery request, CancellationToken cancellationToken)

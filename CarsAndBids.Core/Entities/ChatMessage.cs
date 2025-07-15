@@ -11,5 +11,6 @@ public class ChatMessage
 
     public Chat Chat { get; set; } = null!;
     public User User { get; set; } = null!;
+    public ICollection<UserChatMessageReaction>? UserChatMessageReactions { get; set; }
     public ICollection<ChatAttachment>? Attachments { get; set; }
 }

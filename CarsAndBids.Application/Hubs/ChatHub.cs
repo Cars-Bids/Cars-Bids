@@ -17,15 +17,12 @@ public class ChatHub(IMediator mediator) : Hub
     {
         var userId = GetUserId(Context);
         var isUserInChat = await mediator.Send(new IsUserInChatQuery { ChatId = chatId, UserId = userId});
-        if (!isUserInChat)
-        {
-            throw new HubException("User is not a participant of this chat.");
-        }
+        if (!isUserInChat) throw new HubException("User is not a participant of this chat.");
         
         await Groups.AddToGroupAsync(Context.ConnectionId, "Chat"+chatId);
 
-        var res = mediator.Send(new GetChatMessagesQuery { ChatId = chatId });
-        await Clients.Caller.SendAsync("ReceiveChatHistory", res.Result);
+        var res = await mediator.Send(new GetChatMessagesQuery { ChatId = chatId, CurrentUserId = userId});
+        await Clients.Caller.SendAsync("ReceiveChatHistory", res);
     }
     
     public async Task LeaveChat(int chatId)
@@ -98,6 +95,17 @@ public class ChatHub(IMediator mediator) : Hub
 
         await Clients.OthersInGroup("Chat" + chatId).SendAsync("ReceiveTypingStatus",
             new { ChatId = chatId, UserId = userId, isTyping = isTyping });
+    }
+
+    public async Task ReadMessage(int chatId, int messageId)
+    {
+        int userId = GetUserId(Context);
+
+        var command = new CreateMessageReactionCommand { ChatId = chatId, MessageId = messageId, ReaderId = userId };
+        var msgSenderId = await mediator.Send(command);
+
+        await Clients.Clients(_userConnections.Where(userId => userId.Key == msgSenderId).Select(p => p.Value))
+                     .SendAsync("MessageSeen", new { ChatId = chatId, MessageId = messageId, ReaderId = userId });
     }
     
     public override async Task OnConnectedAsync()

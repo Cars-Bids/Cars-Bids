@@ -39,11 +39,17 @@ public class AutoMapperProfile : Profile
 
         CreateMap<User, ProfileDto>().ReverseMap();
         CreateMap<User, UpdateProfileCommand>().ReverseMap();
-
-        CreateMap<ChatMessage, ChatMessageDto>().ReverseMap();
-        CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
-
         
+        CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
+        CreateMap<UserChatMessageReaction, UserChatMessageReactionDto>().ReverseMap();
+
+        CreateMap<ChatMessage, ChatMessageDto>()
+            .ForMember(dest => dest.Attachment,
+                opt => opt.MapFrom(src => src.Attachments != null
+                    ? src.Attachments.Select(a => a.ImageUrl).ToList()
+                    : new List<string>()))
+            .ForMember(dest => dest.UserChatMessageReactionDtos,
+                opt => opt.MapFrom(src => src.UserChatMessageReactions));
 
         CreateMap<RegisterCommand, User>();
     }
