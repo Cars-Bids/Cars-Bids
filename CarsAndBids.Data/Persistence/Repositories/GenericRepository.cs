@@ -144,4 +144,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         await transaction.RollbackAsync();
     }
+    public async Task<int> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
+    {
+        return await SpecificationEvaluator.Default.GetQuery(dbSet.AsQueryable(), specification).CountAsync(cancellationToken);
+    }
+
 }

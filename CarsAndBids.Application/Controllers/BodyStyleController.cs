@@ -9,11 +9,17 @@ namespace CarsAndBids.API.Controllers;
 public class BodyStyleController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var result = await mediator.Send(new GetAllBodyStylesQuery());
+        var result = await mediator.Send(new GetAllBodyStylesQuery
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        });
+
         return Ok(result);
     }
+
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)

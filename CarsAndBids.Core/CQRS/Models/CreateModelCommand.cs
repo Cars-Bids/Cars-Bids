@@ -1,4 +1,5 @@
-﻿using CarsAndBids.Core.Entities;
+﻿using AutoMapper;
+using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
 
@@ -11,15 +12,13 @@ public class CreateModelCommand : IRequest
 }
 
 public class CreateModelsCommandHandler(
-    IGenericRepository<Model> repository
+    IGenericRepository<Model> repository,
+    IMapper mapper
     ) : IRequestHandler<CreateModelCommand>
 {
     public async Task Handle(CreateModelCommand cmd, CancellationToken cancellationToken)
     {
-        await repository.InsertAsync(new Model
-        {
-            MakeId = cmd.MakeId,
-            Name = cmd.Name
-        });
+        var model = mapper.Map<Model>(cmd);
+        await repository.InsertAsync(model);
     }
 }

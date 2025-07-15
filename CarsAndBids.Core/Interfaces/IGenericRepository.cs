@@ -27,4 +27,6 @@ public interface IGenericRepository<TEntity> where TEntity : class
     Task<IDbContextTransaction> BeginTransactionAsync();
     Task CommitAsync(IDbContextTransaction transaction);
     Task RollbackAsync(IDbContextTransaction transaction);
+
+    Task<int> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default);
 }
