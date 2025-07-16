@@ -10,6 +10,7 @@ public class GetAllChatMessagesSpec : Specification<ChatMessage, ChatMessage>
         Query
             .Where(x => x.ChatId == chatId)
             .Include(x => x.Attachments)
-            .Include(x => x.UserChatMessageReactions);
+            .Include(x => x.UserChatMessageReactions)!
+            .ThenInclude(x => x.EmojiReactions);
     }
 }

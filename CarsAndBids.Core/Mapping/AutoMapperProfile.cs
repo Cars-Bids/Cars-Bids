@@ -41,16 +41,44 @@ public class AutoMapperProfile : Profile
         CreateMap<User, UpdateProfileCommand>().ReverseMap();
         
         CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
-        CreateMap<UserChatMessageReaction, UserChatMessageReactionDto>().ReverseMap();
 
         CreateMap<ChatMessage, ChatMessageDto>()
             .ForMember(dest => dest.Attachment,
                 opt => opt.MapFrom(src => src.Attachments != null
                     ? src.Attachments.Select(a => a.ImageUrl).ToList()
                     : new List<string>()))
-            .ForMember(dest => dest.UserChatMessageReactionDtos,
-                opt => opt.MapFrom(src => src.UserChatMessageReactions));
+            .ForMember(dest => dest.ReactionSummaryDtos, opt => opt.Ignore())
+            .AfterMap((src, dest, ctx) =>
+            {
+                var currentUserId = ctx.Items.ContainsKey("UserId") ? (int)ctx.Items["UserId"] : 0;
+                var isOwner = src.SenderId == currentUserId;
 
+                // mapping grouped reactions
+                var grouped = src.UserChatMessageReactions?
+                    .SelectMany(r => r.EmojiReactions.Select(e => new { e.Emoji, UserId = r.UserId }))
+                    .GroupBy(x => x.Emoji)
+                    .Select(g => new ReactionSummaryDto
+                    {
+                        Emoji = g.Key,
+                        Count = g.Count(),
+                        ReactedByCurrentUser = g.Any(x => x.UserId == currentUserId)
+                    }).ToList();
+
+                dest.ReactionSummaryDtos = grouped;
+
+                // if current user - sender, adding seenBy
+                if (isOwner)
+                {
+                    dest.SeenBy = src.UserChatMessageReactions?
+                        .Where(r => r.SeenAt != default)
+                        .Select(r => new SeenInfoDto
+                        {
+                            UserId = r.UserId,
+                            SeenAt = r.SeenAt
+                        }).ToList();
+                }
+            });
+            
         CreateMap<RegisterCommand, User>();
     }
 }

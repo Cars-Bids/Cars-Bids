@@ -10,5 +10,6 @@ public class ChatMessageDto
     public string? Message { get; set; }
     public DateTime SentAt { get; set; }
     public List<string>? Attachment { get; set; }
-    public List<UserChatMessageReactionDto>? UserChatMessageReactionDtos { get; set; }
+    public List<ReactionSummaryDto>? ReactionSummaryDtos { get; set; }
+    public List<SeenInfoDto>? SeenBy { get; set; }
 }

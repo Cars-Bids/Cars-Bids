@@ -107,6 +107,16 @@ public class ChatHub(IMediator mediator) : Hub
         await Clients.Clients(_userConnections.Where(userId => userId.Key == msgSenderId).Select(p => p.Value))
                      .SendAsync("MessageSeen", new { ChatId = chatId, MessageId = messageId, ReaderId = userId });
     }
+
+    public async Task ToggleEmoji(string emoji, int messageId, int chatId)
+    {
+        int userId = GetUserId(Context);
+
+        var command = new ToggleEmojiCommand { UserId = userId, Emoji = emoji, MessageId = messageId, ChatId = chatId };
+        var isCreated = await mediator.Send(command);
+
+        await Clients.Group("Chat" + chatId).SendAsync("ReactionChange", new { isCreated = isCreated, emoji = emoji });
+    }
     
     public override async Task OnConnectedAsync()
     {

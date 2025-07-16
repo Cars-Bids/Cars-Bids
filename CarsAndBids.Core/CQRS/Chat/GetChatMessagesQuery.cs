@@ -21,6 +21,11 @@ public class GetChatMessagesQueryHandler(IGenericRepository<ChatMessage> chatMes
         var spec = new GetAllChatMessagesSpec(request.ChatId);
         var messages = await chatMessageRepository.GetListBySpec(spec);
         
-        return mapper.Map<List<ChatMessageDto>>(messages.ToList());
+        var res = mapper.Map<List<ChatMessageDto>>(messages, opt =>
+        {
+            opt.Items["UserId"] = request.CurrentUserId;
+        }).ToList();
+
+        return res;
     }
 }

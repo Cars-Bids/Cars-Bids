@@ -132,6 +132,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         await context.SaveChangesAsync();
     }
     
+    public async Task SaveAsync()
+    {
+        await context.SaveChangesAsync();
+    }
+
+    
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
         return await context.Database.BeginTransactionAsync();
