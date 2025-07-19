@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Cars;
-using CarsAndBids.Core.CQRS.BodyStyles;
 
 namespace CarsAndBids.API.Controllers;
 

@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.SignalR;
 using CarsAndBids.Data.Persistence.Seed;
 using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.DTOs;
 
 namespace CarsAndBids.API.DependencyInjection;
 
@@ -41,6 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
         services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
         services.AddScoped<IGenericRepository<Chat>, GenericRepository<Chat>>();
+        services.AddScoped<IGenericRepository<Wishlist>, GenericRepository<Wishlist>>();
         services.AddScoped<IGenericRepository<ChatMessage>, GenericRepository<ChatMessage>>();
         services.AddScoped<IGenericRepository<ChatAttachment>, GenericRepository<ChatAttachment>>();
 
@@ -54,7 +55,8 @@ public static class ServiceCollectionExtensions
 
         services.AddControllers();
 
-        //Validation
+        services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
