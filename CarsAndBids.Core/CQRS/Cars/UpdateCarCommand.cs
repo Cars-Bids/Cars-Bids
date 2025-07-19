@@ -3,10 +3,10 @@ using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Enums;
-using CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Net;
+using CarsAndBids.Core.Specification.CarSpec;
 
 namespace CarsAndBids.Core.CQRS.Cars;
 

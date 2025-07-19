@@ -1,44 +1,62 @@
 ﻿using CarsAndBids.API.Hubs;
-using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Enums;
+using CarsAndBids.Core.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
-namespace CarsAndBids.Data.Services;
+namespace CarsAndBids.API.HostedServices;
 
 public class AuctionHostedService(
     IServiceScopeFactory scopeFactory,
     IHubContext<AuctionHub> hubContext
     ) : BackgroundService
 {
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        //check and close expired auctions
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             using var scope = scopeFactory.CreateScope();
             var auctionService = scope.ServiceProvider.GetRequiredService<IAuctionService>();
 
-            var activeAuctions = await auctionService.GetAllActiveAuctions();
+            var auctions = await auctionService.GetAllOpenedAuctions();
 
-            foreach (var auction in activeAuctions)
+            foreach (var auction in auctions)
             {
-                if (auction.EndTime <= DateTime.UtcNow)
+                //start pending auctions
+                if (auction.Status == AuctionStatus.Pending && auction.StartTime <= DateTime.UtcNow)
                 {
-                    var finalStatus = auction.CurrentBidder is null
-                        ? AuctionStatus.NotSold
-                        : AuctionStatus.Sold;
+                    auctionService.UpdateStatus(auction.Id, AuctionStatus.Active);
+
+                    await hubContext.Clients.Group(auction.Id.ToString()).SendAsync(
+                        "AuctionStarted",
+                        new {
+                            AuctionId = auction.Id,
+                            StartPrice = auction.StartPrice,
+                            EndTime = auction.EndTime
+                        }, 
+                        cancellationToken);
+                }
+
+                //finish expired auctions
+                if (auction.Status == AuctionStatus.Active && auction.EndTime <= DateTime.UtcNow)
+                {
+                    var finalStatus = auction.CurrentPrice >= auction.StartPrice && auction.CurrentBidder is not null
+                        ? AuctionStatus.Sold
+                        : AuctionStatus.NotSold;
 
                     auctionService.UpdateStatus(auction.Id, finalStatus);
 
-                    await hubContext.Clients.Group(auction.Id.ToString()).SendAsync("AuctionEnded", new
-                    {
-                        AuctionId = auction.Id,
-                        FinalBid = auction.CurrentBid,
-                        Winner = auction.CurrentBidder
-                    });
+                    await hubContext.Clients.Group(auction.Id.ToString()).SendAsync(
+                        "AuctionEnded",
+                        new
+                        {
+                            AuctionId = auction.Id,
+                            FinalBid = auction.CurrentPrice,
+                            Winner = auction.CurrentBidder
+                        },
+                        cancellationToken);
                 }
             }
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(1000, cancellationToken);
         }
     }
 }

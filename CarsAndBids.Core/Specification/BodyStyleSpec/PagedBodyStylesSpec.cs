@@ -3,7 +3,7 @@ using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Specification.СommonSpec;
 
 
-namespace CarsAndBids.Data.Persistence.Repositories.Specification.BodyStyleSpec;
+namespace CarsAndBids.Core.Specification.BodyStyleSpec;
 
 public class PagedBodyStylesSpec : PagedSpec<BodyStyle>
 {

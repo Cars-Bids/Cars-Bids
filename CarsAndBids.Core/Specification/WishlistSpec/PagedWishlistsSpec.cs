@@ -3,7 +3,7 @@ using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Specification.СommonSpec;
 
 
-namespace CarsAndBids.Data.Persistence.Repositories.Specification.WishlistSpec;
+namespace CarsAndBids.Core.Specification.WishlistSpec;
 
 public class PagedWishlistsSpec : PagedSpec<Wishlist>
 {

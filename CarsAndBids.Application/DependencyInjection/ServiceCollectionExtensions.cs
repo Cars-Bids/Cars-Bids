@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.SignalR;
 using CarsAndBids.Data.Persistence.Seed;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.DTOs;
+using CarsAndBids.API.HostedServices;
 
 namespace CarsAndBids.API.DependencyInjection;
 
@@ -44,6 +45,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<Wishlist>, GenericRepository<Wishlist>>();
         services.AddScoped<IGenericRepository<ChatMessage>, GenericRepository<ChatMessage>>();
         services.AddScoped<IGenericRepository<ChatAttachment>, GenericRepository<ChatAttachment>>();
+        services.AddScoped<IGenericRepository<UserChatMessageReaction>, GenericRepository<UserChatMessageReaction>>();
+        services.AddScoped<IGenericRepository<EmojiReaction>, GenericRepository<EmojiReaction>>();
+        services.AddScoped<IGenericRepository<Wishlist>, GenericRepository<Wishlist>>();
+        services.AddScoped<IGenericRepository<Bid>, GenericRepository<Bid>>();
 
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();

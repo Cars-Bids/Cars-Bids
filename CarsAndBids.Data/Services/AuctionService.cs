@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Enums;
 using CarsAndBids.Core.Interfaces;
@@ -9,19 +8,16 @@ namespace CarsAndBids.Data.Services;
 
 public class AuctionService(
     IMapper mapper,
+    IGenericRepository<Bid> bidRepository,
     IGenericRepository<Auction> auctionRepository
     ) : IAuctionService
 {   
-    public async Task<IEnumerable<AuctionDto>> GetAllAsync()
-    {
-        var auctions = await auctionRepository.GetAsync();
-        return mapper.Map<IEnumerable<AuctionDto>>(auctions);
-    }
-
-    public async Task<IEnumerable<AuctionDto>> GetAllActiveAuctions()
+    public async Task<IEnumerable<AuctionDto>> GetAllOpenedAuctions()
     {
         var activeAuctions = await auctionRepository.GetAsync(
-            filter: a => a.Status == AuctionStatus.Active
+            filter: a => 
+                a.Status == AuctionStatus.Active || 
+                a.Status == AuctionStatus.Pending
         );
         return mapper.Map<IEnumerable<AuctionDto>>(activeAuctions);
     }
@@ -34,37 +30,52 @@ public class AuctionService(
             : mapper.Map<AuctionDto>(auction);
     }
 
-    public async Task<(bool Result, string? Error)> TryPlaceBid(int auctionId, decimal amount, string bidder)
+    public async Task<(bool Result, string? Error)> TryPlaceBid(int auctionId, decimal amount, string bidderName, int bidderUserId)
     {
-        var auction = await auctionRepository.GetByIdAsync(auctionId);
+        await using var transaction = await auctionRepository.BeginTransactionAsync();
 
-        if (auction is null)
+        try
         {
-            return (false, "Аукціон не знайдено!");
-        }
+            var auction = await auctionRepository.GetByIdAsync(auctionId)
+                ?? throw new Exception("Аукціон не знайдено!");
 
-        if (auction.Status != AuctionStatus.Active || DateTime.UtcNow > auction.EndTime)
+            if (auction.Status != AuctionStatus.Active || DateTime.UtcNow > auction.EndTime)
+            {
+                throw new Exception("Аукціон не активний або завершено!");
+            }
+
+            if (amount <= auction.CurrentPrice)
+            {
+                throw new Exception("Ставка має бути вищою за поточну!");
+            }
+
+            //Антиснайпер: подовжуємо, якщо менше 1 хв
+            var remaining = auction.EndTime - DateTime.UtcNow;
+            if (remaining.TotalMinutes < 1)
+            {
+                auction.EndTime = DateTime.UtcNow.AddMinutes(1);
+            }
+            auction.CurrentPrice = amount;
+            auction.CurrentBidder = bidderName;
+            await auctionRepository.UpdateAsync(auction);
+
+            //add bid
+            await bidRepository.InsertAsync(new Bid
+            {
+                AuctionId = auctionId,
+                UserId = bidderUserId,
+                BidAmount = amount,
+                BidTime = DateTime.UtcNow
+            });
+
+            await transaction.CommitAsync();
+            return (true, null);
+        }
+        catch (Exception e)
         {
-            return (false, "Аукціон не активний або завершено!");
-        }
-
-        if (amount <= auction.CurrentPrice)
-        {
-            return (false, "Ставка має бути вищою за поточну!");
-        }
-
-        //Антиснайпер: подовжуємо, якщо менше 1 хв
-        var remaining = auction.EndTime - DateTime.UtcNow;
-        if (remaining.TotalMinutes < 1)
-        {
-            auction.EndTime = DateTime.UtcNow.AddMinutes(1);
-        }
-        auction.CurrentPrice = amount;
-        auction.CurrentBidder = bidder;
-
-        //todo - save bid!
-        await auctionRepository.UpdateAsync(auction);
-        return (true, null);
+            await transaction.RollbackAsync();
+            return (false, e.Message);
+        }        
     }
 
     public async void UpdateStatus(int auctionId, AuctionStatus newStatus)
