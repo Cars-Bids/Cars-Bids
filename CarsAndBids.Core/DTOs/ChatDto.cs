@@ -1,5 +1,3 @@
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Enums;
 
 namespace CarsAndBids.Core.DTOs;
 

@@ -43,6 +43,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<Chat>, GenericRepository<Chat>>();
         services.AddScoped<IGenericRepository<ChatMessage>, GenericRepository<ChatMessage>>();
         services.AddScoped<IGenericRepository<ChatAttachment>, GenericRepository<ChatAttachment>>();
+        services.AddScoped<IGenericRepository<UserChatMessageReaction>, GenericRepository<UserChatMessageReaction>>();
+        services.AddScoped<IGenericRepository<EmojiReaction>, GenericRepository<EmojiReaction>>();
 
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();

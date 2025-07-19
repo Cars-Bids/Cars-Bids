@@ -22,7 +22,7 @@ public interface IGenericRepository<TEntity> where TEntity : class
     Task DeleteAsync(TEntity entity);
     Task DeleteRangeAsync(IEnumerable<TEntity> entities);
     Task UpdateAsync(TEntity entity);
-  
+    Task SaveAsync();
     Task UpdateRangeAsync(IEnumerable<TEntity> entities);
     Task<IDbContextTransaction> BeginTransactionAsync();
     Task CommitAsync(IDbContextTransaction transaction);

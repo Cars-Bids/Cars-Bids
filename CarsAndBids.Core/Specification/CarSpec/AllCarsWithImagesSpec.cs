@@ -2,7 +2,7 @@
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Specification.СommonSpec;
 
-namespace CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
+namespace CarsAndBids.Core.Specification.CarSpec;
 
 public class AllCarsWithImagesSpec : PagedSpec<Car>
 {
