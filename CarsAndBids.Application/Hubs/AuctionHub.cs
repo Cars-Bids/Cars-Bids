@@ -7,15 +7,16 @@ public class AuctionHub(IAuctionService auctionService) : Hub
 {
     public async Task PlaceBid(int auctionId, decimal amount)
     {
-        var bidder = Context.User?.Identity?.Name;
+        var bidderId = Context.User?.FindFirst("nameid")?.Value;
+        var bidderName = Context.User?.FindFirst("username")?.Value;
 
-        if (string.IsNullOrEmpty(bidder))
+        if (!int.TryParse(bidderId, out var userId) || string.IsNullOrEmpty(bidderName))
         {
             await Clients.Caller.SendAsync("BidRejected", "Ви не авторизовані для участі в аукціоні!");
             return;
         }
 
-        var (isSuccess, error) = await auctionService.TryPlaceBid(auctionId, amount, bidder);
+        var (isSuccess, error) = await auctionService.TryPlaceBid(auctionId, amount, bidderName, userId);
 
         if (!isSuccess)
         {
@@ -28,8 +29,8 @@ public class AuctionHub(IAuctionService auctionService) : Hub
         await Clients.Group(auctionId.ToString()).SendAsync("ReceiveBid", new
         {
             AuctionId = auctionId,
-            Amount = auction!.CurrentBid,
-            Bidder = auction.CurrentBidder,
+            CurrentPrice = auction!.CurrentPrice,
+            CurrentBidder = auction.CurrentBidder,
             EndTime = auction.EndTime,
             Timestamp = DateTime.UtcNow
         });
@@ -41,17 +42,18 @@ public class AuctionHub(IAuctionService auctionService) : Hub
 
         if (int.TryParse(auctionId, out int id))
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, auctionId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, auctionId!);
 
             var auction = await auctionService.GetById(id);
             
             if (auction is not null)
             {
-                await Clients.Caller.SendAsync("ReceiveBid", new
+                await Clients.Caller.SendAsync("ConnectAuction", new
                 {
                     AuctionId = auction.Id,
-                    Amount = auction.CurrentBid,
-                    Bidder = auction.CurrentBidder,
+                    StartPrice = auction.StartPrice,
+                    CurrentPrice = auction.CurrentPrice,
+                    CurrentBidder = auction.CurrentBidder,
                     EndTime = auction.EndTime,
                     Timestamp = DateTime.UtcNow
                 });
@@ -66,7 +68,7 @@ public class AuctionHub(IAuctionService auctionService) : Hub
         var auctionId = Context.GetHttpContext()?.Request.Query["auctionId"];
         if (!string.IsNullOrEmpty(auctionId))
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, auctionId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, auctionId!);
         }
 
         await base.OnDisconnectedAsync(exception);
