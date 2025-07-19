@@ -11,21 +11,18 @@ namespace CarsAndBids.API.Hubs;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ChatHub(IMediator mediator) : Hub
 {
-    private static readonly ConcurrentDictionary<int, bool> UserStatuses = new ConcurrentDictionary<int, bool>();
+    private static ConcurrentDictionary<int, string> _userConnections = new ConcurrentDictionary<int, string>();
     
     public async Task JoinChat(int chatId)
     {
-        var userId = int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId(Context);
         var isUserInChat = await mediator.Send(new IsUserInChatQuery { ChatId = chatId, UserId = userId});
-        if (!isUserInChat)
-        {
-            throw new HubException("User is not a participant of this chat.");
-        }
+        if (!isUserInChat) throw new HubException("User is not a participant of this chat.");
         
         await Groups.AddToGroupAsync(Context.ConnectionId, "Chat"+chatId);
 
-        var res = mediator.Send(new GetChatMessagesQuery { ChatId = chatId });
-        await Clients.Caller.SendAsync("ReceiveChatHistory", res.Result);
+        var res = await mediator.Send(new GetChatMessagesQuery { ChatId = chatId, CurrentUserId = userId});
+        await Clients.Caller.SendAsync("ReceiveChatHistory", res);
     }
     
     public async Task LeaveChat(int chatId)
@@ -35,7 +32,7 @@ public class ChatHub(IMediator mediator) : Hub
 
     public async Task SendMessage(int chatId, string message, List<IFormFile> images)
     {
-        var senderId = int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var senderId = GetUserId(Context);
 
         var newMessage = await mediator.Send(new SendChatMessageCommand
         {
@@ -51,7 +48,7 @@ public class ChatHub(IMediator mediator) : Hub
 
     public async Task EditMessage(int chatId, int messageId, string newMessage)
     {
-        var userId = int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId(Context);
 
         var editedMessage = await mediator.Send(new EditChatMessageCommand
         {
@@ -66,7 +63,7 @@ public class ChatHub(IMediator mediator) : Hub
     
     public async Task DeleteMessage(int messageId, int chatId)
     {
-        var requesterId = int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var requesterId = GetUserId(Context);
 
         await mediator.Send(new DeleteMessageCommand
         {
@@ -80,7 +77,7 @@ public class ChatHub(IMediator mediator) : Hub
 
     public async Task DeleteAttachments(List<int> attachmentsId, int chatId)
     {
-        var userId = int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId(Context);
         
         var command = new DeleteAttachmentsCommand
         {
@@ -91,12 +88,74 @@ public class ChatHub(IMediator mediator) : Hub
         var deletedAttachmentIds = await mediator.Send(command);
         await Clients.Group("Chat" + chatId).SendAsync("AttachmentsDeleted", deletedAttachmentIds);
     }
+
+    public async Task SendTypingStatus(int chatId, bool isTyping)
+    {
+        int userId = GetUserId(Context);
+
+        await Clients.OthersInGroup("Chat" + chatId).SendAsync("ReceiveTypingStatus",
+            new { ChatId = chatId, UserId = userId, isTyping = isTyping });
+    }
+
+    public async Task ReadMessage(int chatId, int messageId)
+    {
+        int userId = GetUserId(Context);
+
+        var command = new CreateMessageReactionCommand { ChatId = chatId, MessageId = messageId, ReaderId = userId };
+        var msgSenderId = await mediator.Send(command);
+
+        await Clients.Clients(_userConnections.Where(userId => userId.Key == msgSenderId).Select(p => p.Value))
+                     .SendAsync("MessageSeen", new { ChatId = chatId, MessageId = messageId, ReaderId = userId });
+    }
+
+    public async Task ToggleEmoji(string emoji, int messageId, int chatId)
+    {
+        int userId = GetUserId(Context);
+
+        var command = new ToggleEmojiCommand { UserId = userId, Emoji = emoji, MessageId = messageId, ChatId = chatId };
+        var isCreated = await mediator.Send(command);
+
+        await Clients.Group("Chat" + chatId).SendAsync("ReactionChange", new { isCreated = isCreated, emoji = emoji });
+    }
     
     public override async Task OnConnectedAsync()
     {
-        var nameId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        Console.WriteLine("UserId: " + nameId); // має бути userId
+        var userId = GetUserId(Context);
+
+        var query = new GetConnectedUsersIdQuery { CurrentUserId = userId, TargetUserIds = _userConnections.Keys.ToList() };
+        var onlineUserIds = await mediator.Send(query);
+
+        await Clients.Caller.SendAsync("UsersOnline", onlineUserIds);
+
+        await Clients.Clients(_userConnections.Where(userId => onlineUserIds.Contains(userId.Key))
+                            .Select(u => u.Value))
+            .SendAsync("NewOnlineUser", userId);
+
+        _userConnections.TryAdd(userId, Context.ConnectionId);
+
         await base.OnConnectedAsync();
+    }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        var userId = GetUserId(Context);
+
+        var query = new GetConnectedUsersIdQuery { CurrentUserId = userId, TargetUserIds = _userConnections.Keys.ToList() };
+        var onlineUserIds = await mediator.Send(query);
+
+        await Clients.Clients(
+                _userConnections.Where(u => onlineUserIds.Contains(u.Key))
+                    .Select(u => u.Value))
+            .SendAsync("NewOfflineUser", userId);
+
+        _userConnections.Remove(userId, out var value);
+        
+        await base.OnDisconnectedAsync(exception);
+    }
+
+    private int GetUserId(HubCallerContext context)
+    {
+        return int.Parse(context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     }
     
 }

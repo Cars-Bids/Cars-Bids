@@ -1,23 +1,52 @@
-﻿using CarsAndBids.Core.Interfaces;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CarsAndBids.Core.CQRS.Auctions;
 
 namespace CarsAndBids.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuctionsController : ControllerBase
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+public class AuctionsController(IMediator mediator) : ControllerBase
 {
-    private readonly IAuctionService _auctionService;
-
-    public AuctionsController(IAuctionService auctionService)
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
-        _auctionService = auctionService;
+        var auctions = await mediator.Send(new GetAllAuctionsQuery
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        });
+        return Ok(auctions);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        var auctions = await _auctionService.GetAllAsync();
-        return Ok(auctions);
+        var auction = await mediator.Send(new GetAuctionByIdQuery { Id = id });
+        return Ok(auction);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] CreateAuctionCommand request)
+    {
+        await mediator.Send(request);
+        return Created();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update([FromForm] UpdateAuctionCommand request)
+    {
+        await mediator.Send(request);
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteById([FromRoute] int id)
+    {
+        await mediator.Send(new DeleteAuctionByIdCommand { Id = id });
+        return Ok();
     }
 }

@@ -3,7 +3,7 @@ using AutoMapper;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
+using CarsAndBids.Core.Specification.CarSpec;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Cars;

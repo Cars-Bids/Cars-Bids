@@ -20,5 +20,6 @@ public class User : IdentityUser<int>
     public ICollection<Wishlist>? Wishlists { get; set; }
     public ICollection<RefreshToken>? RefreshTokens { get; set; }
     public ICollection<Chat>? Chats { get; set; }
+    public ICollection<UserChatMessageReaction>? UserChatMessageReactions { get; set; }
     
 }

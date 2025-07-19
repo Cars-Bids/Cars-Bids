@@ -1,7 +1,10 @@
 using System.Net;
+using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Exceptions;
+using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Specification.ChatSpec;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Chat;
@@ -15,26 +18,22 @@ public class IsUserInChatQuery : IRequest<bool>
 public class IsUserInChatQueryHandler(IGenericRepository<User> userRepository,
                                       IGenericRepository<Entities.Chat> chatRepository) : IRequestHandler<IsUserInChatQuery, bool>
 {
-    public async Task<bool> Handle(IsUserInChatQuery request, CancellationToken cancellationToken)                         // TODO: needs to be reworked
-    {                                                                                                                      // (retrieving list when using only 1 object)
+    public async Task<bool> Handle(IsUserInChatQuery request, CancellationToken cancellationToken)   
+    {                                                                                                                   
         var user = await userRepository.GetByIdAsync(request.UserId);
         if (user == null)
         {
             throw new HttpException("User not found.", HttpStatusCode.NotFound);
         }
         
-        var chat = await chatRepository.GetAsync(
-            filter: c => c.Id == request.ChatId,
-            includeProperties: "Participants"
-        );
+        var result = await chatRepository.GetItemBySpec(
+            new ChatContainsUserSpec(request.ChatId, request.UserId));
 
-        if (!chat.Any())
+        if (result == 0)
         {
-            throw new HttpException("Chat not found.", HttpStatusCode.NotFound);
+            throw new HttpException("Chat not found or user not in chat.", HttpStatusCode.NotFound);
         }
-        
-        var isUserInChat = chat.First().Participants?.Any(p => p.Id == request.UserId) ?? false;
-        
-        return isUserInChat;
+
+        return true;
     }
 }

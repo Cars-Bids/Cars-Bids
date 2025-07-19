@@ -3,6 +3,7 @@ using System;
 using CarsAndBids.Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CarsAndBids.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250715065935_AddedChatMessageReactions")]
+    partial class AddedChatMessageReactions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,29 +412,6 @@ namespace CarsAndBids.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("CarsAndBids.Core.Entities.EmojiReaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Emoji")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
-
-                    b.Property<int>("MessageReactionId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MessageReactionId");
-
-                    b.ToTable("EmojiReaction");
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Make", b =>
@@ -989,17 +969,6 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CarsAndBids.Core.Entities.EmojiReaction", b =>
-                {
-                    b.HasOne("CarsAndBids.Core.Entities.UserChatMessageReaction", "UserChatMessageReaction")
-                        .WithMany("EmojiReactions")
-                        .HasForeignKey("MessageReactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserChatMessageReaction");
-                });
-
             modelBuilder.Entity("CarsAndBids.Core.Entities.Model", b =>
                 {
                     b.HasOne("CarsAndBids.Core.Entities.Make", "Make")
@@ -1220,11 +1189,6 @@ namespace CarsAndBids.Data.Migrations
                     b.Navigation("UserChatMessageReactions");
 
                     b.Navigation("Wishlists");
-                });
-
-            modelBuilder.Entity("CarsAndBids.Core.Entities.UserChatMessageReaction", b =>
-                {
-                    b.Navigation("EmojiReactions");
                 });
 #pragma warning restore 612, 618
         }

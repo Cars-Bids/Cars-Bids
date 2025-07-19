@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using CarsAndBids.Core.Entities;
 
-namespace CarsAndBids.Data.Persistence.Repositories.Specification.CarSpec;
+namespace CarsAndBids.Core.Specification.CarSpec;
 
 public class CarImagesMaxOrderNumberSpec : Specification<CarImage, int>
 {
