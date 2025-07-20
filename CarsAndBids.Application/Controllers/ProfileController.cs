@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Profile;
+using Microsoft.AspNetCore.Identity;
 namespace CarsAndBids.API.Controllers;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -35,5 +36,12 @@ public class ProfileController(IMediator mediator) : ControllerBase
         {
             return BadRequest(new { error = e.Message });
         }
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+    {
+        await mediator.Send(command);
+        return Ok();
     }
 }
