@@ -11,12 +11,9 @@ namespace CarsAndBids.Core.CQRS.Account;
 
 public class RegisterCommand : IRequest
 {
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public string? Username { get; set; }
-    public string? Email { get; set; }
-    public string? Password { get; set; }
-    public IFormFile? Image { get; set; }
+    public string Username { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string Password { get; set; } = null!;
 }
 
 public class RegisterCommandHandler(IFileService fileService,
@@ -31,9 +28,6 @@ public class RegisterCommandHandler(IFileService fileService,
                 throw new Exception($"User with {cmd.Email} already exist!");
 
             var newUser = mapper.Map<User>(cmd);
-            
-            newUser.ProfilePictureUrl = cmd.Image is null ? null : 
-                await fileService.UploadImageAsync(cmd.Image);
             
             var result = await userManager.CreateAsync(newUser, cmd.Password!);
             
