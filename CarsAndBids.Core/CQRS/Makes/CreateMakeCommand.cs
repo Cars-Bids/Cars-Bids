@@ -6,7 +6,6 @@ namespace CarsAndBids.Core.CQRS.Makes;
 public class CreateMakeCommand : IRequest
 {
     public string? Name { get; set; }
-
 }
 
 public class CreateMakesCommandHandler(

@@ -33,4 +33,11 @@ public class AccountController(IMediator mediator) : ControllerBase
     {
         return Ok(await mediator.Send(query));
     }
+
+    [HttpPost]
+    public async Task<IActionResult> SendPasswordResetEmail([FromBody] SendPasswordResetEmailCommand request)
+    {
+        await mediator.Send(request);
+        return Ok();
+    }
 }

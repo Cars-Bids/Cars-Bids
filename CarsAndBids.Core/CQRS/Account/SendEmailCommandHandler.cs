@@ -8,11 +8,11 @@ using System.Reflection;
 using CarsAndBids.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace CarsAndBids.Core.CQRS.Emails;
+namespace CarsAndBids.Core.CQRS.Account;
 
 public class SendPasswordResetEmailCommand : IRequest<bool>
 {
-    public string To { get; set; }
+    public string MailTo { get; set; }
 }
 
 public class SendPasswordResetEmailCommandHandler(
@@ -29,7 +29,7 @@ public class SendPasswordResetEmailCommandHandler(
         if (settings == null)
             throw new ArgumentNullException(nameof(settings));
 
-        var user = await userManager.FindByEmailAsync(request.To);
+        var user = await userManager.FindByEmailAsync(request.MailTo);
         if (user == null)
             return false;
 
@@ -52,7 +52,7 @@ public class SendPasswordResetEmailCommandHandler(
 
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress("CarsAndBids", settings.Username ?? throw new ArgumentNullException(nameof(settings.Username))));
-        message.To.Add(new MailboxAddress(request.To ?? throw new ArgumentNullException(nameof(request.To)), request.To));
+        message.To.Add(new MailboxAddress(request.MailTo ?? throw new ArgumentNullException(nameof(request.MailTo)), request.MailTo));
         message.Subject = "Password Reset";
         message.Body = new TextPart("html") { Text = htmlBody };
 

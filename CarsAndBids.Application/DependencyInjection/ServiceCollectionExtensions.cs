@@ -16,6 +16,8 @@ using CarsAndBids.Data.Persistence.Seed;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.API.HostedServices;
+using CarsAndBids.API.Middleware;
+using MediatR;
 
 namespace CarsAndBids.API.DependencyInjection;
 
@@ -54,6 +56,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddSignalR();
         services.AddHostedService<AuctionHostedService>();
