@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Chat;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,16 +35,22 @@ public class ChatHub(IMediator mediator) : Hub
     {
         var senderId = GetUserId(Context);
 
-        var newMessage = await mediator.Send(new SendChatMessageCommand
+        try
         {
-            Attachments = images,
-            ChatId = chatId,
-            Message = message,
-            SenderId = senderId
-        });
+            var newMessage = await mediator.Send(new SendChatMessageCommand
+            {
+                Attachments = images,
+                ChatId = chatId,
+                Message = message,
+                SenderId = senderId
+            });
 
-
-        await Clients.Group("Chat"+chatId).SendAsync("ReceiveMessage", newMessage);
+            await Clients.Group("Chat" + chatId).SendAsync("ReceiveMessage", newMessage);
+        }
+        catch (ValidationException ex)
+        {
+            throw new HubException(ex.Message);
+        }
     }
 
     public async Task EditMessage(int chatId, int messageId, string newMessage)

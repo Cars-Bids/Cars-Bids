@@ -1,5 +1,5 @@
-using CarsAndBids.Core.CQRS.Chat;
 using FluentValidation;
+using CarsAndBids.Core.CQRS.Chat;
 
 namespace CarsAndBids.Core.Validators.Chat;
 
@@ -19,11 +19,11 @@ public class SendChatMessageCommandValidator : AbstractValidator<SendChatMessage
 
         RuleFor(x => x.Message)
             .NotEmpty()
-            .When(x => x.Attachments == null || !x.Attachments.Any())
+            .When(x => x.Attachments is not { Count: > 0 })
             .WithMessage("Message content or attachments are required.");
 
         RuleFor(x => x.Attachments)
-            .Must(files => files == null || files.Count <= MaxAttachments)
+            .Must(files => files is not { Count: > MaxAttachments })
             .WithMessage($"Maximum {MaxAttachments} attachments are allowed.");
     }
 }

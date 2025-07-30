@@ -9,34 +9,38 @@ public class CreateCarCommandValidator : AbstractValidator<CreateCarCommand>
     {
         RuleFor(x => x.Year)
             .NotEmpty()
-            .WithMessage("Рік випуску є обов'язковим")
+            .WithMessage("Manufacture year is required")
             .GreaterThanOrEqualTo(1900)
-            .WithMessage("Рік випуску не може бути менше 1900")
+            .WithMessage("Manufacture year can't be earlier than 1900")
             .LessThanOrEqualTo(DateTime.Now.Year)
-            .WithMessage("Рік випуску не може бути більше поточного");
+            .WithMessage("Manufacture year can't be greater than the current year");
 
         RuleFor(x => x.Mileage)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("Пробіг не може бути менше 0");
+            .WithMessage("Mileage can't be less than 0");
 
         RuleFor(x => x.Drivetrain)
             .IsInEnum()
-            .WithMessage("Вказаний тип приводу не знайдено");
+            .WithMessage("Specified drivetrain type not found");
 
         RuleFor(x => x.TransmissionType)
             .IsInEnum()
-            .WithMessage("Вказаний тип коробки передач не знайдено");
+            .WithMessage("Specified transmission type not found");
 
         RuleFor(x => x.Speeds)
             .GreaterThan(0)
-            .WithMessage("Швидкість має бути більше 0");
+            .WithMessage("Speed must be greater than 0");
 
         RuleFor(x => x.BodyStyleId)
             .GreaterThan(0)
-            .WithMessage("Тип кузова є обов'язковим");
+            .WithMessage("Body type is required");
 
         RuleFor(x => x.ModelId)
             .GreaterThan(0)
-            .WithMessage("Модель є обов'язковою");
+            .WithMessage("Model is required");
+
+        RuleFor(x => x.OwnerId)
+            .GreaterThan(0)
+            .WithMessage("Owner is required");
     }
 }
