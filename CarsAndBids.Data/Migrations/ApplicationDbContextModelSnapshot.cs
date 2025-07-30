@@ -53,7 +53,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Auction", b =>
@@ -105,7 +105,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Auctions");
+                    b.ToTable("Auctions", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Bid", b =>
@@ -136,7 +136,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bids");
+                    b.ToTable("Bids", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.BodyStyle", b =>
@@ -157,7 +157,7 @@ namespace CarsAndBids.Data.Migrations
                     b.HasIndex("StyleName")
                         .IsUnique();
 
-                    b.ToTable("BodyStyles");
+                    b.ToTable("BodyStyles", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Car", b =>
@@ -257,7 +257,7 @@ namespace CarsAndBids.Data.Migrations
                     b.HasIndex("Vin")
                         .IsUnique();
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.CarImage", b =>
@@ -293,7 +293,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("CarImages");
+                    b.ToTable("CarImages", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Chat", b =>
@@ -311,7 +311,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.ChatAttachment", b =>
@@ -339,7 +339,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("MessageId");
 
-                    b.ToTable("ChatAttachments");
+                    b.ToTable("ChatAttachments", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.ChatMessage", b =>
@@ -376,7 +376,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("ChatMessages");
+                    b.ToTable("ChatMessages", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Comment", b =>
@@ -408,7 +408,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.EmojiReaction", b =>
@@ -431,7 +431,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("MessageReactionId");
 
-                    b.ToTable("EmojiReaction");
+                    b.ToTable("EmojiReaction", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Make", b =>
@@ -452,7 +452,7 @@ namespace CarsAndBids.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Makes");
+                    b.ToTable("Makes", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Model", b =>
@@ -478,7 +478,7 @@ namespace CarsAndBids.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Models");
+                    b.ToTable("Models", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Question", b =>
@@ -510,7 +510,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.RefreshToken", b =>
@@ -537,7 +537,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.User", b =>
@@ -652,7 +652,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserChatMessageReactions");
+                    b.ToTable("UserChatMessageReactions", (string)null);
                 });
 
             modelBuilder.Entity("CarsAndBids.Core.Entities.Wishlist", b =>
@@ -681,7 +681,7 @@ namespace CarsAndBids.Data.Migrations
                     b.HasIndex("UserId", "AuctionId")
                         .IsUnique();
 
-                    b.ToTable("Wishlists");
+                    b.ToTable("Wishlists", (string)null);
                 });
 
             modelBuilder.Entity("ChatUser", b =>
@@ -696,7 +696,7 @@ namespace CarsAndBids.Data.Migrations
 
                     b.HasIndex("ParticipantsId");
 
-                    b.ToTable("ChatUser");
+                    b.ToTable("ChatUser", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>

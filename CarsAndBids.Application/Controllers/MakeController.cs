@@ -1,15 +1,20 @@
-﻿using MediatR;
+﻿using CarsAndBids.Core.Constants;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using CarsAndBids.Core.CQRS.Makes;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace CarsAndBids.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class MakeController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
         var result = await mediator.Send(new GetAllMakesQuery());
@@ -17,6 +22,7 @@ public class MakeController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         var result = await mediator.Send(new GetMakeByIdQuery { Id = id });
@@ -26,6 +32,7 @@ public class MakeController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Create([FromBody] CreateMakeCommand request)
     {
         try
@@ -40,6 +47,7 @@ public class MakeController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Update([FromBody] UpdateMakeCommand request)
     {
         try
@@ -54,6 +62,7 @@ public class MakeController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
     {
         try

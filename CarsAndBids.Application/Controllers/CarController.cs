@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Cars;
+using CloudinaryDotNet.Actions;
 
 namespace CarsAndBids.API.Controllers;
 
@@ -13,6 +14,7 @@ namespace CarsAndBids.API.Controllers;
 public class CarController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await mediator.Send(new GetAllCarsQuery
@@ -25,6 +27,7 @@ public class CarController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         var result = await mediator.Send(new GetCarByIdQuery { Id = id });
@@ -41,6 +44,7 @@ public class CarController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Update([FromForm] UpdateCarCommand request)
     {
         await mediator.Send(request);
@@ -48,6 +52,7 @@ public class CarController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
     {
         await mediator.Send(new DeleteCarByIdCommand { Id = id });
