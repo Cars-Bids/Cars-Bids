@@ -2,8 +2,7 @@ using System.Net;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Resources;
 using CarsAndBids.Core.Specification.ChatSpec;
 using MediatR;
 
@@ -22,17 +21,14 @@ public class IsUserInChatQueryHandler(IGenericRepository<User> userRepository,
     {                                                                                                                   
         var user = await userRepository.GetByIdAsync(request.UserId);
         if (user == null)
-        {
-            throw new HttpException("User not found.", HttpStatusCode.NotFound);
-        }
-        
+            throw new HttpException(Resource.UserNotFound, HttpStatusCode.NotFound);
+
+
         var result = await chatRepository.GetItemBySpec(
             new ChatContainsUserSpec(request.ChatId, request.UserId));
 
         if (result == 0)
-        {
-            throw new HttpException("Chat not found or user not in chat.", HttpStatusCode.NotFound);
-        }
+            throw new HttpException(Resource.ChatNotFoundOrUserNotInChat, HttpStatusCode.NotFound);
 
         return true;
     }

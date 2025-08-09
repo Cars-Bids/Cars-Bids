@@ -4,6 +4,7 @@ using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Chat;
 
@@ -22,18 +23,21 @@ public class DeleteAttachmentsCommandHandler(IMediator mediator,
     public async Task<List<int>> Handle(DeleteAttachmentsCommand request, CancellationToken cancellationToken)
     {
         var isUserInChat = await mediator.Send(new IsUserInChatQuery { ChatId = request.ChatId, UserId = request.UserId });
-        if (!isUserInChat) throw new HubException("User is not a participant of this chat.");
+        if (!isUserInChat)
+            throw new HubException(Resource.UserNotParticipantOfChat);
 
         var attachments = await chatAttachmentRepository.GetAsync(filter: a => request.AttachmentIds.Contains(a.Id)
                                                                                           && a.Message.ChatId == request.ChatId,
                                                                                           includeProperties: "Message");
-        if (attachments.Count() != request.AttachmentIds.Count) throw new HubException("One or more attachment not found.");
+        if (attachments.Count() != request.AttachmentIds.Count)
+            throw new HubException(Resource.OneOrMoreAttachmentsNotFound);
 
         // Check if user is the sender of each message
         foreach (var chatAttachment in attachments)
         {
             var message = chatAttachment.Message;
-            if (message.SenderId != request.UserId) throw new HubException($"User is not authorized to delete attachment {chatAttachment.Id}");
+            if (message.SenderId != request.UserId)
+                throw new HubException(string.Format(Resource.UserNotAuthorizedToDeleteAttachment, chatAttachment.Id));
         }
 
         var deletedAttachmentIds = attachments.Select(a => a.Id).ToList();
@@ -76,7 +80,7 @@ public class DeleteAttachmentsCommandHandler(IMediator mediator,
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw new HttpException("Failed to delete attachments.", HttpStatusCode.InternalServerError, ex);
+                throw new HttpException(Resource.FailedToDeleteAttachments, HttpStatusCode.InternalServerError, ex);
             }
         }
 

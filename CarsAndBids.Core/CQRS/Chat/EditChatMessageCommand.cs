@@ -6,6 +6,7 @@ using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Chat;
 
@@ -24,13 +25,17 @@ public class EditChatMessageCommandHandler(IMediator mediator,
     public async Task<ChatMessageDto> Handle(EditChatMessageCommand request, CancellationToken cancellationToken)
     {
         var isUserInChat = await mediator.Send(new IsUserInChatQuery{ ChatId = request.ChatId, UserId = request.UserId});
-        if (isUserInChat) throw new HubException("User is not a participant of this chat.");
+        if (!isUserInChat)
+            throw new HubException(Resource.UserNotParticipantOfChat);
 
         var messages = await chatMessageRepository.GetAsync(filter: c => c.Id == request.MessageId,
                                                                                   includeProperties: "Attachments");
         var message = messages.First();
-        if (message == null) throw new HubException("Message doesnt exist.");
-        if (message.SenderId != request.UserId) throw new HubException("User is not authorized to edit the message");
+        if (message == null)
+            throw new HubException(Resource.MessageDoesNotExist);
+
+        if (message.SenderId != request.UserId)
+            throw new HubException(Resource.UserNotAuthorizedToEditMessage);
 
         message.Message = request.NewMessage;
         await chatMessageRepository.UpdateAsync(message);

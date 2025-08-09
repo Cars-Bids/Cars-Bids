@@ -1,4 +1,5 @@
 ﻿using CarsAndBids.Core.CQRS.Chat;
+using CarsAndBids.Core.Resources;
 using FluentValidation;
 
 namespace CarsAndBids.Core.Validators.Chat;
@@ -9,6 +10,6 @@ public class CreateChatCommandValidator : AbstractValidator<CreateChatCommand>
     {
         RuleFor(x => x.ParticipantIds)
             .NotEmpty()
-            .WithMessage("Participants count must be greater than 0.");
+            .WithMessage(Resource.ParticipantsRequired);
     }
 }

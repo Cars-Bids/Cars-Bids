@@ -3,6 +3,7 @@ using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Account;
 
@@ -27,10 +28,10 @@ public class LoginQueryHandler(UserManager<User> userManager,
 
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user is null)
-            throw new Exception($"Incorrect data");
+            throw new Exception(Resource.IncorectData);
 
         if (!await userManager.CheckPasswordAsync(user, request.Password))
-            throw new Exception($"Incorrect data");
+            throw new Exception(Resource.IncorectData);
 
         var accessToken = await jwtTokenService.CreateTokenAsync(user);
         var refreshToken = jwtTokenService.GenerateRefreshToken(user);

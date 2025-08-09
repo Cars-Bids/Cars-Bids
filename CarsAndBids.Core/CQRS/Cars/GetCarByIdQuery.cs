@@ -5,6 +5,7 @@ using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
 using System.Net;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Cars;
 
@@ -22,7 +23,7 @@ public class GetCarByIdHandler(
     public async Task<CarDto> Handle(GetCarByIdQuery request, CancellationToken cancellationToken)
     {
         var car = await carRepository.GetByIdAsync(request.Id)
-            ?? throw new HttpException($"Car with id [{request.Id}] not found!", HttpStatusCode.NotFound);
+            ?? throw new HttpException(string.Format(Resource.CarNotFoundById, request.Id),HttpStatusCode.NotFound);
 
         var images = await carImageRepository.GetAsync(filter: img => img.CarId == request.Id);
 

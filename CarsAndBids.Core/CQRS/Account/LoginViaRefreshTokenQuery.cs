@@ -2,6 +2,7 @@ using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Entities;
 using MediatR;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Account;
 
@@ -23,12 +24,12 @@ public class LoginViaRefreshTokenQueryHandler(IJwtTokenService jwtTokenService,
         var oldRefreshToken = refreshTokens.FirstOrDefault();
         if (oldRefreshToken == null || oldRefreshToken.User == null)
         {
-            throw new Exception("Invalid refresh token or user not found");
+            throw new Exception(Resource.InvalidRefresh);
         }
 
         if (oldRefreshToken.ExpiresOnUtc < DateTime.UtcNow)
         {
-            throw new Exception("Refresh token has expired");
+            throw new Exception(Resource.RefreshExpired);
         }
 
         var accessToken = await jwtTokenService.CreateTokenAsync(oldRefreshToken.User);

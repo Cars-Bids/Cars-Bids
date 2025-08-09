@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using CarsAndBids.Core.CQRS.Profile;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.Validators.Profile;
 
@@ -8,15 +9,15 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
     public ResetPasswordCommandValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format");
+    .NotEmpty().WithMessage(Resource.EmailRequired)
+    .EmailAddress().WithMessage(Resource.EmailInvalidFormat);
 
         RuleFor(x => x.Token)
-            .NotEmpty().WithMessage("Reset token is required");
+            .NotEmpty().WithMessage(Resource.ResetTokenRequired);
 
         RuleFor(x => x.NewPassword)
-            .NotEmpty().WithMessage("New password is required")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long")
-            .MaximumLength(20).WithMessage("Password must be at most 20 characters long");
+            .NotEmpty().WithMessage(Resource.NewPasswordRequired)
+            .MinimumLength(6).WithMessage(Resource.NewPasswordMinLength)
+            .MaximumLength(20).WithMessage(Resource.NewPasswordMaxLength);
     }
 }

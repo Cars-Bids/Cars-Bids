@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using CarsAndBids.Core.CQRS.Account;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.Validators.Account;
 public class LoginQueryValidator : AbstractValidator<LoginQuery>
@@ -7,12 +8,12 @@ public class LoginQueryValidator : AbstractValidator<LoginQuery>
     public LoginQueryValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format");
+    .NotEmpty().WithMessage(Resource.EmailRequired)
+    .EmailAddress().WithMessage(Resource.InvalidEmailFormat);
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters")
-            .MaximumLength(20).WithMessage("Password can't be longer than 20 characters");
+            .NotEmpty().WithMessage(Resource.PasswordRequired)
+            .MinimumLength(6).WithMessage(Resource.PasswordMinLength)
+            .MaximumLength(20).WithMessage(Resource.PasswordMaxLength);
     }
 }

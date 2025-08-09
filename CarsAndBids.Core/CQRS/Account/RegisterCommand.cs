@@ -5,6 +5,7 @@ using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using CarsAndBids.Core.Resources;
 
 
 namespace CarsAndBids.Core.CQRS.Account;
@@ -29,7 +30,7 @@ public class RegisterCommandHandler(IFileService fileService,
     {
             var user = await userManager.FindByEmailAsync(cmd.Email!);
             if (user is not null) 
-                throw new Exception($"User with {cmd.Email} already exist!");
+                throw new Exception(string.Format(Resource.UserAlreadyExists, cmd.Email));
 
             var newUser = mapper.Map<User>(cmd);
             
