@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using CarsAndBids.Core.CQRS.Account;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.Validators.Account;
 
@@ -8,7 +9,7 @@ public class LoginViaRefreshTokenQueryValidator : AbstractValidator<LoginViaRefr
     public LoginViaRefreshTokenQueryValidator()
     {
         RuleFor(x => x.RefreshToken)
-            .NotEmpty()
-            .WithMessage("Refresh token is required");
+        .NotEmpty()
+        .WithMessage(Resource.RefreshTokenRequired);
     }
 }

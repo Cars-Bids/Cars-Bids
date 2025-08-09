@@ -3,6 +3,7 @@ using System.Net;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Auctions;
 
@@ -18,7 +19,7 @@ public class DeleteAuctionByIdCommandHandler(
     public async Task Handle(DeleteAuctionByIdCommand cmd, CancellationToken cancellationToken)
     {
         var auction = await auctionRepository.GetByIdAsync(cmd.Id)
-            ?? throw new HttpException($"Auction with id [{cmd.Id}] not found!", HttpStatusCode.NotFound);
+            ?? throw new HttpException(string.Format(Resource.AuctionNotFoundById, cmd.Id), HttpStatusCode.NotFound);
 
         await auctionRepository.DeleteAsync(auction.Id);
     }

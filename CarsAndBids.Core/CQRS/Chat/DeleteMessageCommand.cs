@@ -2,6 +2,7 @@ using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Chat;
 
@@ -20,18 +21,21 @@ public class DeleteMessageCommandHandler(IMediator mediator,
     public async Task Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
     {
         var isUserInChat = await mediator.Send(new IsUserInChatQuery { ChatId = request.ChatId, UserId = request.RequesterId });
-        if (!isUserInChat) throw new HubException("User is not a participant of this chat.");
+        if (!isUserInChat)
+            throw new HubException(Resource.UserNotParticipantOfChat);
 
         var messages = await chatMessageRepository.GetAsync(filter: m => m.Id == request.MessageId,
                                                      includeProperties: "Attachments");
         if (!messages.Any())
-        {
-            throw new HubException("Message doesn't exist.");
-        }
+            throw new HubException(Resource.MessageDoesNotExist);
+
         var message = messages.First();
-        
-        if (message == null) throw new HubException("Message doesn't exist.");
-        if (message.SenderId != request.RequesterId) throw new HubException("User doesn't have rights to delete this message.");
+
+        if (message == null)
+            throw new HubException(Resource.MessageDoesNotExist);
+
+        if (message.SenderId != request.RequesterId)
+            throw new HubException(Resource.UserNotAuthorizedToDeleteMessage);
 
         if (message.HasAttachments)
         {

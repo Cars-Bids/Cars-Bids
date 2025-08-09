@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using CarsAndBids.Core.CQRS.BodyStyles;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.Validators.BodyStyle;
 
@@ -8,7 +9,8 @@ public class CreateBodyStyleCommandValidator : AbstractValidator<CreateBodyStyle
     public CreateBodyStyleCommandValidator()
     {
         RuleFor(x => x.StyleName)
-            .NotEmpty().WithMessage("Body style name is required")
-            .MaximumLength(50).WithMessage("Body style name must be at most 50 characters long");
+            .NotEmpty().WithMessage(Resource.BodyStyleNameRequired)
+            .MaximumLength(50).WithMessage(Resource.BodyStyleNameMaxLength);
+    
     }
 }

@@ -2,6 +2,7 @@
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -29,7 +30,7 @@ public class UpdateProfileCommandHandler(
 
         if (existingUser == null)
         {
-            throw new KeyNotFoundException("User not found.");
+            throw new KeyNotFoundException(Resource.UserNotFound);
         }
 
         mapper.Map(cmd, existingUser);

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using CarsAndBids.Core.CQRS.Profile;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.Validators.Profile;
 
@@ -8,28 +9,28 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
     public UpdateProfileCommandValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0).WithMessage("User ID must be greater than 0");
+            .GreaterThan(0).WithMessage(Resource.UserIdGreaterThanZero);
 
         RuleFor(x => x.FirstName)
             .MaximumLength(50)
-            .WithMessage("First name can't be longer than 50 characters");
+            .WithMessage(Resource.FirstNameMaxLength);
 
         RuleFor(x => x.LastName)
             .MaximumLength(50)
-            .WithMessage("Last name can't be longer than 50 characters");
+            .WithMessage(Resource.LastNameMaxLength);
 
         RuleFor(x => x.Username)
-            .NotEmpty().WithMessage("Username is required")
-            .MinimumLength(4).WithMessage("Username must be at least 4 characters")
-            .MaximumLength(30).WithMessage("Username can't be longer than 30 characters");
+            .NotEmpty().WithMessage(Resource.UsernameRequired)
+            .MinimumLength(4).WithMessage(Resource.UsernameMinLength)
+            .MaximumLength(30).WithMessage(Resource.UsernameMaxLength);
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format");
+            .NotEmpty().WithMessage(Resource.EmailRequired)
+            .EmailAddress().WithMessage(Resource.EmailInvalidFormat);
 
         RuleFor(x => x.ProfilePictureUrl)
-            .MaximumLength(2048).WithMessage("Profile picture URL is too long")
-            .Must(BeValidUrl).WithMessage("Profile picture URL must be a valid URL");
+            .MaximumLength(2048).WithMessage(Resource.ProfilePictureUrlMaxLength)
+            .Must(BeValidUrl).WithMessage(Resource.ProfilePictureUrlInvalid);
     }
 
     private bool BeValidUrl(string? url)

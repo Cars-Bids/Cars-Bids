@@ -5,6 +5,7 @@ using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Chat;
 
@@ -29,7 +30,7 @@ public class SendChatMessageCommandHandler(IGenericRepository<Entities.Chat> cha
         var isUserInChat = await mediator.Send(new IsUserInChatQuery { ChatId = request.ChatId, UserId = request.SenderId });
         if (!isUserInChat)
         {
-            throw new HubException("User is not a participant of this chat.");
+            throw new HubException(Resource.UserNotInChat);
         }
 
         var message = mapper.Map<ChatMessage>(request);

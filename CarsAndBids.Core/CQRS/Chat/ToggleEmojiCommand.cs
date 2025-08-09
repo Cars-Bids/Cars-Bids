@@ -1,5 +1,6 @@
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Resources;
 using CarsAndBids.Core.Specification.ChatSpec;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -20,7 +21,8 @@ public class ToggleEmojiCommandHandler(IMediator mediator,
     public async Task<bool> Handle(ToggleEmojiCommand request, CancellationToken cancellationToken)
     {
         var isUserInChat = await mediator.Send(new IsUserInChatQuery{ ChatId = request.ChatId, UserId = request.UserId});
-        if (isUserInChat) throw new HubException("User is not a participant of this chat.");
+        if (isUserInChat)
+            throw new HubException(Resource.UserNotInChat);
 
         var spec = new GetChatMessageReactionSpec(request.UserId, request.MessageId);
         var reaction = await messageReactionRepository.GetItemBySpec(spec, cancellationToken);
@@ -42,7 +44,7 @@ public class ToggleEmojiCommandHandler(IMediator mediator,
             }
             await messageReactionRepository.SaveAsync();
         }
-        else throw new HubException("Try again");
+        else throw new HubException(Resource.EmojiToggleFailed);
 
         return isCreated;
     }
