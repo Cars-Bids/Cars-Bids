@@ -1,9 +1,9 @@
 ﻿using Ardalis.Specification;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Specification.СommonSpec;
+using Steria.Core.Entities;
+using Steria.Core.Specification.СommonSpec;
 
 
-namespace CarsAndBids.Core.Specification.WishlistSpec;
+namespace Steria.Core.Specification.WishlistSpec;
 
 public class PagedWishlistsSpec : PagedSpec<Wishlist>
 {

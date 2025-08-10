@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.Serialization;
 
-namespace CarsAndBids.Core.Exceptions;
+namespace Steria.Core.Exceptions;
 
 [Serializable]
 public class HttpException : Exception

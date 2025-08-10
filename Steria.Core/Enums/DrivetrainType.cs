@@ -1,4 +1,4 @@
-namespace CarsAndBids.Core.Enums;
+namespace Steria.Core.Enums;
 
 public enum DrivetrainType
 {

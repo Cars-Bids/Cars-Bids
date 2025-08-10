@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Account;
 using Microsoft.AspNetCore.Http;
+using Steria.Core.CQRS.Account;
 
-namespace CarsAndBids.Core.Validators.Account;
+namespace Steria.Core.Validators.Account;
 
 public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {

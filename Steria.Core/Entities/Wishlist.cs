@@ -1,4 +1,4 @@
-namespace CarsAndBids.Core.Entities;
+namespace Steria.Core.Entities;
 
 public class Wishlist
 {

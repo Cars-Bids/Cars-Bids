@@ -1,7 +1,7 @@
-﻿using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Enums;
+﻿using Steria.Core.DTOs;
+using Steria.Core.Enums;
 
-namespace CarsAndBids.Core.Interfaces;
+namespace Steria.Core.Interfaces;
 
 public interface IAuctionService
 {

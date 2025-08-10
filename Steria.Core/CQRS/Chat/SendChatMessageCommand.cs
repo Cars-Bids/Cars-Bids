@@ -1,12 +1,12 @@
 using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Chat;
+namespace Steria.Core.CQRS.Chat;
 
 public class SendChatMessageCommand : IRequest<ChatMessageDto>
 {

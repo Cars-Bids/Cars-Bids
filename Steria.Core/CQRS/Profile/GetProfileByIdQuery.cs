@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
 using MediatR;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Profile;
+namespace Steria.Core.CQRS.Profile;
 
 public class GetProfileByIdQuery : IRequest<ProfileDto?>
 {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Models;
+using Steria.Core.CQRS.Models;
 
-namespace CarsAndBids.Core.Validators.Model;
+namespace Steria.Core.Validators.Model;
 
 public class CreateModelCommandValidator : AbstractValidator<CreateModelCommand>
 {

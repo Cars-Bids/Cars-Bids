@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CarsAndBids.Core.Interfaces;
+namespace Steria.Core.Interfaces;
 public interface IDataSeederRepository
 {
     Task SeedRolesAsync();

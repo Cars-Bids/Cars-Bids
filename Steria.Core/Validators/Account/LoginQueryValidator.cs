@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Account;
+using Steria.Core.CQRS.Account;
 
-namespace CarsAndBids.Core.Validators.Account;
+namespace Steria.Core.Validators.Account;
 public class LoginQueryValidator : AbstractValidator<LoginQuery>
 {
     public LoginQueryValidator()

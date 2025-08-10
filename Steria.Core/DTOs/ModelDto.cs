@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarsAndBids.Core.DTOs;
+namespace Steria.Core.DTOs;
 public class ModelDto
 {
     public int Id { get; set; }

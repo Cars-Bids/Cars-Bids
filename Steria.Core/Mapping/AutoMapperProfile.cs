@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.CQRS.Account;
-using CarsAndBids.Core.CQRS.Auctions;
-using CarsAndBids.Core.CQRS.BodyStyles;
-using CarsAndBids.Core.CQRS.Cars;
-using CarsAndBids.Core.CQRS.Chat;
-using CarsAndBids.Core.CQRS.Makes;
-using CarsAndBids.Core.CQRS.Models;
-using CarsAndBids.Core.CQRS.Profile;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Entities;
+using Steria.Core.CQRS.Account;
+using Steria.Core.CQRS.Auctions;
+using Steria.Core.CQRS.BodyStyles;
+using Steria.Core.CQRS.Cars;
+using Steria.Core.CQRS.Chat;
+using Steria.Core.CQRS.Makes;
+using Steria.Core.CQRS.Models;
+using Steria.Core.CQRS.Profile;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
 
-namespace CarsAndBids.Core.Mapping;
+namespace Steria.Core.Mapping;
 
 public class AutoMapperProfile : Profile
 {

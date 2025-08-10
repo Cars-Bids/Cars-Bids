@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CarsAndBids.Core.Entities;
+namespace Steria.Core.Entities;
 
 public class User : IdentityUser<int>
 {
@@ -21,5 +21,7 @@ public class User : IdentityUser<int>
     public ICollection<RefreshToken>? RefreshTokens { get; set; }
     public ICollection<Chat>? Chats { get; set; }
     public ICollection<UserChatMessageReaction>? UserChatMessageReactions { get; set; }
+    public ICollection<UserNotificationSetting>? UserNotificationSettings { get; set; }
+    public ICollection<UserNotification>? UserNotifications { get; set; }
     
 }

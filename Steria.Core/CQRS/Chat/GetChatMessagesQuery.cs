@@ -1,11 +1,11 @@
 using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Specification.ChatSpec;
 using MediatR;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
+using Steria.Core.Specification.ChatSpec;
 
-namespace CarsAndBids.Core.CQRS.Chat;
+namespace Steria.Core.CQRS.Chat;
 
 public class GetChatMessagesQuery : IRequest<List<ChatMessageDto>>
 {

@@ -1,6 +1,6 @@
-﻿using CarsAndBids.Core.Enums;
+﻿using Steria.Core.Enums;
 
-namespace CarsAndBids.Core.DTOs;
+namespace Steria.Core.DTOs;
 
 public class AuctionDto
 {

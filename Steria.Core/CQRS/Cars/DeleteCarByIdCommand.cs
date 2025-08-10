@@ -1,9 +1,9 @@
-﻿using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Specification.CarSpec;
-using MediatR;
+﻿using MediatR;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
+using Steria.Core.Specification.CarSpec;
 
-namespace CarsAndBids.Core.CQRS.Cars;
+namespace Steria.Core.CQRS.Cars;
 public class DeleteCarByIdCommand : IRequest
 {
     public int Id { get; set; }

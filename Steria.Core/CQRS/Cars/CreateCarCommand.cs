@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Enums;
-using CarsAndBids.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-namespace CarsAndBids.Core.CQRS.Cars;
+using Steria.Core.Entities;
+using Steria.Core.Enums;
+using Steria.Core.Interfaces;
+
+namespace Steria.Core.CQRS.Cars;
 
 public class CreateCarCommand : IRequest
 {

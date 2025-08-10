@@ -1,9 +1,9 @@
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
 using MediatR;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Account;
+namespace Steria.Core.CQRS.Account;
 
 public class LoginViaRefreshTokenQuery : IRequest<TokensDto>
 {

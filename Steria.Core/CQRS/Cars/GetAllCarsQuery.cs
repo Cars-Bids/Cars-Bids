@@ -1,12 +1,12 @@
 ﻿using Ardalis.Specification;
 using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Specification.CarSpec;
 using MediatR;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
+using Steria.Core.Specification.CarSpec;
 
-namespace CarsAndBids.Core.CQRS.Cars;
+namespace Steria.Core.CQRS.Cars;
 
 public class GetAllCarsQuery : IRequest<PagedResult<CarDto>>
 {

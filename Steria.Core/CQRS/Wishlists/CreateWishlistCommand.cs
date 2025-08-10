@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
 using MediatR;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Wishlists;
+namespace Steria.Core.CQRS.Wishlists;
 
 public class CreateWishlistCommand : IRequest
 {

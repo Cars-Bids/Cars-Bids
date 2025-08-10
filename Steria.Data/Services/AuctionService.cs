@@ -4,7 +4,7 @@ using Steria.Core.Entities;
 using Steria.Core.Enums;
 using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Data.Services;
+namespace Steria.Data.Services;
 
 public class AuctionService(
     IMapper mapper,

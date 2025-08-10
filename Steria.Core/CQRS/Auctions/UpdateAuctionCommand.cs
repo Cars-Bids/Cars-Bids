@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using System.Net;
 using AutoMapper;
-using CarsAndBids.Core.Enums;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Core.Interfaces;
+using Steria.Core.Entities;
+using Steria.Core.Enums;
+using Steria.Core.Exceptions;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Auctions;
+namespace Steria.Core.CQRS.Auctions;
 
 public class UpdateAuctionCommand : IRequest
 {

@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using System.Net;
 using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Exceptions;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Auctions;
+namespace Steria.Core.CQRS.Auctions;
 
 public class GetAuctionByIdQuery : IRequest<AuctionDto>
 {

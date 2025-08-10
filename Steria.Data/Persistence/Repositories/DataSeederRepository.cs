@@ -1,9 +1,9 @@
 ﻿using Steria.Core.Entities;
 using Steria.Core.Interfaces;
-using CarsAndBids.Data.Persistence.Seed;
 using Microsoft.AspNetCore.Identity;
+using Steria.Data.Persistence.Seed;
 
-namespace CarsAndBids.Data.Persistence.Repositories;
+namespace Steria.Data.Persistence.Repositories;
 
 public class DataSeederRepository(
     ApplicationDbContext context,

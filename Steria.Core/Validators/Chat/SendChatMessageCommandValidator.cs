@@ -1,7 +1,7 @@
 using FluentValidation;
-using CarsAndBids.Core.CQRS.Chat;
+using Steria.Core.CQRS.Chat;
 
-namespace CarsAndBids.Core.Validators.Chat;
+namespace Steria.Core.Validators.Chat;
 
 public class SendChatMessageCommandValidator : AbstractValidator<SendChatMessageCommand>
 {

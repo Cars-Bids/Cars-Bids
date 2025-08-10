@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Net;
-using CarsAndBids.Core.Specification.CarSpec;
+using Steria.Core.Entities;
+using Steria.Core.Enums;
+using Steria.Core.Exceptions;
+using Steria.Core.Interfaces;
+using Steria.Core.Specification.CarSpec;
 
-namespace CarsAndBids.Core.CQRS.Cars;
+namespace Steria.Core.CQRS.Cars;
 
 public class UpdateCarCommand : IRequest
 {

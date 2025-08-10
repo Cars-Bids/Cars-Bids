@@ -1,11 +1,11 @@
 using System.Net;
-using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Steria.Core.Entities;
+using Steria.Core.Exceptions;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Chat;
+namespace Steria.Core.CQRS.Chat;
 
 public class DeleteAttachmentsCommand : IRequest<List<int>>
 {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarsAndBids.Data.Persistence;
+namespace Steria.Data.Persistence;
 
 public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {

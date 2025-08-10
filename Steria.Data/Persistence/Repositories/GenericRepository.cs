@@ -5,7 +5,7 @@ using Steria.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace CarsAndBids.Data.Persistence.Repositories;
+namespace Steria.Data.Persistence.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {

@@ -1,6 +1,6 @@
-using CarsAndBids.Core.Entities;
+using Steria.Core.Entities;
 
-namespace CarsAndBids.Core.Interfaces;
+namespace Steria.Core.Interfaces;
 
 public interface IJwtTokenService
 {

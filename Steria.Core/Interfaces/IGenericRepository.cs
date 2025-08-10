@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Ardalis.Specification;
 
-namespace CarsAndBids.Core.Interfaces;
+namespace Steria.Core.Interfaces;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {

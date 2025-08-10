@@ -1,8 +1,8 @@
 ﻿using Ardalis.Specification;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Specification.СommonSpec;
+using Steria.Core.Entities;
+using Steria.Core.Specification.СommonSpec;
 
-namespace CarsAndBids.Core.Specification.AuctionSpec;
+namespace Steria.Core.Specification.AuctionSpec;
 
 public class PagedAuctionSpec : PagedSpec<Auction>
 {

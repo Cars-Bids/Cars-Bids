@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.Formats.Webp;
 using System.Text.RegularExpressions;
 using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Data.Services;
+namespace Steria.Data.Services;
 
 public class FileService: IFileService
 {

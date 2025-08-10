@@ -1,7 +1,7 @@
-﻿using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Enums;
+﻿using Steria.Core.Entities;
+using Steria.Core.Enums;
 
-namespace CarsAndBids.Core.DTOs;
+namespace Steria.Core.DTOs;
 
 public class CarDto
 {

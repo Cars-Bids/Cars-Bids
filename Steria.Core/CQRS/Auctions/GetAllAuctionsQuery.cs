@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using AutoMapper;
 using Ardalis.Specification;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Specification.AuctionSpec;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
+using Steria.Core.Specification.AuctionSpec;
 
-namespace CarsAndBids.Core.CQRS.Auctions;
+namespace Steria.Core.CQRS.Auctions;
 
 public class GetAllAuctionsQuery : IRequest<PagedResult<AuctionDto>>
 {

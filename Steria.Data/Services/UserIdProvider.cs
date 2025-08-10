@@ -1,4 +1,4 @@
-namespace CarsAndBids.Data.Services;
+namespace Steria.Data.Services;
 
 using Microsoft.AspNetCore.SignalR;
 

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Auctions;
+using Steria.Core.CQRS.Auctions;
 
-namespace CarsAndBids.Core.Validators.Auction;
+namespace Steria.Core.Validators.Auction;
 
 public class CreateAuctionCommandValidator : AbstractValidator<CreateAuctionCommand>
 {

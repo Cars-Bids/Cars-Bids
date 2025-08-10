@@ -3,12 +3,12 @@ using Microsoft.Extensions.Options;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using CarsAndBids.Core.DTOs;
 using System.Reflection;
-using CarsAndBids.Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
 
-namespace CarsAndBids.Core.CQRS.Account;
+namespace Steria.Core.CQRS.Account;
 
 public class SendPasswordResetEmailCommand : IRequest<bool>
 {
@@ -36,7 +36,7 @@ public class SendPasswordResetEmailCommandHandler(
         var token = await userManager.GeneratePasswordResetTokenAsync(user);
 
         var assembly = Assembly.GetExecutingAssembly();
-        var resourceName = "CarsAndBids.Core.Templates.PasswordResetTemplate.html";
+        var resourceName = "Steria.Core.Templates.PasswordResetTemplate.html";
         string htmlBody;
 
         using (var stream = assembly.GetManifestResourceStream(resourceName))

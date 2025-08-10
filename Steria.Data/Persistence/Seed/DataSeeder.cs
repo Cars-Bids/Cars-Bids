@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarsAndBids.Data.Persistence.Seed
+namespace Steria.Data.Persistence.Seed
 {
     public class DataSeeder(
         IDataSeederRepository seederRepository

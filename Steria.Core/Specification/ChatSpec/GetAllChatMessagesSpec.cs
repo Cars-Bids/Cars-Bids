@@ -1,7 +1,7 @@
 using Ardalis.Specification;
-using CarsAndBids.Core.Entities;
+using Steria.Core.Entities;
 
-namespace CarsAndBids.Core.Specification.ChatSpec;
+namespace Steria.Core.Specification.ChatSpec;
 
 public class GetAllChatMessagesSpec : Specification<ChatMessage, ChatMessage>
 {

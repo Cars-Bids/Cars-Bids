@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CarsAndBids.Data.Persistence.Seed;
+namespace Steria.Data.Persistence.Seed;
 
 public class RoleSeed(RoleManager<IdentityRole<int>> roleManager)
 {

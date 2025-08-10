@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CarsAndBids.Data.Services;
+namespace Steria.Data.Services;
 
 public class JwtTokenService(IConfiguration configuration,
                              UserManager<User> userManager) : IJwtTokenService

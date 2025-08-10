@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
-using CarsAndBids.Core.Entities;
+using Steria.Core.Entities;
 
-namespace CarsAndBids.Core.Specification.CarSpec;
+namespace Steria.Core.Specification.CarSpec;
 public class CarImageByCarIdAndUrlSpec : Specification<CarImage, CarImage>
 {
     public CarImageByCarIdAndUrlSpec(int carId, string imageUrl)

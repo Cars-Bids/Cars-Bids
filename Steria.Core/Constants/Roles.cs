@@ -1,4 +1,4 @@
-namespace CarsAndBids.Core.Constants;
+namespace Steria.Core.Constants;
 
 public class Roles
 {

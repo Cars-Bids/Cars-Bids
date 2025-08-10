@@ -2,7 +2,7 @@
 using Steria.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarsAndBids.Data.Persistence.Seed;
+namespace Steria.Data.Persistence.Seed;
 
 public class BodyStyleSeed(
     IGenericRepository<BodyStyle> bodyStyleRepository

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.BodyStyles;
+using Steria.Core.CQRS.BodyStyles;
 
-namespace CarsAndBids.Core.Validators.BodyStyle;
+namespace Steria.Core.Validators.BodyStyle;
 
 public class CreateBodyStyleCommandValidator : AbstractValidator<CreateBodyStyleCommand>
 {

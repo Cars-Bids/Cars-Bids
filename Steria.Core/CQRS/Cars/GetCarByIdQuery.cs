@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Exceptions;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
 using MediatR;
 using System.Net;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Exceptions;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Cars;
+namespace Steria.Core.CQRS.Cars;
 
 public class GetCarByIdQuery : IRequest<CarDto>
 {

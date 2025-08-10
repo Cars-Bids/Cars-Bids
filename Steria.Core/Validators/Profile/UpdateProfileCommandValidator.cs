@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Profile;
+using Steria.Core.CQRS.Profile;
 
-namespace CarsAndBids.Core.Validators.Profile;
+namespace Steria.Core.Validators.Profile;
 
 public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileCommand>
 {

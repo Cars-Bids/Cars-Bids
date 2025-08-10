@@ -1,4 +1,4 @@
-﻿namespace CarsAndBids.Core.DTOs;
+﻿namespace Steria.Core.DTOs;
 
 public class WishlistDto
 {

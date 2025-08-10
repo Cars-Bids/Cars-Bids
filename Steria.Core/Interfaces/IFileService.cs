@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace CarsAndBids.Core.Interfaces;
+namespace Steria.Core.Interfaces;
 
 public interface IFileService
 {

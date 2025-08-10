@@ -1,8 +1,8 @@
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
 using MediatR;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Chat;
+namespace Steria.Core.CQRS.Chat;
 
 public class CreateChatCommand : IRequest<int>
 {

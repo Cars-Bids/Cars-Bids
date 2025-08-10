@@ -1,8 +1,8 @@
-﻿using CarsAndBids.Core.Entities;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Steria.Core.Entities;
 
-namespace CarsAndBids.Core.CQRS.Profile;
+namespace Steria.Core.CQRS.Profile;
 public class ResetPasswordCommand : IRequest<bool>
 {
     public string Email { get; set; }

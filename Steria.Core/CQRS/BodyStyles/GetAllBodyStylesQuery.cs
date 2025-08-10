@@ -1,13 +1,13 @@
 ﻿using Ardalis.Specification;
 using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Specification.BodyStyleSpec;
 using MediatR;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
+using Steria.Core.Specification.BodyStyleSpec;
 
 
-namespace CarsAndBids.Core.CQRS.BodyStyles;
+namespace Steria.Core.CQRS.BodyStyles;
 
 public class GetAllBodyStylesQuery : IRequest<PagedResult<BodyStyleDto>>
 {

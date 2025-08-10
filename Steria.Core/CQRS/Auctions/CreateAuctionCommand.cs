@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using AutoMapper;
-using CarsAndBids.Core.Enums;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
+using Steria.Core.Entities;
+using Steria.Core.Enums;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Auctions;
+namespace Steria.Core.CQRS.Auctions;
 
 public class CreateAuctionCommand : IRequest
 {

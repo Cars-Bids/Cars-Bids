@@ -1,6 +1,6 @@
-using CarsAndBids.Core.Enums;
+using Steria.Core.Enums;
 
-namespace CarsAndBids.Core.Entities;
+namespace Steria.Core.Entities;
 
 public class CarImage
 {

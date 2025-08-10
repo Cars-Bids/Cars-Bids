@@ -1,13 +1,13 @@
 ﻿using Ardalis.Specification;
 using AutoMapper;
-using CarsAndBids.Core.DTOs;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Specification.WishlistSpec;
 using MediatR;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
+using Steria.Core.Specification.WishlistSpec;
 
 
-namespace CarsAndBids.Core.CQRS.Wishlists;
+namespace Steria.Core.CQRS.Wishlists;
 
 public class GetAllWishlistsQuery : IRequest<PagedResult<WishlistDto>>
 {

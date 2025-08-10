@@ -2,7 +2,7 @@ using Steria.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CarsAndBids.Data.Configurations;
+namespace Steria.Data.Configurations;
 
 public class CommentConfiguration : IEntityTypeConfiguration<Comment>
 {

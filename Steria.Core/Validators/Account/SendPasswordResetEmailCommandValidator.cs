@@ -1,7 +1,7 @@
-﻿using CarsAndBids.Core.CQRS.Account;
-using FluentValidation;
+﻿using FluentValidation;
+using Steria.Core.CQRS.Account;
 
-namespace CarsAndBids.Core.Validators.Account;
+namespace Steria.Core.Validators.Account;
 
 public class SendPasswordResetEmailCommandValidator : AbstractValidator<SendPasswordResetEmailCommand>
 {

@@ -1,13 +1,13 @@
 using AutoMapper;
-using CarsAndBids.Core.Constants;
-using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Steria.Core.Constants;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
 
-namespace CarsAndBids.Core.CQRS.Account;
+namespace Steria.Core.CQRS.Account;
 
 public class RegisterCommand : IRequest
 {

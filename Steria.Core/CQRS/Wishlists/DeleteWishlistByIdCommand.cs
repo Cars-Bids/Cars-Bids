@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
 using MediatR;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Wishlists;
+namespace Steria.Core.CQRS.Wishlists;
 
 public class DeleteWishlistByIdCommand : IRequest
 {

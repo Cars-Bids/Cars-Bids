@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace CarsAndBids.Core.Entities;
+namespace Steria.Core.Entities;
 
 public class Comment
 {

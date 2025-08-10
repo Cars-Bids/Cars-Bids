@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CarsAndBids.Data.Migrations
+namespace Steria.Data.Migrations
 {
     /// <inheritdoc />
     public partial class _01_Migrate : Migration

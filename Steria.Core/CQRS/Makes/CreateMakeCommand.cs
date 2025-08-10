@@ -1,8 +1,8 @@
-﻿using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
-using MediatR;
+﻿using MediatR;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.CQRS.Makes;
+namespace Steria.Core.CQRS.Makes;
 public class CreateMakeCommand : IRequest
 {
     public string? Name { get; set; }

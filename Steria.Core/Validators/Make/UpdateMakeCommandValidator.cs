@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Makes;
+using Steria.Core.CQRS.Makes;
 
-namespace CarsAndBids.Core.Validators.Make;
+namespace Steria.Core.Validators.Make;
 
 public class UpdateMakeCommandValidator : AbstractValidator<UpdateMakeCommand>
 {
