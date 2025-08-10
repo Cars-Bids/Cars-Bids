@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace CarsAndBids.Core.Entities;
+﻿namespace CarsAndBids.Core.Entities;
 
 public class Comment
 {

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CarsAndBids.Core.DTOs;
 
-namespace CarsAndBids.Core.DTOs;
 public class ModelDto
 {
     public int Id { get; set; }

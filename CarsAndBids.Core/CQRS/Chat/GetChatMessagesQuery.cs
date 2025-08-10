@@ -13,8 +13,10 @@ public class GetChatMessagesQuery : IRequest<List<ChatMessageDto>>
     public int CurrentUserId { get; set; }
 }
 
-public class GetChatMessagesQueryHandler(IGenericRepository<ChatMessage> chatMessageRepository, 
-                                            IMapper mapper) : IRequestHandler<GetChatMessagesQuery, List<ChatMessageDto>>
+public class GetChatMessagesQueryHandler(
+    IGenericRepository<ChatMessage> chatMessageRepository, 
+    IMapper mapper
+    ) : IRequestHandler<GetChatMessagesQuery, List<ChatMessageDto>>
 {
     public async Task<List<ChatMessageDto>> Handle(GetChatMessagesQuery request, CancellationToken cancellationToken)
     {

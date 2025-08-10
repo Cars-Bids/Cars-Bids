@@ -1,20 +1,28 @@
-﻿using CarsAndBids.Core.Interfaces;
+﻿using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
-namespace CarsAndBids.Data.Persistence.Seed
+namespace CarsAndBids.Data.Persistence.Seed;
+
+public class DataSeeder(
+    RoleManager<IdentityRole<int>> roleManager,
+    IGenericRepository<BodyStyle> bodyStyleRepository)
 {
-    public class DataSeeder(
-        IDataSeederRepository seederRepository
-        )
+    public async Task SeedAsync()
     {
-        public async Task SeedAsync()
-        {
-            await seederRepository.SeedRolesAsync();
-            await seederRepository.SeedBodyStylesAsync();
-
-        }
-
+        await SeedRolesAsync();
+        await SeedBodyStylesAsync();
     }
 
+    public async Task SeedRolesAsync()
+    {
+        var roleSeed = new RoleSeed(roleManager);
+        await roleSeed.SeedAsync();
+    }
+
+    public async Task SeedBodyStylesAsync()
+    {
+        var bodyStyleSeed = new BodyStyleSeed(bodyStyleRepository);
+        await bodyStyleSeed.SeedAsync();
+    }
 }

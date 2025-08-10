@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CarsAndBids.Core.CQRS.Auctions;
-using CloudinaryDotNet.Actions;
 
 namespace CarsAndBids.API.Controllers;
 

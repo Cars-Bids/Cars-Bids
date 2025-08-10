@@ -1,4 +1,5 @@
 ﻿namespace CarsAndBids.Core.DTOs;
+
 public class PagedResult<T>
 {
     public List<T> Items { get; set; } = [];

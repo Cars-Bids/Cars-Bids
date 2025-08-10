@@ -21,7 +21,7 @@ public class ValidationFilter : IAsyncActionFilter
                     isValid = false,
                     errors = new Dictionary<string, string[]>
                     {
-                        { paramName, new[] { $"{paramName} має бути більшим за 0" } }
+                        { paramName, new[] { $"{paramName} must be greater than 0" } }
                     }
                 });
                 return;

@@ -18,7 +18,7 @@ public class SendPasswordResetEmailCommand : IRequest<bool>
 public class SendPasswordResetEmailCommandHandler(
     UserManager<User> userManager,
     IOptions<EmailSettings> emailSettings
-) : IRequestHandler<SendPasswordResetEmailCommand, bool>
+    ) : IRequestHandler<SendPasswordResetEmailCommand, bool>
 {
     public async Task<bool> Handle(SendPasswordResetEmailCommand request, CancellationToken cancellationToken)
     {

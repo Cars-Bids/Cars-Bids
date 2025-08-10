@@ -6,9 +6,7 @@ using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Makes;
 
-public class GetAllMakesQuery : IRequest<List<MakeDto>>
-{
-}
+public class GetAllMakesQuery : IRequest<List<MakeDto>> {}
 
 public class GetAllMakesHandler(
     IMapper mapper,

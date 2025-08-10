@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
@@ -24,6 +23,5 @@ public class UpdateBodyStyleCommandHandler(
         mapper.Map(cmd, existingBodyStyle);
 
         await repository.UpdateAsync(existingBodyStyle!);
-        return;
     }
 }
