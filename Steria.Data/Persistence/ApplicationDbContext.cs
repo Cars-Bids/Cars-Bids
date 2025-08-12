@@ -26,6 +26,9 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     public DbSet<Wishlist> Wishlists { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<UserChatMessageReaction> UserChatMessageReactions { get; set; }
+    public DbSet<NotificationType> NotificationTypes { get; set; }
+    public DbSet<UserNotificationSetting> UserNotificationSettings { get; set; }
+    public DbSet<UserNotification> UserNotifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

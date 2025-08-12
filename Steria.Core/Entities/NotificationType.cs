@@ -9,8 +9,8 @@ public class NotificationType
     public string RedirectRoute { get; set; } = null!;
     public NotificationSource SourceType { get; set; }
     public string Description { get; set; } = null!;
-    public bool DefaultSendEmail { get; set; }
-    public bool DefaultSendSite { get; set; }
+    public bool DefaultSendEmail { get; set; } = false;
+    public bool DefaultSendSite { get; set; } = false;
 
     public ICollection<UserNotificationSetting>? UserNotificationSettings { get; set; }
     public ICollection<UserNotification>? UserNotifications { get; set; }

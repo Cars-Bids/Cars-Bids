@@ -5,4 +5,5 @@ public interface IDataSeederRepository
 {
     Task SeedRolesAsync();
     Task SeedBodyStylesAsync();
+    Task SeedNotificationTypesAsync();
 }

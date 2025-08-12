@@ -12,7 +12,7 @@ namespace Steria.Data.Persistence.Seed
         {
             await seederRepository.SeedRolesAsync();
             await seederRepository.SeedBodyStylesAsync();
-
+            await seederRepository.SeedNotificationTypesAsync();
         }
 
     }

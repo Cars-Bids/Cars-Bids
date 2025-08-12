@@ -1,6 +1,7 @@
 ﻿using Steria.Core.Entities;
 using Steria.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Steria.Core.Specification.СommonSpec;
 
 namespace Steria.Data.Persistence.Seed;
 
@@ -11,10 +12,10 @@ public class BodyStyleSeed(
     public async Task SeedAsync()
     {
         // Отримуємо всі існуючі стилі з бази
-        var existingStyles = await bodyStyleRepository.GetAsync();
+        var existingStyles = await bodyStyleRepository.GetItemBySpec(new FirstRecordSpec<BodyStyle>());
 
         // Перевіряємо, чи є вже записи в базі
-        if (!existingStyles.Any())
+        if (existingStyles is null)
         {
             var bodyStyles = new List<BodyStyle>
             {
@@ -61,11 +62,7 @@ public class BodyStyleSeed(
                 new BodyStyle { StyleName = "Semi-Convertible" }
             };
 
-            // Додаємо кожен стиль по одному через InsertAsync
-            foreach (var style in bodyStyles)
-            {
-                await bodyStyleRepository.InsertAsync(style);
-            }
+            await bodyStyleRepository.InsertRangeAsync(bodyStyles);
         }
     }
 }
