@@ -3,6 +3,6 @@
 public enum NotificationSource
 {
     Auction,
-    Comment,
+    AuctionComment,
     Profile
 }

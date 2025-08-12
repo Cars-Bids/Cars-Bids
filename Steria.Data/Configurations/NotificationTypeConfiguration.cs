@@ -20,5 +20,9 @@ public class NotificationTypeConfiguration : IEntityTypeConfiguration<Notificati
 
         builder.Property(n => n.Description)
             .HasMaxLength(100);
+        
+        builder.Property(n => n.SourceType)
+            .HasConversion<string>()
+            .HasMaxLength(30);
     }
 }

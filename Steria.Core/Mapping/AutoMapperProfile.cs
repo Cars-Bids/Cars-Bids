@@ -6,6 +6,7 @@ using Steria.Core.CQRS.Cars;
 using Steria.Core.CQRS.Chat;
 using Steria.Core.CQRS.Makes;
 using Steria.Core.CQRS.Models;
+using Steria.Core.CQRS.NotificationTypes;
 using Steria.Core.CQRS.Profile;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
@@ -40,6 +41,10 @@ public class AutoMapperProfile : Profile
 
         CreateMap<User, ProfileDto>().ReverseMap();
         CreateMap<User, UpdateProfileCommand>().ReverseMap();
+
+        CreateMap<NotificationType, CreateNotificationTypeCommand>().ReverseMap();
+        CreateMap<NotificationType, UpdateNotificationTypeCommand>().ReverseMap();
+        CreateMap<NotificationType, NotificationTypeDto>().ReverseMap();
         
         CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
 

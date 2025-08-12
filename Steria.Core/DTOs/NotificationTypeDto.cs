@@ -1,8 +1,8 @@
 ﻿using Steria.Core.Enums;
 
-namespace Steria.Core.Entities;
+namespace Steria.Core.DTOs;
 
-public class NotificationType
+public class NotificationTypeDto
 {
     public int Id { get; set; }
     public string Key { get; set; } = null!;
@@ -11,7 +11,4 @@ public class NotificationType
     public string Description { get; set; } = null!;
     public bool DefaultSendEmail { get; set; }
     public bool DefaultSendSite { get; set; }
-
-    public ICollection<UserNotificationSetting>? UserNotificationSettings { get; set; }
-    public ICollection<UserNotification>? UserNotifications { get; set; }
 }
