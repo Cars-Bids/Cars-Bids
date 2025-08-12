@@ -15,8 +15,10 @@ public class ToggleEmojiCommand : IRequest<bool>
     public string Emoji { get; set; } = null!;
 }
 
-public class ToggleEmojiCommandHandler(IMediator mediator,
-                                       IGenericRepository<UserChatMessageReaction> messageReactionRepository) : IRequestHandler<ToggleEmojiCommand, bool>
+public class ToggleEmojiCommandHandler(
+    IMediator mediator,
+    IGenericRepository<UserChatMessageReaction> messageReactionRepository
+    ) : IRequestHandler<ToggleEmojiCommand, bool>
 {
     public async Task<bool> Handle(ToggleEmojiCommand request, CancellationToken cancellationToken)
     {
@@ -31,20 +33,21 @@ public class ToggleEmojiCommandHandler(IMediator mediator,
         
         if (reaction != null)
         {
-            var existing = reaction.EmojiReactions.FirstOrDefault(x => x.Emoji == request.Emoji);
+            var existing = reaction.EmojiReactions?.FirstOrDefault(x => x.Emoji == request.Emoji);
             if (existing != null)
             {
-                reaction.EmojiReactions.Remove(existing); //toggle off
+                reaction.EmojiReactions!.Remove(existing); //toggle off
                 isCreated = false;
             } 
             else
             {
-                reaction.EmojiReactions.Add(new EmojiReaction { Emoji = request.Emoji }); //toggle on
+                reaction.EmojiReactions?.Add(new EmojiReaction { Emoji = request.Emoji }); //toggle on
                 isCreated = true;
             }
             await messageReactionRepository.SaveAsync();
         }
-        else throw new HubException(Resource.EmojiToggleFailed);
+        else 
+            throw new HubException(Resource.EmojiToggleFailed);
 
         return isCreated;
     }

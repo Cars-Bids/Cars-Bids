@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
 using MediatR;

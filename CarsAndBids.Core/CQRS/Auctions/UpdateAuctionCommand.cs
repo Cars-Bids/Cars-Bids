@@ -5,7 +5,6 @@ using CarsAndBids.Core.Enums;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
-using Org.BouncyCastle.Asn1.Ocsp;
 using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Auctions;

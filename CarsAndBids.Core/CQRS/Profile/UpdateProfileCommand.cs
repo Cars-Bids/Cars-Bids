@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Resources;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace CarsAndBids.Core.CQRS.Profile;
 
@@ -26,12 +23,8 @@ public class UpdateProfileCommandHandler(
 {
     public async Task Handle(UpdateProfileCommand cmd, CancellationToken cancellationToken)
     {
-        var existingUser = await repository.GetByIdAsync(cmd.UserId);
-
-        if (existingUser == null)
-        {
-            throw new KeyNotFoundException(Resource.UserNotFound);
-        }
+        var existingUser = await repository.GetByIdAsync(cmd.UserId)
+            ?? throw new KeyNotFoundException(Resource.UserNotFound);
 
         mapper.Map(cmd, existingUser);
 

@@ -11,8 +11,10 @@ public class LoginViaRefreshTokenQuery : IRequest<TokensDto>
     public string? RefreshToken { get; set; }
 }
 
-public class LoginViaRefreshTokenQueryHandler(IJwtTokenService jwtTokenService,
-                                              IGenericRepository<RefreshToken> repository) : IRequestHandler<LoginViaRefreshTokenQuery, TokensDto>
+public class LoginViaRefreshTokenQueryHandler(
+    IJwtTokenService jwtTokenService,
+    IGenericRepository<RefreshToken> repository
+    ) : IRequestHandler<LoginViaRefreshTokenQuery, TokensDto>
 {
     public async Task<TokensDto> Handle(LoginViaRefreshTokenQuery request, CancellationToken cancellationToken)
     {

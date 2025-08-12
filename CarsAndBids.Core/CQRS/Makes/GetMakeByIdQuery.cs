@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
+using System.Net;
 
 namespace CarsAndBids.Core.CQRS.Makes;
 
@@ -18,10 +20,9 @@ public class GetMakeByIdHandler(
 {
     public async Task<MakeDto?> Handle(GetMakeByIdQuery request, CancellationToken cancellationToken)
     {
-        var make = await repository.GetByIdAsync(request.Id);
+        var make = await repository.GetByIdAsync(request.Id)
+            ?? throw new HttpException("make not found", HttpStatusCode.NotFound);
 
-        return make is null
-            ? null
-            : mapper.Map<MakeDto>(make);
+        return mapper.Map<MakeDto>(make);
     }
 }

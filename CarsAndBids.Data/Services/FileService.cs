@@ -25,13 +25,14 @@ public class FileService: IFileService
         var account = new Account(
             cloudinarySettings["CloudName"],
             cloudinarySettings["ApiKey"],
-            cloudinarySettings["ApiSecret"]);
+            cloudinarySettings["ApiSecret"]
+        );
         cloudinary = new Cloudinary(account);
     }
     
     private string ExtractPublicIdFromUrl(string url)
     {
-        if (string.IsNullOrEmpty(url))
+        if (string.IsNullOrWhiteSpace(url))
             throw new ArgumentException("URL cannot be empty.");
         
         var regex = new Regex($@"https://res\.cloudinary\.com/{cloudName}/image/upload/v\d+/(.+)\.webp");
@@ -45,7 +46,7 @@ public class FileService: IFileService
     
     public async Task<string> UploadImageAsync(IFormFile file)
     {
-        if (file == null || file.Length == 0)
+        if (file is not { Length: > 0 })
             throw new ArgumentException("No file provided.");
 
         if (file.Length > MaxFileSizeBytes)
@@ -78,7 +79,7 @@ public class FileService: IFileService
 
     public async Task<List<string>> UploadImagesAsync(IList<IFormFile> files)
     {
-        if (files == null || files.Count == 0)
+        if (files is not { Count: > 0})
             throw new ArgumentException("No files provided.");
 
         if (files.Count > 500)
@@ -112,7 +113,7 @@ public class FileService: IFileService
 
     public async Task<bool> DeleteImageAsync(string publicId)
     {
-        if (string.IsNullOrEmpty(publicId))
+        if (string.IsNullOrWhiteSpace(publicId))
             throw new ArgumentException("PublicId cannot be empty.");
 
         var deletionParams = new DeletionParams(publicId);
@@ -123,7 +124,7 @@ public class FileService: IFileService
 
     public async Task<bool> DeleteImagesAsync(IList<string> publicIds)
     {
-        if (publicIds == null || publicIds.Count == 0)
+        if (publicIds is not { Count: > 0 })
             throw new ArgumentException("No PublicIds provided.");
 
         var deletionResult = await cloudinary.DeleteResourcesAsync(publicIds.ToArray());
@@ -148,7 +149,7 @@ public class FileService: IFileService
 
     public async Task<bool> DeleteImagesByUrlsAsync(IList<string> urls)
     {
-        if (urls == null || urls.Count == 0)
+        if (urls is not { Count: > 0 })
             throw new ArgumentException("No URLs provided.");
 
         var publicIds = new List<string>();
@@ -165,9 +166,6 @@ public class FileService: IFileService
             }
         }
 
-        if (publicIds.Count == 0)
-            return false;
-
-        return await DeleteImagesAsync(publicIds);
+        return publicIds.Count > 0 && await DeleteImagesAsync(publicIds);
     }
 }

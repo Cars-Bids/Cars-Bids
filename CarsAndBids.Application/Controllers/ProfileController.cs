@@ -7,9 +7,9 @@ using CarsAndBids.Core.CQRS.Profile;
 
 namespace CarsAndBids.API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ProfileController(IMediator mediator) : ControllerBase
 {
 
@@ -18,24 +18,16 @@ public class ProfileController(IMediator mediator) : ControllerBase
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var result = await mediator.Send(new GetProfileByIdQuery { UserId = userId });
-        return result is null ? NotFound() : Ok(result);
+        return Ok(result);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateProfileCommand request)
     {
-        try
-        {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            request.UserId = userId;
-
-            await mediator.Send(request);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { error = e.Message });
-        }
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        request.UserId = userId;
+        await mediator.Send(request);
+        return Ok();
     }
 
     [HttpPost("reset-password")]

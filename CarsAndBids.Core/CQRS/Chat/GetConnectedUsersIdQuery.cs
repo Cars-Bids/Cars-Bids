@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Specification.ChatSpec;
 using MediatR;

@@ -25,6 +25,5 @@ public class UpdateWishlistCommandHandler(
         mapper.Map(cmd, existingWishlist);
 
         await repository.UpdateAsync(existingWishlist!);
-        return;
     }
 }

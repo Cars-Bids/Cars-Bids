@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
+using System.Net;
 
 namespace CarsAndBids.Core.CQRS.Wishlists;
 
@@ -18,10 +20,9 @@ public class GetWishlistByIdHandler(
 {
     public async Task<WishlistDto?> Handle(GetWishlistByIdQuery request, CancellationToken cancellationToken)
     {
-        var wishlist = await repository.GetByIdAsync(request.Id);
+        var wishlist = await repository.GetByIdAsync(request.Id)
+            ?? throw new HttpException("user not found", HttpStatusCode.NotFound);
 
-        return wishlist is null
-            ? null
-            : mapper.Map<WishlistDto>(wishlist);
+        return mapper.Map<WishlistDto>(wishlist);
     }
 }
