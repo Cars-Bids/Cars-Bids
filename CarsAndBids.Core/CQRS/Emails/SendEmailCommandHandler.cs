@@ -56,7 +56,7 @@ public class SendPasswordResetEmailCommandHandler(
         message.To.Add(new MailboxAddress(request.To ?? throw new ArgumentNullException(nameof(request.To)), request.To));
         message.Subject = "Password Reset";
         message.Body = new TextPart("html") { Text = htmlBody };
-
+    
         using var client = new SmtpClient();
         await client.ConnectAsync(settings.SmtpServer ?? throw new ArgumentNullException(nameof(settings.SmtpServer)), settings.Port, SecureSocketOptions.StartTls, cancellationToken);
         await client.AuthenticateAsync(settings.Username ?? throw new ArgumentNullException(nameof(settings.Username)), settings.Password ?? throw new ArgumentNullException(nameof(settings.Password)), cancellationToken);
