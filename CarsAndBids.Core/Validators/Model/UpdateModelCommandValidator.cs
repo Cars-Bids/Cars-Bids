@@ -9,7 +9,7 @@ public class UpdateModelCommandValidator : AbstractValidator<UpdateModelCommand>
     public UpdateModelCommandValidator()
     {
         RuleFor(x => x.Id)
-        .GreaterThan(0).WithMessage(Resource.ModelIdGreaterThanZero);
+            .GreaterThan(0).WithMessage(Resource.ModelIdGreaterThanZero);
 
         RuleFor(x => x.MakeId)
             .GreaterThan(0).WithMessage(Resource.MakeIdGreaterThanZero);

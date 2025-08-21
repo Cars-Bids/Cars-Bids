@@ -29,7 +29,7 @@ public class GetCarByIdHandler(
 
         var carDto = mapper.Map<CarDto>(car);
 
-        carDto.Images = mapper.Map<List<CarImageDto>>(images) ?? new List<CarImageDto>();
+        carDto.Images = mapper.Map<List<CarImageDto>>(images) ?? [];
 
         return carDto;
     }

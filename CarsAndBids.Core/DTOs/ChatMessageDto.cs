@@ -1,5 +1,3 @@
-using System.Security.AccessControl;
-
 namespace CarsAndBids.Core.DTOs;
 
 public class ChatMessageDto

@@ -1,4 +1,5 @@
 ﻿namespace CarsAndBids.Core.DTOs;
+
 public class ProfileDto
 {
     public int Id { get; set; }

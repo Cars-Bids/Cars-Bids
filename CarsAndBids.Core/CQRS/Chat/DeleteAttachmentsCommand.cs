@@ -15,10 +15,12 @@ public class DeleteAttachmentsCommand : IRequest<List<int>>
     public int UserId { get; set; }
 }
 
-public class DeleteAttachmentsCommandHandler(IMediator mediator,
-                                             IFileService fileService,
-                                             IGenericRepository<ChatAttachment> chatAttachmentRepository,
-                                             IGenericRepository<ChatMessage> chatMessageRepository) : IRequestHandler<DeleteAttachmentsCommand, List<int>>
+public class DeleteAttachmentsCommandHandler(
+    IMediator mediator,
+    IFileService fileService,
+    IGenericRepository<ChatAttachment> chatAttachmentRepository,
+    IGenericRepository<ChatMessage> chatMessageRepository
+    ) : IRequestHandler<DeleteAttachmentsCommand, List<int>>
 {
     public async Task<List<int>> Handle(DeleteAttachmentsCommand request, CancellationToken cancellationToken)
     {
@@ -26,9 +28,11 @@ public class DeleteAttachmentsCommandHandler(IMediator mediator,
         if (!isUserInChat)
             throw new HubException(Resource.UserNotParticipantOfChat);
 
-        var attachments = await chatAttachmentRepository.GetAsync(filter: a => request.AttachmentIds.Contains(a.Id)
-                                                                                          && a.Message.ChatId == request.ChatId,
-                                                                                          includeProperties: "Message");
+        var attachments = await chatAttachmentRepository.GetAsync(filter: a =>
+            request.AttachmentIds.Contains(a.Id) && 
+            a.Message.ChatId == request.ChatId,
+            includeProperties: "Message");
+        
         if (attachments.Count() != request.AttachmentIds.Count)
             throw new HubException(Resource.OneOrMoreAttachmentsNotFound);
 

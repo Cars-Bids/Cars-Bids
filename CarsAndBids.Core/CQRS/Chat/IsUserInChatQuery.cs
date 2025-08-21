@@ -14,14 +14,15 @@ public class IsUserInChatQuery : IRequest<bool>
     public int UserId { get; set; }
 }
 
-public class IsUserInChatQueryHandler(IGenericRepository<User> userRepository,
-                                      IGenericRepository<Entities.Chat> chatRepository) : IRequestHandler<IsUserInChatQuery, bool>
+public class IsUserInChatQueryHandler(
+    IGenericRepository<User> userRepository,
+    IGenericRepository<Entities.Chat> chatRepository
+    ) : IRequestHandler<IsUserInChatQuery, bool>
 {
     public async Task<bool> Handle(IsUserInChatQuery request, CancellationToken cancellationToken)   
     {                                                                                                                   
-        var user = await userRepository.GetByIdAsync(request.UserId);
-        if (user == null)
-            throw new HttpException(Resource.UserNotFound, HttpStatusCode.NotFound);
+        var user = await userRepository.GetByIdAsync(request.UserId)
+            ?? throw new HttpException(Resource.UserNotFound, HttpStatusCode.NotFound);
 
 
         var result = await chatRepository.GetItemBySpec(

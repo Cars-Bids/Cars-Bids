@@ -13,10 +13,12 @@ public class DeleteMessageCommand : IRequest
     public int RequesterId { get; set; }
 }
 
-public class DeleteMessageCommandHandler(IMediator mediator,
-                                         IGenericRepository<ChatMessage> chatMessageRepository,
-                                         IGenericRepository<ChatAttachment> chatAttachmentRepository,
-                                         IFileService fileService) : IRequestHandler<DeleteMessageCommand>
+public class DeleteMessageCommandHandler(
+    IMediator mediator,
+    IGenericRepository<ChatMessage> chatMessageRepository,
+    IGenericRepository<ChatAttachment> chatAttachmentRepository,
+    IFileService fileService
+    ) : IRequestHandler<DeleteMessageCommand>
 {
     public async Task Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
     {
@@ -26,22 +28,17 @@ public class DeleteMessageCommandHandler(IMediator mediator,
 
         var messages = await chatMessageRepository.GetAsync(filter: m => m.Id == request.MessageId,
                                                      includeProperties: "Attachments");
-        if (!messages.Any())
-            throw new HubException(Resource.MessageDoesNotExist);
 
-        var message = messages.First();
-
-        if (message == null)
-            throw new HubException(Resource.MessageDoesNotExist);
+        var message = messages?.FirstOrDefault()
+            ?? throw new HubException(Resource.MessageDoesNotExist);
 
         if (message.SenderId != request.RequesterId)
             throw new HubException(Resource.UserNotAuthorizedToDeleteMessage);
 
         if (message.HasAttachments)
         {
-            await chatAttachmentRepository.DeleteRangeAsync(message.Attachments);
-            await fileService.DeleteImagesByUrlsAsync(message.Attachments.Select(url => url.ImageUrl).ToList());
-            
+            await chatAttachmentRepository.DeleteRangeAsync(message.Attachments!);
+            await fileService.DeleteImagesByUrlsAsync(message.Attachments!.Select(url => url.ImageUrl).ToList());            
         }
 
         await chatMessageRepository.DeleteAsync(message);

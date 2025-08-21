@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Cars;
-using CloudinaryDotNet.Actions;
 
 namespace CarsAndBids.API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CarController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

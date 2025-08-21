@@ -9,11 +9,10 @@ public class UpdateBodyStyleCommandValidator : AbstractValidator<UpdateBodyStyle
     public UpdateBodyStyleCommandValidator()
     {
         RuleFor(x => x.Id)
-    .GreaterThan(0).WithMessage(Resource.BodyStyleIdGreaterThanZero);
+            .GreaterThan(0).WithMessage(Resource.BodyStyleIdGreaterThanZero);
 
         RuleFor(x => x.StyleName)
             .NotEmpty().WithMessage(Resource.BodyStyleNameRequired)
-            .MaximumLength(50).WithMessage(Resource.BodyStyleNameMaxLength);
-    
+            .MaximumLength(50).WithMessage(Resource.BodyStyleNameMaxLength);    
     }
 }

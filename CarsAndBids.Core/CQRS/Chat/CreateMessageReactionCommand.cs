@@ -14,9 +14,11 @@ public class CreateMessageReactionCommand : IRequest<int>
     public int MessageId { get; set; }
 }
 
-public class CreateMessageReactionCommandHandler(IMediator mediator,
-                                                 IGenericRepository<ChatMessage> chatMessageRepository,
-                                                 IGenericRepository<UserChatMessageReaction> chatMessageReactionRepository) : IRequestHandler<CreateMessageReactionCommand, int>
+public class CreateMessageReactionCommandHandler(
+    IMediator mediator,
+    IGenericRepository<ChatMessage> chatMessageRepository,
+    IGenericRepository<UserChatMessageReaction> chatMessageReactionRepository
+    ) : IRequestHandler<CreateMessageReactionCommand, int>
 {
     public async Task<int> Handle(CreateMessageReactionCommand request, CancellationToken cancellationToken)
     {
@@ -25,12 +27,14 @@ public class CreateMessageReactionCommandHandler(IMediator mediator,
             throw new HubException(Resource.UserNotParticipantOfChat);
 
         var spec = new GetChatMessageWithUserReactionSpec(request.ReaderId, request.MessageId);
-        var msg = await chatMessageRepository.GetItemBySpec(spec);
-        if (msg == null)
-            throw new HubException(Resource.MessageNotFound);
+        
+        var msg = await chatMessageRepository.GetItemBySpec(spec)
+            ?? throw new HubException(Resource.MessageNotFound);
+        
         if (msg.SenderId == request.ReaderId)
             throw new HubException(Resource.UserCannotReadOwnMessage);
-        if (msg.UserChatMessageReactions.FirstOrDefault() != null)
+
+        if (msg.UserChatMessageReactions?.FirstOrDefault() != null)
             throw new Exception(Resource.UserAlreadySeenMessage);
 
         var reaction = new UserChatMessageReaction

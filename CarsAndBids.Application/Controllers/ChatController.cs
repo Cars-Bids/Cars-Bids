@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace CarsAndBids.API.Controllers;
 
-[Route("api/[controller]/[action]")]
 [ApiController]
+[Route("api/[controller]/[action]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ChatController(IMediator mediator, IHubContext<ChatHub> chatHubContext) : ControllerBase
 {

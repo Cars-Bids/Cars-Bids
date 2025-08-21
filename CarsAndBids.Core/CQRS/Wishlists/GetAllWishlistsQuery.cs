@@ -6,7 +6,6 @@ using CarsAndBids.Core.Interfaces;
 using CarsAndBids.Core.Specification.WishlistSpec;
 using MediatR;
 
-
 namespace CarsAndBids.Core.CQRS.Wishlists;
 
 public class GetAllWishlistsQuery : IRequest<PagedResult<WishlistDto>>

@@ -6,7 +6,7 @@ public class RoleSeed(RoleManager<IdentityRole<int>> roleManager)
 {
     public async Task SeedAsync()
     {
-        string[] roles = { "Admin", "Manager", "User" };
+        string[] roles = ["Admin", "Manager", "User"];
 
         foreach (var role in roles)
         {

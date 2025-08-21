@@ -1,4 +1,3 @@
-
 namespace CarsAndBids.Core.DTOs;
 
 public class ChatDto

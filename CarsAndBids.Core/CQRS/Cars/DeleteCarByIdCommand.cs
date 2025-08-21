@@ -18,9 +18,8 @@ public class DeleteCarByIdHandler(
 {
     public async Task Handle(DeleteCarByIdCommand cmd, CancellationToken cancellationToken)
     {
-        var car = await carRepository.GetByIdAsync(cmd.Id);
-        if (car == null)
-            throw new ArgumentException(string.Format(Resource.CarNotFoundById, cmd.Id));
+        var car = await carRepository.GetByIdAsync(cmd.Id)
+            ?? throw new ArgumentException(string.Format(Resource.CarNotFoundById, cmd.Id));
 
         await fileService.DeleteImagesByUrlsAsync(
             await carImageRepository.GetListBySpec(new CarImagesByCarIdSpec(cmd.Id), cancellationToken));

@@ -9,7 +9,7 @@ public class LoginViaRefreshTokenQueryValidator : AbstractValidator<LoginViaRefr
     public LoginViaRefreshTokenQueryValidator()
     {
         RuleFor(x => x.RefreshToken)
-        .NotEmpty()
-        .WithMessage(Resource.RefreshTokenRequired);
+            .NotEmpty()
+            .WithMessage(Resource.RefreshTokenRequired);
     }
 }

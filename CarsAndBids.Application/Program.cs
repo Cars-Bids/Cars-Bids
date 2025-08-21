@@ -1,6 +1,5 @@
 using CarsAndBids.API.DependencyInjection;
 using CarsAndBids.API.Hubs;
-using CarsAndBids.Data.Persistence;
 using CarsAndBids.API.Extensions;
 using CarsAndBids.API.Middleware;
 
