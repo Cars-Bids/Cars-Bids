@@ -9,14 +9,6 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterCommandValidator()
     {
-        RuleFor(x => x.FirstName)
-            .MaximumLength(50)
-            .WithMessage(Resource.FirstNameMaxLength);
-
-        RuleFor(x => x.LastName)
-            .MaximumLength(50)
-            .WithMessage(Resource.LastNameMaxLength);
-
         RuleFor(x => x.Username)
             .NotEmpty().WithMessage(Resource.UsernameRequired)
             .MinimumLength(4).WithMessage(Resource.UsernameMinLength)
@@ -31,9 +23,6 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
             .MinimumLength(6).WithMessage(Resource.PasswordMinLength)
             .MaximumLength(20).WithMessage(Resource.PasswordMaxLength);
 
-        RuleFor(x => x.Image)
-            .Must(BeValidImage)
-            .WithMessage(Resource.ImageInvalidFormat);
     }
 
     private bool BeValidImage(IFormFile? file)
