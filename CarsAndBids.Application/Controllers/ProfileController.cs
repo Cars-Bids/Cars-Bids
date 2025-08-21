@@ -36,4 +36,12 @@ public class ProfileController(IMediator mediator) : ControllerBase
         await mediator.Send(command);
         return Ok();
     }
+
+    [HttpGet("bids-and-wins")]
+    public async Task<IActionResult> GetBidsAndWins()
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await mediator.Send(new GetUserBidsAndWinsQuery { UserId = userId });
+        return Ok(result);
+    }
 }

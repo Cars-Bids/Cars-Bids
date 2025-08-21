@@ -10,7 +10,7 @@ public class PagedBodyStylesSpec : PagedSpec<BodyStyle>
     public PagedBodyStylesSpec(int pageNumber, int pageSize)
         : base(pageNumber, pageSize)
     {
-        Query.OrderBy(bs => bs.StyleName); // sort (unbonded)
+        Query.OrderBy(bs => bs.StyleName);
 
     }
 }
