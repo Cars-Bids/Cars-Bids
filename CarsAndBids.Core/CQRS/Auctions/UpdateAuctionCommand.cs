@@ -5,6 +5,7 @@ using CarsAndBids.Core.Enums;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Exceptions;
 using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Auctions;
 
@@ -29,7 +30,7 @@ public class UpdateAuctionCommandHandler(
     public async Task Handle(UpdateAuctionCommand cmd, CancellationToken cancellationToken)
     {
         var existingAuction = await auctionRepository.GetByIdAsync(cmd.Id)
-            ?? throw new HttpException($"Auction with id [{cmd.Id}] not found!", HttpStatusCode.NotFound);
+            ?? throw new HttpException(string.Format(Resource.AuctionNotFoundById, cmd.Id), HttpStatusCode.NotFound);
 
         mapper.Map(cmd, existingAuction);
 

@@ -12,6 +12,7 @@ namespace CarsAndBids.API.Controllers;
 public class AuctionsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
     {
         var auctions = await mediator.Send(new GetAllAuctionsQuery
@@ -23,6 +24,7 @@ public class AuctionsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         var auction = await mediator.Send(new GetAuctionByIdQuery { Id = id });
@@ -30,6 +32,7 @@ public class AuctionsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Create([FromForm] CreateAuctionCommand request)
     {
         await mediator.Send(request);
@@ -37,6 +40,7 @@ public class AuctionsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Update([FromForm] UpdateAuctionCommand request)
     {
         await mediator.Send(request);
@@ -44,6 +48,7 @@ public class AuctionsController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
     {
         await mediator.Send(new DeleteAuctionByIdCommand { Id = id });

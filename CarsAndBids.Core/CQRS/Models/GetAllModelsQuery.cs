@@ -5,9 +5,7 @@ using CarsAndBids.Core.Interfaces;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Models;
-public class GetAllModelsQuery : IRequest<List<ModelDto>>
-{
-}
+public class GetAllModelsQuery : IRequest<List<ModelDto>> { }
 
 public class GetAllModelsHandler(
     IMapper mapper,

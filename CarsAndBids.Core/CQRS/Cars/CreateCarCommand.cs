@@ -4,6 +4,7 @@ using CarsAndBids.Core.Enums;
 using CarsAndBids.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+
 namespace CarsAndBids.Core.CQRS.Cars;
 
 public class CreateCarCommand : IRequest
@@ -35,14 +36,13 @@ public class CreateCarCommandHandler(
     IMapper mapper,
     IFileService fileService
     ) : IRequestHandler<CreateCarCommand>
-{
-    
+{    
     public async Task Handle(CreateCarCommand cmd, CancellationToken cancellationToken)
     {
-
         var car = mapper.Map<Car>(cmd);
         car.OwnerId = cmd.OwnerId;
         car.Status = CarStatus.inPending;
+        car.CreatedAt = DateTime.UtcNow;
 
         await carRepository.InsertAsync(car);
 
@@ -109,8 +109,5 @@ public class CreateCarCommandHandler(
                 });
             }
         }
-
-        car.CreatedAt = DateTime.UtcNow;
-
     }
 }

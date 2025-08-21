@@ -2,10 +2,9 @@ using AutoMapper;
 using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Interfaces;
-using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Chat;
 
@@ -17,20 +16,25 @@ public class EditChatMessageCommand : IRequest<ChatMessageDto>
     public string NewMessage { get; set; }
 }
 
-public class EditChatMessageCommandHandler(IMediator mediator,
-                                           IMapper mapper,
-                                           IGenericRepository<ChatMessage> chatMessageRepository) : IRequestHandler<EditChatMessageCommand, ChatMessageDto>
+public class EditChatMessageCommandHandler(
+    IMediator mediator,
+    IMapper mapper,
+    IGenericRepository<ChatMessage> chatMessageRepository
+    ) : IRequestHandler<EditChatMessageCommand, ChatMessageDto>
 {
     public async Task<ChatMessageDto> Handle(EditChatMessageCommand request, CancellationToken cancellationToken)
     {
         var isUserInChat = await mediator.Send(new IsUserInChatQuery{ ChatId = request.ChatId, UserId = request.UserId});
-        if (isUserInChat) throw new HubException("User is not a participant of this chat.");
+        if (!isUserInChat)
+            throw new HubException(Resource.UserNotParticipantOfChat);
 
         var messages = await chatMessageRepository.GetAsync(filter: c => c.Id == request.MessageId,
                                                                                   includeProperties: "Attachments");
-        var message = messages.First();
-        if (message == null) throw new HubException("Message doesnt exist.");
-        if (message.SenderId != request.UserId) throw new HubException("User is not authorized to edit the message");
+        var message = messages?.FirstOrDefault()
+            ?? throw new HubException(Resource.MessageDoesNotExist);
+
+        if (message.SenderId != request.UserId)
+            throw new HubException(Resource.UserNotAuthorizedToEditMessage);
 
         message.Message = request.NewMessage;
         await chatMessageRepository.UpdateAsync(message);

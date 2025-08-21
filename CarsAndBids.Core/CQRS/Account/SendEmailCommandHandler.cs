@@ -50,6 +50,7 @@ public class SendPasswordResetEmailCommandHandler(
 
         htmlBody = htmlBody.Replace("{{ResetToken}}", token);
         htmlBody = htmlBody.Replace("{{UserMail}}", request.MailTo);
+
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress("CarsAndBids", settings.Username ?? throw new ArgumentNullException(nameof(settings.Username))));
         message.To.Add(new MailboxAddress(request.MailTo ?? throw new ArgumentNullException(nameof(request.MailTo)), request.MailTo));

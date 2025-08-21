@@ -4,11 +4,11 @@ using CarsAndBids.Core.Interfaces;
 using MediatR;
 
 namespace CarsAndBids.Core.CQRS.Models;
+
 public class CreateModelCommand : IRequest
 {
     public int MakeId { get; set; }
     public string? Name { get; set; }
-
 }
 
 public class CreateModelsCommandHandler(

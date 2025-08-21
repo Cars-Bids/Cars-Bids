@@ -2,6 +2,7 @@
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Specification.CarSpec;
 using MediatR;
+using CarsAndBids.Core.Resources;
 
 namespace CarsAndBids.Core.CQRS.Cars;
 public class DeleteCarByIdCommand : IRequest
@@ -17,9 +18,8 @@ public class DeleteCarByIdHandler(
 {
     public async Task Handle(DeleteCarByIdCommand cmd, CancellationToken cancellationToken)
     {
-        var car = await carRepository.GetByIdAsync(cmd.Id);
-        if (car == null)
-            throw new ArgumentException($"Car with ID {cmd.Id} not found.");
+        var car = await carRepository.GetByIdAsync(cmd.Id)
+            ?? throw new ArgumentException(string.Format(Resource.CarNotFoundById, cmd.Id));
 
         await fileService.DeleteImagesByUrlsAsync(
             await carImageRepository.GetListBySpec(new CarImagesByCarIdSpec(cmd.Id), cancellationToken));
