@@ -4,6 +4,7 @@ using Ardalis.Specification;
 using CarsAndBids.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using CarsAndBids.Core.Entities;
 
 namespace CarsAndBids.Data.Persistence.Repositories;
 
@@ -153,6 +154,20 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     public async Task<int> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
     {
         return await SpecificationEvaluator.Default.GetQuery(dbSet.AsQueryable(), specification).CountAsync(cancellationToken);
+    }
+
+    public async Task<int> CountUniqueCarsAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        if (typeof(TEntity) != typeof(Bid))
+        {
+            throw new InvalidOperationException("CountUniqueCarsAsync is only supported for Bid entities.");
+        }
+
+        return await context.Set<Bid>()
+            .Where(bid => bid.UserId == userId)
+            .Select(bid => bid.Auction.CarId)
+            .Distinct()
+            .CountAsync(cancellationToken);
     }
 
 }

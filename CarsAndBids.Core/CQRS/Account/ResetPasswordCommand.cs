@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace CarsAndBids.Core.CQRS.Profile;
+namespace CarsAndBids.Core.CQRS.Account;
 public class ResetPasswordCommand : IRequest<bool>
 {
     public string Email { get; set; }

@@ -1,6 +1,6 @@
 ﻿using Ardalis.Specification;
 using CarsAndBids.Core.Entities;
-using CarsAndBids.Core.Specification.СommonSpec;
+using CarsAndBids.Core.Specification.CommonSpec;
 
 
 namespace CarsAndBids.Core.Specification.WishlistSpec;

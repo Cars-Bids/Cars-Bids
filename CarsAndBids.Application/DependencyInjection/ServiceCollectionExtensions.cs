@@ -18,6 +18,7 @@ using CarsAndBids.Core.DTOs;
 using CarsAndBids.API.HostedServices;
 using CarsAndBids.API.Middleware;
 using MediatR;
+using CarsAndBids.Core.Services;
 
 namespace CarsAndBids.API.DependencyInjection;
 
@@ -48,12 +49,16 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<EmojiReaction>, GenericRepository<EmojiReaction>>();
         services.AddScoped<IGenericRepository<Wishlist>, GenericRepository<Wishlist>>();
         services.AddScoped<IGenericRepository<Bid>, GenericRepository<Bid>>();
+        services.AddScoped<IGenericRepository<Comment>, GenericRepository<Comment>>();
 
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+        services.AddSingleton<IEmailQueue, EmailQueue>();
+        services.AddHostedService<EmailBackgroundService>();
 
         services.AddSignalR();
         services.AddHostedService<AuctionHostedService>();
