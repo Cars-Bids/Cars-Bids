@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using CarsAndBids.Core.CQRS.Profile;
 using CarsAndBids.Core.Resources;
+using CarsAndBids.Core.CQRS.Account;
 
-namespace CarsAndBids.Core.Validators.Profile;
+namespace CarsAndBids.Core.Validators.Account;
 
 public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
 {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Profile;
 using CarsAndBids.Core.DTOs;
+using CarsAndBids.Core.CQRS.Account;
 
 namespace CarsAndBids.API.Controllers;
 
@@ -28,13 +29,6 @@ public class ProfileController(IMediator mediator) : ControllerBase
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         request.UserId = userId;
         await mediator.Send(request);
-        return Ok();
-    }
-
-    [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
-    {
-        await mediator.Send(command);
         return Ok();
     }
 

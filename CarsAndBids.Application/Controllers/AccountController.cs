@@ -35,4 +35,11 @@ public class AccountController(IMediator mediator) : ControllerBase
         await mediator.Send(request);
         return Ok();
     }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+    {
+        await mediator.Send(command);
+        return Ok();
+    }
 }
