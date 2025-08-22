@@ -38,6 +38,7 @@ app.MapHub<AuctionHub>("/auctionHub").RequireAuthorization();
 // });
 
 app.MapHub<ChatHub>("/hub/chat");
+app.MapHub<NotificationHub>("/hub/notifications");
 
 app.MapControllers();
 

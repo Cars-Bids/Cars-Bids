@@ -19,6 +19,7 @@ using MediatR;
 using Steria.API.Filters;
 using Steria.API.HostedServices;
 using Steria.API.Middleware;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Steria.API.DependencyInjection;
 
@@ -33,6 +34,13 @@ public static class ServiceCollectionExtensions
 
 
         services.AddAutoMapper(typeof(AutoMapperProfile));
+        services.AddFusionCache()
+                .WithDefaultEntryOptions(new FusionCacheEntryOptions
+                {
+                    Duration = TimeSpan.FromMinutes(30),
+                    FailSafeMaxDuration = TimeSpan.FromHours(1),
+                    JitterMaxDuration = TimeSpan.FromSeconds(30)
+                });
       
         services.AddScoped<IDataSeederRepository, DataSeederRepository>();
       
@@ -53,12 +61,15 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<Wishlist>, GenericRepository<Wishlist>>();
         services.AddScoped<IGenericRepository<Bid>, GenericRepository<Bid>>();
         services.AddScoped<IGenericRepository<NotificationType>, GenericRepository<NotificationType>>();
+        services.AddScoped<IGenericRepository<UserNotificationSetting>, GenericRepository<UserNotificationSetting>>();
+        services.AddScoped<IGenericRepository<UserNotification>, GenericRepository<UserNotification>>();
 
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddScoped<IUserNotificationSettingsCacheService, UserNotificationSettingsCacheService>();
 
         services.AddSignalR();
         services.AddHostedService<AuctionHostedService>();

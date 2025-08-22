@@ -33,6 +33,7 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.11.0" />
     <PackageReference Include="System.Net.Mail.Abstractions" Version="1.1.21" />
+    <PackageReference Include="ZiggyCreatures.FusionCache" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>

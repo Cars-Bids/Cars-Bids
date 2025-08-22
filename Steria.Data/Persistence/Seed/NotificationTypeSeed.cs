@@ -1,4 +1,4 @@
-﻿using Steria.Core.Entities;
+﻿ using Steria.Core.Entities;
 using Steria.Core.Enums;
 using Steria.Core.Interfaces;
 using Steria.Core.Specification.СommonSpec;
@@ -33,6 +33,8 @@ public class NotificationTypeSeed(IGenericRepository<NotificationType> repositor
                 new NotificationType { Key = "NewCommentOnAuction", Description = "Notifies when there are new comments on user's auction.", SourceType = NotificationSource.AuctionComment, RedirectRoute = "/auction/id={}", DefaultSendEmail = false, DefaultSendSite = true },
                 new NotificationType { Key = "NewBidOnAuction", Description = "Notifies when there are new bids on user's auction.", SourceType = NotificationSource.AuctionBid, RedirectRoute = "/auction/id={}", DefaultSendEmail = false, DefaultSendSite = true }
             };
+
+            await repository.InsertRangeAsync(types);
         }
     }
 }
