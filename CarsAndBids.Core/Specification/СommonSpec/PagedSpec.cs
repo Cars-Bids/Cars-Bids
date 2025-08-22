@@ -1,6 +1,6 @@
 ﻿using Ardalis.Specification;
 
-namespace CarsAndBids.Core.Specification.СommonSpec;
+namespace CarsAndBids.Core.Specification.CommonSpec;
 
 public abstract class PagedSpec<TEntity> : Specification<TEntity, TEntity> where TEntity : class
 {

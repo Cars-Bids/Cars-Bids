@@ -48,6 +48,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<EmojiReaction>, GenericRepository<EmojiReaction>>();
         services.AddScoped<IGenericRepository<Wishlist>, GenericRepository<Wishlist>>();
         services.AddScoped<IGenericRepository<Bid>, GenericRepository<Bid>>();
+        services.AddScoped<IGenericRepository<Comment>, GenericRepository<Comment>>();
 
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();

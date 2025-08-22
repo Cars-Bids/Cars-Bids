@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CarsAndBids.Core.CQRS.Profile;
+using CarsAndBids.Core.DTOs;
 
 namespace CarsAndBids.API.Controllers;
 
@@ -42,6 +43,38 @@ public class ProfileController(IMediator mediator) : ControllerBase
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var result = await mediator.Send(new GetUserBidsAndWinsQuery { UserId = userId });
+        return Ok(result);
+    }
+
+    [HttpGet("bidded-cars")]
+    public async Task<IActionResult> GetBiddedCars([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await mediator.Send(new GetUserBiddedCarsQuery
+        {
+            UserId = userId,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        });
+        return Ok(result);
+    }
+
+    [HttpGet("comments/count")]
+    public async Task<ActionResult<int>> GetUserCommentsCount(CancellationToken cancellationToken)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        var query = new GetUserCommentsCountQuery(userId);
+        var count = await mediator.Send(query, cancellationToken);
+        return Ok(count);
+    }
+
+    [HttpGet("comments")]
+    public async Task<ActionResult<PagedResult<UserCommentDto>>> GetUserComments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetUserCommentsQuery(userId, pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 }

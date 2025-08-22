@@ -29,4 +29,5 @@ public interface IGenericRepository<TEntity> where TEntity : class
     Task RollbackAsync(IDbContextTransaction transaction);
 
     Task<int> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default);
+    Task<int> CountUniqueCarsAsync(int userId, CancellationToken cancellationToken = default);
 }

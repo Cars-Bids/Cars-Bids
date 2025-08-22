@@ -4,8 +4,7 @@ namespace CarsAndBids.Core.Entities;
 
 public class User : IdentityUser<int>
 {
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
+    public string? Bio { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? ProfilePictureUrl { get; set; }
 

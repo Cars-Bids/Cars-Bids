@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using System.Linq.Expressions;
 
-namespace CarsAndBids.Core.Specification.СommonSpec;
+namespace CarsAndBids.Core.Specification.CommonSpec;
 
 public class SelectByPropertySpec<TEntity, TResult> : Specification<TEntity, TResult>
     where TEntity : class
