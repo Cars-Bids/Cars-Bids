@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Options;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
-using CarsAndBids.Core.DTOs;
-using System.Reflection;
-using CarsAndBids.Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.Models;
+using CarsAndBids.Core.Interfaces;
+using System.Reflection;
+using CarsAndBids.Core.DTOs;
+using System.Web;
 
 namespace CarsAndBids.Core.CQRS.Account;
 
@@ -16,9 +16,9 @@ public class SendPasswordResetEmailCommand : IRequest<bool>
 }
 
 public class SendPasswordResetEmailCommandHandler(
-    UserManager<User> userManager,
-    IOptions<EmailSettings> emailSettings
-    ) : IRequestHandler<SendPasswordResetEmailCommand, bool>
+        UserManager<User> userManager,
+        IOptions<EmailSettings> emailSettings,
+        IEmailQueue emailQueue) : IRequestHandler<SendPasswordResetEmailCommand, bool>
 {
     public async Task<bool> Handle(SendPasswordResetEmailCommand request, CancellationToken cancellationToken)
     {
@@ -48,19 +48,19 @@ public class SendPasswordResetEmailCommandHandler(
             htmlBody = await reader.ReadToEndAsync();
         }
 
-        htmlBody = htmlBody.Replace("{{ResetToken}}", token);
+        htmlBody = htmlBody.Replace("{{ResetToken}}", HttpUtility.UrlEncode(token))
+                           .Replace("{{Email}}", HttpUtility.UrlEncode(request.MailTo));
 
-        var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("CarsAndBids", settings.Username ?? throw new ArgumentNullException(nameof(settings.Username))));
-        message.To.Add(new MailboxAddress(request.MailTo ?? throw new ArgumentNullException(nameof(request.MailTo)), request.MailTo));
-        message.Subject = "Password Reset";
-        message.Body = new TextPart("html") { Text = htmlBody };
+        var emailTask = new EmailTask
+        {
+            MailTo = request.MailTo,
+            Subject = "Password Reset",
+            HtmlBody = htmlBody,
+            FromName = "CarsAndBids",
+            FromEmail = settings.Username
+        };
 
-        using var client = new SmtpClient();
-        await client.ConnectAsync(settings.SmtpServer ?? throw new ArgumentNullException(nameof(settings.SmtpServer)), settings.Port, SecureSocketOptions.StartTls, cancellationToken);
-        await client.AuthenticateAsync(settings.Username ?? throw new ArgumentNullException(nameof(settings.Username)), settings.Password ?? throw new ArgumentNullException(nameof(settings.Password)), cancellationToken);
-        await client.SendAsync(message, cancellationToken);
-        await client.DisconnectAsync(true, cancellationToken);
+        emailQueue.Enqueue(emailTask);
 
         return true;
     }
