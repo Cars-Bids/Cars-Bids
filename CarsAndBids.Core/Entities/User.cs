@@ -4,9 +4,9 @@ namespace CarsAndBids.Core.Entities;
 
 public class User : IdentityUser<int>
 {
-    public string? Bio { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? ProfilePictureUrl { get; set; }
+    public string? Bio { get; set; }
 
     public ICollection<Car>? AssingCars { get; set; }
     public ICollection<Car>? OwnedCars { get; set; }
@@ -19,5 +19,5 @@ public class User : IdentityUser<int>
     public ICollection<Wishlist>? Wishlists { get; set; }
     public ICollection<RefreshToken>? RefreshTokens { get; set; }
     public ICollection<Chat>? Chats { get; set; }
-    public ICollection<UserChatMessageReaction>? UserChatMessageReactions { get; set; }    
+    public ICollection<UserChatMessageReaction>? UserChatMessageReactions { get; set; }
 }
