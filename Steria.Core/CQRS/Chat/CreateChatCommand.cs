@@ -9,8 +9,10 @@ public class CreateChatCommand : IRequest<int>
     public List<int> ParticipantIds { get; set; }
 }
 
-public class CreateChatCommandHandler(IGenericRepository<User> userRepository,
-                                      IGenericRepository<Entities.Chat> chatRepository) : IRequestHandler<CreateChatCommand, int>
+public class CreateChatCommandHandler(
+    IGenericRepository<User> userRepository,
+    IGenericRepository<Entities.Chat> chatRepository
+    ) : IRequestHandler<CreateChatCommand, int>
 {
     public async Task<int> Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {

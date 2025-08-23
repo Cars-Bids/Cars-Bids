@@ -6,11 +6,11 @@ using System.Security.Claims;
 using Steria.Core.CQRS.Cars;
 using CloudinaryDotNet.Actions;
 
-namespace Steria.API.Controllers;
+namespace CarsAndBids.API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CarController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

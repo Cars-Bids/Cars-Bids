@@ -36,14 +36,13 @@ public class CreateCarCommandHandler(
     IMapper mapper,
     IFileService fileService
     ) : IRequestHandler<CreateCarCommand>
-{
-    
+{    
     public async Task Handle(CreateCarCommand cmd, CancellationToken cancellationToken)
     {
-
         var car = mapper.Map<Car>(cmd);
         car.OwnerId = cmd.OwnerId;
         car.Status = CarStatus.inPending;
+        car.CreatedAt = DateTime.UtcNow;
 
         await carRepository.InsertAsync(car);
 

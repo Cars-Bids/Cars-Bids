@@ -1,5 +1,4 @@
 ﻿using Ardalis.Specification;
-using System;
 using System.Linq.Expressions;
 
 namespace Steria.Core.Specification.СommonSpec;

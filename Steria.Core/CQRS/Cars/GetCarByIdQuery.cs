@@ -5,6 +5,7 @@ using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Exceptions;
 using Steria.Core.Interfaces;
+using Steria.Core.Resources;
 
 namespace Steria.Core.CQRS.Cars;
 
@@ -22,13 +23,13 @@ public class GetCarByIdHandler(
     public async Task<CarDto> Handle(GetCarByIdQuery request, CancellationToken cancellationToken)
     {
         var car = await carRepository.GetByIdAsync(request.Id)
-            ?? throw new HttpException($"Car with id [{request.Id}] not found!", HttpStatusCode.NotFound);
+            ?? throw new HttpException(string.Format(Resource.CarNotFoundById, request.Id),HttpStatusCode.NotFound);
 
         var images = await carImageRepository.GetAsync(filter: img => img.CarId == request.Id);
 
         var carDto = mapper.Map<CarDto>(car);
 
-        carDto.Images = mapper.Map<List<CarImageDto>>(images) ?? new List<CarImageDto>();
+        carDto.Images = mapper.Map<List<CarImageDto>>(images) ?? [];
 
         return carDto;
     }

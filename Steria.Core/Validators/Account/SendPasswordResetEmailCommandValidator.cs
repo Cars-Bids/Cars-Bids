@@ -1,5 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Steria.Core.CQRS.Account;
+using Steria.Core.Resources;
 
 namespace Steria.Core.Validators.Account;
 
@@ -8,7 +9,7 @@ public class SendPasswordResetEmailCommandValidator : AbstractValidator<SendPass
     public SendPasswordResetEmailCommandValidator()
     {
         RuleFor(x => x.MailTo)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format");
+            .NotEmpty().WithMessage(Resource.EmailRequired)
+            .EmailAddress().WithMessage(Resource.EmailInvalid);
     }
 }

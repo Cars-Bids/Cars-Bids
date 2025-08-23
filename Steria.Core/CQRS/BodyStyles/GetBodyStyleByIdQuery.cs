@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using MediatR;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
+using Steria.Core.Exceptions;
 using Steria.Core.Interfaces;
 
 namespace Steria.Core.CQRS.BodyStyles;
@@ -18,10 +20,9 @@ public class GetBodyStyleByIdHandler(
 {
     public async Task<BodyStyleDto?> Handle(GetBodyStyleByIdQuery request, CancellationToken cancellationToken)
     {
-        var bodyStyle = await repository.GetByIdAsync(request.Id);
+        var bodyStyle = await repository.GetByIdAsync(request.Id)
+            ?? throw new HttpException($"body style by id {request.Id} not found", HttpStatusCode.NotFound);
 
-        return bodyStyle is null
-            ? null
-            : mapper.Map<BodyStyleDto>(bodyStyle);
+        return mapper.Map<BodyStyleDto>(bodyStyle);
     }
 }

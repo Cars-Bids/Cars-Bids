@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Steria.Core.CQRS.Account;
+using Steria.Core.Resources;
 
 namespace Steria.Core.Validators.Account;
 
@@ -9,6 +10,6 @@ public class LoginViaRefreshTokenQueryValidator : AbstractValidator<LoginViaRefr
     {
         RuleFor(x => x.RefreshToken)
             .NotEmpty()
-            .WithMessage("Refresh token is required");
+            .WithMessage(Resource.RefreshTokenRequired);
     }
 }

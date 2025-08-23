@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Steria.Core.CQRS.Profile;
+using Steria.Core.DTOs;
 
 namespace Steria.API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ProfileController(IMediator mediator) : ControllerBase
 {
 
@@ -18,30 +19,55 @@ public class ProfileController(IMediator mediator) : ControllerBase
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var result = await mediator.Send(new GetProfileByIdQuery { UserId = userId });
-        return result is null ? NotFound() : Ok(result);
+        return Ok(result);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateProfileCommand request)
     {
-        try
-        {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            request.UserId = userId;
-
-            await mediator.Send(request);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { error = e.Message });
-        }
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        request.UserId = userId;
+        await mediator.Send(request);
+        return Ok();
     }
 
-    [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+    [HttpGet("bids-and-wins")]
+    public async Task<IActionResult> GetBidsAndWins()
     {
-        await mediator.Send(command);
-        return Ok();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await mediator.Send(new GetUserBidsAndWinsQuery { UserId = userId });
+        return Ok(result);
+    }
+
+    [HttpGet("bidded-cars")]
+    public async Task<IActionResult> GetBiddedCars([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await mediator.Send(new GetUserBiddedCarsQuery
+        {
+            UserId = userId,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        });
+        return Ok(result);
+    }
+
+    [HttpGet("comments/count")]
+    public async Task<ActionResult<int>> GetUserCommentsCount(CancellationToken cancellationToken)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        var query = new GetUserCommentsCountQuery(userId);
+        var count = await mediator.Send(query, cancellationToken);
+        return Ok(count);
+    }
+
+    [HttpGet("comments")]
+    public async Task<ActionResult<PagedResult<UserCommentDto>>> GetUserComments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetUserCommentsQuery(userId, pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
     }
 }

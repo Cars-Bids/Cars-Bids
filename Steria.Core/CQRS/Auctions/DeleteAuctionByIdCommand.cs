@@ -3,6 +3,7 @@ using System.Net;
 using Steria.Core.Entities;
 using Steria.Core.Exceptions;
 using Steria.Core.Interfaces;
+using Steria.Core.Resources;
 
 namespace Steria.Core.CQRS.Auctions;
 
@@ -18,7 +19,7 @@ public class DeleteAuctionByIdCommandHandler(
     public async Task Handle(DeleteAuctionByIdCommand cmd, CancellationToken cancellationToken)
     {
         var auction = await auctionRepository.GetByIdAsync(cmd.Id)
-            ?? throw new HttpException($"Auction with id [{cmd.Id}] not found!", HttpStatusCode.NotFound);
+            ?? throw new HttpException(string.Format(Resource.AuctionNotFoundById, cmd.Id), HttpStatusCode.NotFound);
 
         await auctionRepository.DeleteAsync(auction.Id);
     }

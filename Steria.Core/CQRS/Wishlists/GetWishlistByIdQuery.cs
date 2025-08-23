@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using MediatR;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
+using Steria.Core.Exceptions;
 using Steria.Core.Interfaces;
 
 namespace Steria.Core.CQRS.Wishlists;
@@ -18,10 +20,9 @@ public class GetWishlistByIdHandler(
 {
     public async Task<WishlistDto?> Handle(GetWishlistByIdQuery request, CancellationToken cancellationToken)
     {
-        var wishlist = await repository.GetByIdAsync(request.Id);
+        var wishlist = await repository.GetByIdAsync(request.Id)
+            ?? throw new HttpException("user not found", HttpStatusCode.NotFound);
 
-        return wishlist is null
-            ? null
-            : mapper.Map<WishlistDto>(wishlist);
+        return mapper.Map<WishlistDto>(wishlist);
     }
 }

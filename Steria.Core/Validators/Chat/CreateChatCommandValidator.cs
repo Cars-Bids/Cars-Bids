@@ -1,5 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Steria.Core.CQRS.Chat;
+using Steria.Core.Resources;
 
 namespace Steria.Core.Validators.Chat;
 
@@ -9,6 +10,6 @@ public class CreateChatCommandValidator : AbstractValidator<CreateChatCommand>
     {
         RuleFor(x => x.ParticipantIds)
             .NotEmpty()
-            .WithMessage("Participants count must be greater than 0.");
+            .WithMessage(Resource.ParticipantsRequired);
     }
 }

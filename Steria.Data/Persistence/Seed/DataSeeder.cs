@@ -1,6 +1,5 @@
-﻿using Steria.Core.Interfaces;
+using Steria.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Steria.Data.Persistence.Seed
 {

@@ -10,17 +10,19 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Steria.Data.Services;
 
-public class JwtTokenService(IConfiguration configuration,
-                             UserManager<User> userManager) : IJwtTokenService
+public class JwtTokenService(
+    IConfiguration configuration,
+    UserManager<User> userManager
+    ) : IJwtTokenService
 {
     public async Task<string> CreateTokenAsync(User user)
     {
-        var claims = new List<Claim>
-        {
-            new Claim("nameid", user.Id.ToString()),
+        List<Claim> claims =
+        [
+            new("nameid", user.Id.ToString()),
             new("email", user.Email ?? ""),
             new("username", user.UserName ?? ""),
-        };
+        ];
         var roles = await userManager.GetRolesAsync(user);
 
         foreach (var role in roles)

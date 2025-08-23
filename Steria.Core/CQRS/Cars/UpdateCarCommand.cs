@@ -6,6 +6,7 @@ using Steria.Core.Entities;
 using Steria.Core.Enums;
 using Steria.Core.Exceptions;
 using Steria.Core.Interfaces;
+using Steria.Core.Resources;
 using Steria.Core.Specification.CarSpec;
 
 namespace Steria.Core.CQRS.Cars;
@@ -52,7 +53,8 @@ public class UpdateCarCommandHandler(
     public async Task Handle(UpdateCarCommand cmd, CancellationToken cancellationToken)
     {
         var existingCar = await carRepository.GetByIdAsync(cmd.Id)
-            ?? throw new HttpException($"Car with id [{cmd.Id}] not found!", HttpStatusCode.NotFound);
+            ?? throw new HttpException(
+                string.Format(Resource.CarNotFoundById, cmd.Id), HttpStatusCode.NotFound);
 
         mapper.Map(cmd, existingCar);
         await carRepository.UpdateAsync(existingCar);
@@ -79,7 +81,7 @@ public class UpdateCarCommandHandler(
             {
                 var spec = new CarImageByCarIdAndUrlSpec(cmd.Id, update.ImageUrl!);
                 var image = await carImageRepository.GetItemBySpec(spec, cancellationToken)
-                    ?? throw new HttpException($"Image with URL [{update.ImageUrl}] not found!", HttpStatusCode.NotFound);
+                    ?? throw new HttpException(string.Format(Resource.CarImageNotFound, update.ImageUrl), HttpStatusCode.NotFound);
 
                 image.OrderNumber = update.OrderNumber;
                 image.ImageCategory = update.NewCategory;

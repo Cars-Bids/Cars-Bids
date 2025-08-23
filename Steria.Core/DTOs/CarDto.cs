@@ -1,4 +1,4 @@
-﻿using Steria.Core.Entities;
+using Steria.Core.Entities;
 using Steria.Core.Enums;
 
 namespace Steria.Core.DTOs;

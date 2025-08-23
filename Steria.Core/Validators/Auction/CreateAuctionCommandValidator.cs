@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Steria.Core.CQRS.Auctions;
+using Steria.Core.Resources;
 
 namespace Steria.Core.Validators.Auction;
 
@@ -8,18 +9,19 @@ public class CreateAuctionCommandValidator : AbstractValidator<CreateAuctionComm
     public CreateAuctionCommandValidator()
     {
         RuleFor(x => x.CarId)
-            .GreaterThan(0).WithMessage("Car ID must be greater than 0");
+            .GreaterThan(0).WithMessage(Resource.CarIdGreaterThanZero);
 
         RuleFor(x => x.SellerId)
-            .GreaterThan(0).WithMessage("Seller ID must be greater than 0");
+            .GreaterThan(0).WithMessage(Resource.SellerIdGreaterThanZero);
 
         RuleFor(x => x.StartPrice)
-            .GreaterThan(0).WithMessage("Start price must be greater than 0");
+            .GreaterThan(0).WithMessage(Resource.StartPriceGreaterThanZero);
 
         RuleFor(x => x.StartTime)
-            .GreaterThan(DateTime.UtcNow).WithMessage("Start time must be in the future");
+            .GreaterThan(DateTime.UtcNow).WithMessage(Resource.StartTimeInFuture);
 
         RuleFor(x => x.EndTime)
-            .GreaterThan(x => x.StartTime).WithMessage("End time must be after start time");
+            .GreaterThan(x => x.StartTime).WithMessage(Resource.EndTimeAfterStartTime);
+    
     }
 }

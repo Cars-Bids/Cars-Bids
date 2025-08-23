@@ -24,6 +24,5 @@ public class UpdateBodyStyleCommandHandler(
         mapper.Map(cmd, existingBodyStyle);
 
         await repository.UpdateAsync(existingBodyStyle!);
-        return;
     }
 }

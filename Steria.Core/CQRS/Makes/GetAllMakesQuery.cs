@@ -6,9 +6,7 @@ using Steria.Core.Interfaces;
 
 namespace Steria.Core.CQRS.Makes;
 
-public class GetAllMakesQuery : IRequest<List<MakeDto>>
-{
-}
+public class GetAllMakesQuery : IRequest<List<MakeDto>> {}
 
 public class GetAllMakesHandler(
     IMapper mapper,

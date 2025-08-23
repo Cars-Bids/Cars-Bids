@@ -1,24 +1,26 @@
-﻿using Steria.Core.Interfaces;
-using Steria.Data.Services;
-using Steria.Data.Persistence;
-using Steria.Data.Persistence.Repositories;
+﻿using System.Text;
+using CarsAndBids.Core.Services;
 using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
-using Microsoft.AspNetCore.SignalR;
-using Steria.Data.Persistence.Seed;
-using Steria.Core.Entities;
-using Steria.Core.DTOs;
-using Steria.Core.Mapping;
-using MediatR;
 using Steria.API.Filters;
 using Steria.API.HostedServices;
 using Steria.API.Middleware;
+using Steria.Core.DTOs;
+using Steria.Core.Entities;
+using Steria.Core.Interfaces;
+using Steria.Core.Mapping;
+using Steria.Core.Services;
+using Steria.Data.Persistence;
+using Steria.Data.Persistence.Repositories;
+using Steria.Data.Persistence.Seed;
+using Steria.Data.Services;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Steria.API.DependencyInjection;
@@ -60,6 +62,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<EmojiReaction>, GenericRepository<EmojiReaction>>();
         services.AddScoped<IGenericRepository<Wishlist>, GenericRepository<Wishlist>>();
         services.AddScoped<IGenericRepository<Bid>, GenericRepository<Bid>>();
+        services.AddScoped<IGenericRepository<Comment>, GenericRepository<Comment>>();
         services.AddScoped<IGenericRepository<NotificationType>, GenericRepository<NotificationType>>();
         services.AddScoped<IGenericRepository<UserNotificationSetting>, GenericRepository<UserNotificationSetting>>();
         services.AddScoped<IGenericRepository<UserNotification>, GenericRepository<UserNotification>>();
@@ -70,6 +73,9 @@ public static class ServiceCollectionExtensions
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddScoped<IUserNotificationSettingsCacheService, UserNotificationSettingsCacheService>();
+
+        services.AddSingleton<IEmailQueue, EmailQueue>();
+        services.AddHostedService<EmailBackgroundService>();
 
         services.AddSignalR();
         services.AddHostedService<AuctionHostedService>();

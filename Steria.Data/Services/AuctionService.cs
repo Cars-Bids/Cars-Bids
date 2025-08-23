@@ -37,16 +37,16 @@ public class AuctionService(
         try
         {
             var auction = await auctionRepository.GetByIdAsync(auctionId)
-                ?? throw new Exception("Аукціон не знайдено!");
+                ?? throw new Exception("Auction not found");
 
             if (auction.Status != AuctionStatus.Active || DateTime.UtcNow > auction.EndTime)
             {
-                throw new Exception("Аукціон не активний або завершено!");
+                throw new Exception("Auction is not active or expired!");
             }
 
             if (amount <= auction.CurrentPrice)
             {
-                throw new Exception("Ставка має бути вищою за поточну!");
+                throw new Exception("Bid must be higher than the current price!");
             }
 
             //Антиснайпер: подовжуємо, якщо менше 1 хв

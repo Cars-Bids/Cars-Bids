@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AuctionNotFoundById" xml:space="preserve">
+    <value>Аукціон з ідентифікатором {0} не знайдено!</value>
+  </data>
+  <data name="CarImageNotFound" xml:space="preserve">
+    <value>Зображення з URL-адресою {0} не знайдено!</value>
+  </data>
+  <data name="CarNotFoundById" xml:space="preserve">
+    <value>Автомобіль з ідентифікатором {0} не знайдено.</value>
+  </data>
+  <data name="ChatNotFoundOrUserNotInChat" xml:space="preserve">
+    <value>Чат не знайдено або користувач не в чаті.</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>Потрібна електронна адреса</value>
+  </data>
+  <data name="EmojiToggleFailed" xml:space="preserve">
+    <value>Не вдалося перемкнути емодзі. Спробуйте ще раз.</value>
+  </data>
+  <data name="FailedToDeleteAttachments" xml:space="preserve">
+    <value>Не вдалося видалити вкладення.</value>
+  </data>
+  <data name="FirstNameMaxLength" xml:space="preserve">
+    <value>Ім'я не може бути довше 50 символів</value>
+  </data>
+  <data name="IncorectData" xml:space="preserve">
+    <value>Неправильна електронна пошта або пароль</value>
+  </data>
+  <data name="InvalidEmailFormat" xml:space="preserve">
+    <value>Неправильний формат електронної адреси</value>
+  </data>
+  <data name="InvalidRefresh" xml:space="preserve">
+    <value>Недійсний токен оновлення або користувач не знайдений</value>
+  </data>
+  <data name="LastNameMaxLength" xml:space="preserve">
+    <value>Прізвище не може бути довше 50 символів</value>
+  </data>
+  <data name="MessageDoesNotExist" xml:space="preserve">
+    <value>Повідомлення не існує.</value>
+  </data>
+  <data name="MessageNotFound" xml:space="preserve">
+    <value>Повідомлення не знайдено.</value>
+  </data>
+  <data name="OneOrMoreAttachmentsNotFound" xml:space="preserve">
+    <value>Не знайдено один або кілька вкладень.</value>
+  </data>
+  <data name="PasswordMaxLength" xml:space="preserve">
+    <value>Пароль не може бути довше 20 символів</value>
+  </data>
+  <data name="PasswordMinLength" xml:space="preserve">
+    <value>Пароль повинен складатися щонайменше з 6 символів</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Потрібен пароль</value>
+  </data>
+  <data name="RefreshExpired" xml:space="preserve">
+    <value>Термін дії токена оновлення закінчився</value>
+  </data>
+  <data name="RefreshTokenRequired" xml:space="preserve">
+    <value>Необхідний токен оновлення</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>Користувач з {0} вже існує!</value>
+  </data>
+  <data name="UserAlreadySeenMessage" xml:space="preserve">
+    <value>Користувач вже бачив це повідомлення.</value>
+  </data>
+  <data name="UserCannotReadOwnMessage" xml:space="preserve">
+    <value>Користувач не може прочитати власне повідомлення.</value>
+  </data>
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>Ім'я користувача є обов'язковим</value>
+  </data>
+  <data name="UserNotAuthorizedToDeleteAttachment" xml:space="preserve">
+    <value>Користувач не має права видаляти вкладення {0}.</value>
+  </data>
+  <data name="UserNotAuthorizedToDeleteMessage" xml:space="preserve">
+    <value>Користувач не має прав на видалення цього повідомлення.</value>
+  </data>
+  <data name="UserNotAuthorizedToEditMessage" xml:space="preserve">
+    <value>Користувач не має права редагувати повідомлення.</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Користувач не знайдений.</value>
+  </data>
+  <data name="UserNotInChat" xml:space="preserve">
+    <value>Користувач не є учасником цього чату.</value>
+  </data>
+  <data name="UserNotParticipantOfChat" xml:space="preserve">
+    <value>Користувач не є учасником цього чату.</value>
+  </data>
+  <data name="UsernameMinLength" xml:space="preserve">
+    <value>Ім'я користувача повинно складатися щонайменше з 4 символів</value>
+  </data>
+  <data name="UsernameMaxLength" xml:space="preserve">
+    <value>Ім'я користувача не може бути довше 30 символів</value>
+  </data>
+  <data name="EmailInvalidFormat" xml:space="preserve">
+    <value>Неправильний формат електронної адреси</value>
+  </data>
+  <data name="ImageInvalidFormat" xml:space="preserve">
+    <value>Допускаються тільки зображення у форматі JPEG або PNG</value>
+  </data>
+  <data name="EmailInvalid" xml:space="preserve">
+    <value>Неправильний формат електронної адреси</value>
+  </data>
+  <data name="CarIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор автомобіля повинен бути більшим за 0</value>
+  </data>
+  <data name="SellerIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор продавця повинен бути більшим за 0</value>
+  </data>
+  <data name="StartPriceGreaterThanZero" xml:space="preserve">
+    <value>Початкова ціна повинна бути більшою за 0</value>
+  </data>
+  <data name="StartTimeInFuture" xml:space="preserve">
+    <value>Час початку повинен бути в майбутньому</value>
+  </data>
+  <data name="EndTimeAfterStartTime" xml:space="preserve">
+    <value>Час закінчення повинен бути пізніше часу початку</value>
+  </data>
+  <data name="AuctionIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор аукціону повинен бути більшим за 0</value>
+  </data>
+  <data name="CurrentPriceGTEStartPrice" xml:space="preserve">
+    <value>Поточна ціна не може бути нижчою за стартову ціну</value>
+  </data>
+  <data name="StartTimeBeforeEndTime" xml:space="preserve">
+    <value>Час початку повинен бути раніше часу закінчення</value>
+  </data>
+  <data name="InvalidAuctionStatus" xml:space="preserve">
+    <value>Недійсний статус аукціону</value>
+  </data>
+  <data name="BodyStyleNameRequired" xml:space="preserve">
+    <value>Необхідно вказати назву типу кузова</value>
+  </data>
+  <data name="BodyStyleNameMaxLength" xml:space="preserve">
+    <value>Назва стилю кузова повинна містити не більше 50 символів.</value>
+  </data>
+  <data name="BodyStyleIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор типу кузова повинен бути більшим за 0</value>
+  </data>
+  <data name="ManufactureYearRequired" xml:space="preserve">
+    <value>Необхідно вказати рік випуску</value>
+  </data>
+  <data name="ManufactureYearMin" xml:space="preserve">
+    <value>Рік виготовлення не може бути раніше 1900 року</value>
+  </data>
+  <data name="ManufactureYearMax" xml:space="preserve">
+    <value>Рік виготовлення не може бути більшим за поточний рік</value>
+  </data>
+  <data name="MileageMin" xml:space="preserve">
+    <value>Пробіг не може бути менше 0</value>
+  </data>
+  <data name="DrivetrainInvalid" xml:space="preserve">
+    <value>Вказаний тип трансмісії не знайдено</value>
+  </data>
+  <data name="TransmissionTypeInvalid" xml:space="preserve">
+    <value>Вказаний тип передачі не знайдено</value>
+  </data>
+  <data name="SpeedsGreaterThanZero" xml:space="preserve">
+    <value>Швидкість повинна бути більшою за 0</value>
+  </data>
+  <data name="BodyStyleIdRequired" xml:space="preserve">
+    <value>Тип тіла є обов'язковим</value>
+  </data>
+  <data name="ModelIdRequired" xml:space="preserve">
+    <value>Модель необхідна</value>
+  </data>
+  <data name="OwnerIdRequired" xml:space="preserve">
+    <value>Власник повинен бути присутнім</value>
+  </data>
+  <data name="IdRequired" xml:space="preserve">
+    <value>Потрібен ідентифікатор</value>
+  </data>
+  <data name="CarStatusInvalid" xml:space="preserve">
+    <value>Вказаний стан автомобіля не знайдено</value>
+  </data>
+  <data name="ParticipantsRequired" xml:space="preserve">
+    <value>Кількість учасників повинна бути більшою за 0.</value>
+  </data>
+  <data name="ChatIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор чату повинен бути більшим за 0.</value>
+  </data>
+  <data name="SenderIdRequired" xml:space="preserve">
+    <value>Потрібен ідентифікатор відправника.</value>
+  </data>
+  <data name="MessageOrAttachmentsRequired" xml:space="preserve">
+    <value>Необхідно вказати зміст повідомлення або додати вкладення.</value>
+  </data>
+  <data name="MaxAttachmentsAllowed" xml:space="preserve">
+    <value>Допускається максимум {0} вкладень.</value>
+  </data>
+  <data name="MakeNameRequired" xml:space="preserve">
+    <value>Введіть ім'я обов'язково</value>
+  </data>
+  <data name="MakeNameMaxLength" xml:space="preserve">
+    <value>Ім'я має містити не більше 50 символів.</value>
+  </data>
+  <data name="MakeIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор повинен бути більшим за 0</value>
+  </data>
+  <data name="ModelNameRequired" xml:space="preserve">
+    <value>Необхідно вказати назву моделі</value>
+  </data>
+  <data name="ModelNameMaxLength" xml:space="preserve">
+    <value>Назва моделі повинна містити не більше 50 символів.</value>
+  </data>
+  <data name="ModelIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор моделі повинен бути більшим за 0</value>
+  </data>
+  <data name="ResetTokenRequired" xml:space="preserve">
+    <value>Необхідно ввести токен для скидання налаштувань</value>
+  </data>
+  <data name="NewPasswordRequired" xml:space="preserve">
+    <value>Потрібен новий пароль</value>
+  </data>
+  <data name="NewPasswordMinLength" xml:space="preserve">
+    <value>Пароль повинен складатися щонайменше з 6 символів</value>
+  </data>
+  <data name="NewPasswordMaxLength" xml:space="preserve">
+    <value>Пароль повинен містити не більше 20 символів</value>
+  </data>
+  <data name="UserIdGreaterThanZero" xml:space="preserve">
+    <value>Ідентифікатор користувача повинен бути більшим за 0</value>
+  </data>
+  <data name="ProfilePictureUrlMaxLength" xml:space="preserve">
+    <value>URL-адреса профілю занадто довга</value>
+  </data>
+  <data name="ProfilePictureUrlInvalid" xml:space="preserve">
+    <value>URL-адреса профілю повинна бути дійсною URL-адресою</value>
+  </data>
+  <data name="IdMustBeGreaterThanZero" xml:space="preserve">
+    <value>Індитифікатор {0} має бути більшим за 0</value>
+  </data>
+</root>

@@ -12,7 +12,7 @@ public class AuctionHub(IAuctionService auctionService) : Hub
 
         if (!int.TryParse(bidderId, out var userId) || string.IsNullOrEmpty(bidderName))
         {
-            await Clients.Caller.SendAsync("BidRejected", "Ви не авторизовані для участі в аукціоні!");
+            await Clients.Caller.SendAsync("BidRejected", "You are not authorized to participate in the auction");
             return;
         }
 

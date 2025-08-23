@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Steria.Core.Entities;
 using Steria.Core.Interfaces;
+using Steria.Core.Resources;
 
 namespace Steria.Core.CQRS.Profile;
 
@@ -25,12 +26,8 @@ public class UpdateProfileCommandHandler(
 {
     public async Task Handle(UpdateProfileCommand cmd, CancellationToken cancellationToken)
     {
-        var existingUser = await repository.GetByIdAsync(cmd.UserId);
-
-        if (existingUser == null)
-        {
-            throw new KeyNotFoundException("User not found.");
-        }
+        var existingUser = await repository.GetByIdAsync(cmd.UserId)
+            ?? throw new KeyNotFoundException(Resource.UserNotFound);
 
         mapper.Map(cmd, existingUser);
 

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Steria.Core.CQRS.Makes;
+using Steria.Core.Resources;
 
 namespace Steria.Core.Validators.Make;
 
@@ -8,10 +9,10 @@ public class UpdateMakeCommandValidator : AbstractValidator<UpdateMakeCommand>
     public UpdateMakeCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0).WithMessage("Make ID must be greater than 0");
+            .GreaterThan(0).WithMessage(Resource.MakeIdGreaterThanZero);
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Make name is required")
-            .MaximumLength(50).WithMessage("Make name must be at most 50 characters long");
+            .NotEmpty().WithMessage(Resource.MakeNameRequired)
+            .MaximumLength(50).WithMessage(Resource.MakeNameMaxLength);
     }
 }
