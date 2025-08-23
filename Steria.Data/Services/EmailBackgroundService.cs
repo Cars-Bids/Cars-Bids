@@ -3,7 +3,6 @@ using Steria.Core.Interfaces;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
@@ -11,17 +10,11 @@ namespace CarsAndBids.Core.Services;
 
 public class EmailBackgroundService(
         IEmailQueue emailQueue,
-        IOptions<EmailSettings> emailSettings,
-        ILogger<EmailBackgroundService> logger) : BackgroundService
+        IOptions<EmailSettings> emailSettings) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var settings = emailSettings.Value;
-        if (settings == null)
-        {
-            logger.LogError("Email settings are not configured.");
-            return;
-        }
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -42,11 +35,9 @@ public class EmailBackgroundService(
                 await client.SendAsync(message, stoppingToken);
                 await client.DisconnectAsync(true, stoppingToken);
 
-                logger.LogInformation("Email sent to {MailTo} with subject {Subject}", emailTask.MailTo, emailTask.Subject);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error sending email.");
             }
         }
     }
