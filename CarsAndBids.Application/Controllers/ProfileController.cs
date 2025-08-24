@@ -24,7 +24,7 @@ public class ProfileController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateProfileCommand request)
+    public async Task<IActionResult> Update([FromForm] UpdateProfileCommand request)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         request.UserId = userId;

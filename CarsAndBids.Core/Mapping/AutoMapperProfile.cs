@@ -47,8 +47,9 @@ public class AutoMapperProfile : Profile
         CreateMap<Car, CreateCarCommand>().ReverseMap();
 
         CreateMap<User, ProfileDto>().ReverseMap();
-        CreateMap<User, UpdateProfileCommand>().ReverseMap();
-        
+        CreateMap<UpdateProfileCommand, User>()
+            .ForMember(dest => dest.ProfilePictureUrl, opt => opt.Ignore());
+
         CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
 
         CreateMap<ChatMessage, ChatMessageDto>()

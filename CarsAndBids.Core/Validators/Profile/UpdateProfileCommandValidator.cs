@@ -8,16 +8,8 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
 {
     public UpdateProfileCommandValidator()
     {
-        RuleFor(x => x.UserId)
-            .GreaterThan(0).WithMessage(Resource.UserIdGreaterThanZero);
-
-        RuleFor(x => x.FirstName)
-            .MaximumLength(50)
-            .WithMessage(Resource.FirstNameMaxLength);
-
-        RuleFor(x => x.LastName)
-            .MaximumLength(50)
-            .WithMessage(Resource.LastNameMaxLength);
+        //RuleFor(x => x.UserId)
+        //    .GreaterThan(0).WithMessage(Resource.UserIdGreaterThanZero);
 
         RuleFor(x => x.Username)
             .NotEmpty().WithMessage(Resource.UsernameRequired)
@@ -28,9 +20,9 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
             .NotEmpty().WithMessage(Resource.EmailRequired)
             .EmailAddress().WithMessage(Resource.EmailInvalidFormat);
 
-        RuleFor(x => x.ProfilePictureUrl)
-            .MaximumLength(2048).WithMessage(Resource.ProfilePictureUrlMaxLength)
-            .Must(BeValidUrl).WithMessage(Resource.ProfilePictureUrlInvalid);
+        //RuleFor(x => x.ProfilePictureUrl)
+        //    .MaximumLength(2048).WithMessage(Resource.ProfilePictureUrlMaxLength)
+        //    .Must(BeValidUrl).WithMessage(Resource.ProfilePictureUrlInvalid);
     }
 
     private bool BeValidUrl(string? url)
