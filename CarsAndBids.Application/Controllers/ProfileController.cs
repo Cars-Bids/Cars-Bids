@@ -71,4 +71,20 @@ public class ProfileController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }
+
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var command = new ChangePasswordCommand
+        {
+            UserId = userId,
+            OldPassword = dto.OldPassword,
+            NewPassword = dto.NewPassword
+        };
+        var result = await mediator.Send(command);
+        if (!result)
+            return BadRequest("Failed to change password");
+        return Ok();
+    }
 }

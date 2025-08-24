@@ -9,7 +9,7 @@ namespace CarsAndBids.API.Controllers;
 public class AccountController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Register([FromForm] RegisterCommand cmd)
+    public async Task<IActionResult> Register([FromBody] RegisterCommand cmd)
     {
         await mediator.Send(cmd);
         return Ok();
