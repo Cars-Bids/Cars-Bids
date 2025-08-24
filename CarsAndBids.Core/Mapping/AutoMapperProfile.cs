@@ -33,6 +33,8 @@ public class AutoMapperProfile : Profile
         CreateMap<Comment, CommentDto>().ReverseMap();
         CreateMap<Comment, UpdateCommentCommand>().ReverseMap();
         CreateMap<Comment, CreateCommentCommand>().ReverseMap();
+        CreateMap<Comment, CommentWithNameDto>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
         CreateMap<Model, ModelDto>().ReverseMap();
         CreateMap<Model, UpdateModelCommand>().ReverseMap();

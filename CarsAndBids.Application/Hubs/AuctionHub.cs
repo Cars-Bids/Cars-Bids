@@ -1,9 +1,13 @@
-﻿using CarsAndBids.Core.Interfaces;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
+using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Entities;
+using CarsAndBids.Core.DTOs;
+using AutoMapper;
+using CarsAndBids.Core.Enums;
 
 namespace CarsAndBids.API.Hubs;
 
-public class AuctionHub(IAuctionService auctionService) : Hub
+public class AuctionHub(IAuctionService auctionService, IMapper mapper) : Hub
 {
     public async Task PlaceBid(int auctionId, decimal amount)
     {
@@ -36,6 +40,46 @@ public class AuctionHub(IAuctionService auctionService) : Hub
         });
     }
 
+    public async Task SubscribeToUserAuctions()
+    {
+        var userId = Context.User?.FindFirst("nameid")?.Value;
+        if (!int.TryParse(userId, out var parsedUserId))
+        {
+            await Clients.Caller.SendAsync("SubscriptionFailed", "You are not authorized");
+            return;
+        }
+
+        await Groups.AddToGroupAsync(Context.ConnectionId, $"user-auctions-{parsedUserId}");
+
+        var auctions = await auctionService.GetUserAuctions(parsedUserId);
+        await Clients.Caller.SendAsync("ReceiveUserAuctions", auctions.Select(a => new
+        {
+            AuctionId = a.Id,
+            CarId = a.CarId,
+            StartPrice = a.StartPrice,
+            CurrentPrice = a.CurrentPrice,
+            CurrentBidder = a.CurrentBidder,
+            StartTime = a.StartTime,
+            EndTime = a.EndTime,
+            Status = a.Status,
+            Timestamp = DateTime.UtcNow,
+            Car = new
+            {
+                Year = a.Car.Year,
+                Make = a.Car.Model.Make.Name,
+                Model = a.Car.Model.Name,
+                ExteriorColor = a.Car.ExteriorColor,
+                Mileage = a.Car.Mileage,
+                MainImage = a.Car.Images
+                    .Where(img => img.ImageCategory == ImageCategory.Main)
+                    .Select(img => img.ImageUrl)
+                    .FirstOrDefault() ?? a.Car.Images
+                    .Select(img => img.ImageUrl)
+                    .FirstOrDefault() ?? ""
+            }
+        }));
+    }
+
     public override async Task OnConnectedAsync()
     {
         var auctionId = Context.GetHttpContext()?.Request.Query["auctionId"];
@@ -45,7 +89,7 @@ public class AuctionHub(IAuctionService auctionService) : Hub
             await Groups.AddToGroupAsync(Context.ConnectionId, auctionId!);
 
             var auction = await auctionService.GetById(id);
-            
+
             if (auction is not null)
             {
                 await Clients.Caller.SendAsync("ConnectAuction", new
@@ -69,6 +113,12 @@ public class AuctionHub(IAuctionService auctionService) : Hub
         if (!string.IsNullOrEmpty(auctionId))
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, auctionId!);
+        }
+
+        var userId = Context.User?.FindFirst("nameid")?.Value;
+        if (!string.IsNullOrEmpty(userId))
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"user-auctions-{userId}");
         }
 
         await base.OnDisconnectedAsync(exception);
