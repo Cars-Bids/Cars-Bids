@@ -3,6 +3,7 @@ using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Enums;
 using Steria.Core.Interfaces;
+using Steria.Core.Specification.ProfileSpec;
 
 namespace Steria.Data.Services;
 
@@ -76,6 +77,11 @@ public class AuctionService(
             await transaction.RollbackAsync();
             return (false, e.Message);
         }        
+    }
+    public async Task<List<Auction>> GetUserAuctions(int userId)
+    {
+        var spec = new UserAuctionsSpec(userId);
+        return await auctionRepository.GetListBySpec<Auction>(spec);
     }
 
     public async void UpdateStatus(int auctionId, AuctionStatus newStatus)

@@ -24,7 +24,7 @@ public class ProfileController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateProfileCommand request)
+    public async Task<IActionResult> Update([FromForm] UpdateProfileCommand request)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         request.UserId = userId;
@@ -81,4 +81,47 @@ public class ProfileController(IMediator mediator) : ControllerBase
         return Ok();
     }
     
+
+    [HttpGet("in-review-cars")]
+    public async Task<ActionResult<PagedResult<CarDto>>> GetInReviewCars([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetUserInReviewCarsQuery(userId, pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("auction-comments")]
+    public async Task<ActionResult<PagedResult<CommentDto>>> GetUserAuctionComments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetUserAuctionCommentsQuery(userId, pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var command = new ChangePasswordCommand
+        {
+            UserId = userId,
+            OldPassword = dto.OldPassword,
+            NewPassword = dto.NewPassword
+        };
+        var result = await mediator.Send(command);
+        if (!result)
+            return BadRequest("Failed to change password");
+        return Ok();
+    }
+
+    [HttpGet("ended-auctions")]
+    public async Task<ActionResult<PagedResult<AuctionDto>>> GetUserEndedAuctions([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetUserEndedAuctionsQuery(userId, pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
 }
