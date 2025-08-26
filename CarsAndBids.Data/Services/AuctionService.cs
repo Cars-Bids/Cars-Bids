@@ -3,6 +3,7 @@ using CarsAndBids.Core.DTOs;
 using CarsAndBids.Core.Entities;
 using CarsAndBids.Core.Enums;
 using CarsAndBids.Core.Interfaces;
+using CarsAndBids.Core.Specification.ProfileSpec;
 
 namespace CarsAndBids.Data.Services;
 
@@ -76,6 +77,11 @@ public class AuctionService(
             await transaction.RollbackAsync();
             return (false, e.Message);
         }        
+    }
+    public async Task<List<Auction>> GetUserAuctions(int userId)
+    {
+        var spec = new UserAuctionsSpec(userId);
+        return await auctionRepository.GetListBySpec<Auction>(spec);
     }
 
     public async void UpdateStatus(int auctionId, AuctionStatus newStatus)
