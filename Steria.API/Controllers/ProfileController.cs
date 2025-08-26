@@ -72,6 +72,7 @@ public class ProfileController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpPut("notification-settings")]
     public async Task<IActionResult> UpdateNotificationSettings(UpdateUserNotificationSettingsCommand cmd)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
