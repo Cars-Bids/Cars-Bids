@@ -1,0 +1,10 @@
+namespace Steria.Core.Entities;
+
+public class BodyStyle
+{
+    public int Id { get; set; }
+    public string StyleName { get; set; } = null!;
+
+    public ICollection<Car>? Cars { get; set; }
+
+}
