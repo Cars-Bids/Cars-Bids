@@ -21,7 +21,6 @@ public class GetUserInReviewCarsQuery : IRequest<PagedResult<CarDto>>
         PageSize = pageSize;
     }
 }
-
 public class GetUserInReviewCarsHandler(
     IGenericRepository<Car> carRepository,
     IMapper mapper
@@ -32,16 +31,7 @@ public class GetUserInReviewCarsHandler(
         var spec = new UserInReviewCarsSpec(request.UserId, request.PageNumber, request.PageSize);
         var cars = await carRepository.GetListBySpec(spec, cancellationToken);
 
-        var carDtos = cars.Select(car =>
-        {
-            var dto = mapper.Map<CarDto>(car);
-            dto.Images = car.Images
-                .Where(img => img.ImageCategory == ImageCategory.Main)
-                .Select(img => new CarImageDto { ImageUrl = img.ImageUrl, ImageCategory = img.ImageCategory, OrderNumber = img.OrderNumber, UploadedAt = img.UploadedAt })
-                .Take(1)
-                .ToList();
-            return dto;
-        }).ToList();
+        var carDtos = mapper.Map<List<CarDto>>(cars);
 
         var totalCount = await carRepository.CountAsync(spec, cancellationToken);
 

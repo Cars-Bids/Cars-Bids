@@ -31,13 +31,13 @@ public class GetUserAuctionCommentsHandler(
         var spec = new UserAuctionCommentsSpec(request.UserId, request.PageNumber, request.PageSize);
         var comments = await commentRepository.GetListBySpec(spec, cancellationToken);
 
-        var CommentWithNameDtos = mapper.Map<List<CommentWithNameDto>>(comments);
+        var сommentWithNameDtos = mapper.Map<List<CommentWithNameDto>>(comments);
 
         var totalCount = await commentRepository.CountAsync(spec, cancellationToken);
 
         return new PagedResult<CommentWithNameDto>
         {
-            Items = CommentWithNameDtos,
+            Items = сommentWithNameDtos,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize

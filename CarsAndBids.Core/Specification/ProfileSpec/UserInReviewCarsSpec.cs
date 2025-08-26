@@ -15,7 +15,7 @@ public class UserInReviewCarsSpec : PagedSpec<Car>
             .Include(car => car.Model)
             .ThenInclude(model => model.Make)
             .Include(car => car.BodyStyle)
-            .Include(car => car.Images)
+            .Include(car => car.Images.Where(img => img.ImageCategory == ImageCategory.Main).Take(1))
             .AsNoTracking();
 
         Query.OrderByDescending(car => car.CreatedAt);
