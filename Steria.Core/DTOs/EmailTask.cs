@@ -1,4 +1,4 @@
-﻿namespace Steria.Core.Models;
+﻿namespace Steria.Core.DTOs;
 
 public class EmailTask
 {

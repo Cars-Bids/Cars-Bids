@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace Steria.API.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class ChatHub(IMediator mediator) : Hub //TODO: Move userConnections to redis
+public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager instead of _userConnections
 {
     private static ConcurrentDictionary<int, string> _userConnections = new ConcurrentDictionary<int, string>();
     

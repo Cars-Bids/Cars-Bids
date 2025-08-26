@@ -1,12 +1,12 @@
-﻿using Steria.Core.DTOs;
-using Steria.Core.Interfaces;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Steria.Core.DTOs;
+using Steria.Core.Interfaces;
 
-namespace CarsAndBids.Core.Services;
+namespace Steria.Data.Services;
 
 public class EmailBackgroundService(
         IEmailQueue emailQueue,

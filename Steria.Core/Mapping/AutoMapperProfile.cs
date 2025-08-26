@@ -108,5 +108,8 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.CarName, opt => opt.MapFrom(src => $"{src.Auction.Car.Model.Make.Name} {src.Auction.Car.Model.Name}"))
             .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+
+        CreateMap<UserNotification, UserNotificationDto>()
+            .ForMember(dest => dest.TypeKey, opt => opt.MapFrom(src => src.NotificationType.Key));
     }
 }

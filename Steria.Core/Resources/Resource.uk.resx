@@ -351,4 +351,31 @@
   <data name="IdMustBeGreaterThanZero" xml:space="preserve">
     <value>Індитифікатор {0} має бути більшим за 0</value>
   </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>Цей юзернейм уже зайнятий.</value>
+  </data>
+  <data name="KeyRequired" xml:space="preserve">
+    <value>Потрібен ключ</value>
+  </data>
+  <data name="KeyMaxLength" xml:space="preserve">
+    <value>Ключ має бути не більше 50 символів.</value>
+  </data>
+  <data name="DescriptionRequired" xml:space="preserve">
+    <value>Необхідно вказати опис.</value>
+  </data>
+  <data name="DescriptionMaxLength" xml:space="preserve">
+    <value>Опис не може бути довше 100 символів</value>
+  </data>
+  <data name="RedirectRouteRequired" xml:space="preserve">
+    <value>Необхідно ввести RedirectRoute</value>
+  </data>
+  <data name="RedirectRouteMaxLength" xml:space="preserve">
+    <value>Route не може бути довший ніж 50 символів.</value>
+  </data>
+  <data name="InvalidSourceType" xml:space="preserve">
+    <value>Неправильний тип джерела.</value>
+  </data>
+  <data name="NotificationTypeIdGreaterZero" xml:space="preserve">
+    <value>Айді типу нотифікації має бути більше 0.</value>
+  </data>
 </root>

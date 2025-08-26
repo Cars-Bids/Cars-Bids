@@ -11,6 +11,7 @@ public class NotificationType
     public string Description { get; set; } = null!;
     public bool DefaultSendEmail { get; set; } = false;
     public bool DefaultSendSite { get; set; } = false;
+    public bool IsMandatory { get; set; }
 
     public ICollection<UserNotificationSetting>? UserNotificationSettings { get; set; }
     public ICollection<UserNotification>? UserNotifications { get; set; }

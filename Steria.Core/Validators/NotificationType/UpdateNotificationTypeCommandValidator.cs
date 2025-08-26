@@ -1,28 +1,29 @@
 ﻿using FluentValidation;
 using Steria.Core.CQRS.NotificationTypes;
+using Steria.Core.Resources;
 
 namespace Steria.Core.Validators.NotificationType;
 
 public class UpdateNotificationTypeCommandValidator : AbstractValidator<UpdateNotificationTypeCommand>
 {
-    public UpdateNotificationTypeCommandValidator() //TODO: Add localization
+    public UpdateNotificationTypeCommandValidator()
     {
         RuleFor(x => x.Key)
-            .NotEmpty().WithMessage("Key is required.")
-            .MaximumLength(50).WithMessage("Key must be at 50 characters long.");
+            .NotEmpty().WithMessage(Resource.KeyRequired)
+            .MaximumLength(50).WithMessage(Resource.KeyMaxLength);
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description is required.")
-            .MaximumLength(100).WithMessage("Description must be at 100 characters long.");
+            .NotEmpty().WithMessage(Resource.DescriptionRequired)
+            .MaximumLength(100).WithMessage(Resource.DescriptionMaxLength);
         
         RuleFor(x => x.RedirectRoute)
-            .NotEmpty().WithMessage("RedirectRoute is required.")
-            .MaximumLength(50).WithMessage("Route must be at 50 characters long.");
+            .NotEmpty().WithMessage(Resource.RedirectRouteRequired)
+            .MaximumLength(50).WithMessage(Resource.RedirectRouteMaxLength);
 
         RuleFor(x => x.SourceType)
-            .IsInEnum().WithMessage("Invalid source type.");
+            .IsInEnum().WithMessage(Resource.InvalidSourceType);
         
         RuleFor(x => x.Id)
-            .GreaterThan(0).WithMessage("Notification type ID must be greater than 0");
+            .GreaterThan(0).WithMessage(Resource.NotificationTypeIdGreaterZero);
     }
 }

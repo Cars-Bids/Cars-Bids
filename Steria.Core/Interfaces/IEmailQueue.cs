@@ -1,4 +1,4 @@
-﻿using Steria.Core.Models;
+﻿using Steria.Core.DTOs;
 
 namespace Steria.Core.Interfaces;
 

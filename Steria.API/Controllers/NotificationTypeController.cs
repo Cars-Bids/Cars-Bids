@@ -9,6 +9,7 @@ namespace Steria.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize(Roles = "Admin")]
 public class NotificationTypeController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
@@ -32,7 +33,6 @@ public class NotificationTypeController(IMediator mediator) : ControllerBase
     }
     
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> Create([FromBody] CreateNotificationTypeCommand command)
     {
         try
@@ -47,7 +47,6 @@ public class NotificationTypeController(IMediator mediator) : ControllerBase
     }
     
     [HttpPut]
-    [AllowAnonymous]
     public async Task<IActionResult> Update([FromBody] UpdateNotificationTypeCommand cmd)
     {
         try
@@ -62,7 +61,6 @@ public class NotificationTypeController(IMediator mediator) : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    [AllowAnonymous]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
     {
         try

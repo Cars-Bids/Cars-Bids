@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Steria.Core.CQRS.NotificationSettings;
 using Steria.Core.CQRS.Profile;
 using Steria.Core.DTOs;
 
@@ -70,4 +71,14 @@ public class ProfileController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }
+
+    public async Task<IActionResult> UpdateNotificationSettings(UpdateUserNotificationSettingsCommand cmd)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        cmd.UserId = userId;
+
+        await mediator.Send(cmd);
+        return Ok();
+    }
+    
 }

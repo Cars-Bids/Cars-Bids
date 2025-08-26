@@ -1,12 +1,11 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Steria.Core.CQRS.Cars;
-using CloudinaryDotNet.Actions;
 
-namespace CarsAndBids.API.Controllers;
+namespace Steria.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

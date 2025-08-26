@@ -2,8 +2,10 @@
 
 namespace Steria.Core.Interfaces;
 
-public interface IUserNotificationSettingsCacheService
+public interface ICacheService
 {
     Task<List<UserNotificationSetting>> GetUserSettingsAsync(int userId);
-    Task RemoveUserSettings(int userId);
+    Task<NotificationType> GetNotificationTypeAsync(string key);
+    Task RemoveUserSettingsAsync(int userId);
+    Task RemoveNotificationTypeAsync(string key);
 }

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Steria.Core.Entities;
-using Steria.Core.Models;
 using Steria.Core.Interfaces;
 using System.Reflection;
 using Steria.Core.DTOs;

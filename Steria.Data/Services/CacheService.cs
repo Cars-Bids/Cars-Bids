@@ -10,7 +10,7 @@ public class CacheService(IFusionCache cache,
                           IGenericRepository<UserNotificationSetting> settingsRepository,
                           IGenericRepository<NotificationType> notificationTypeRepository) : ICacheService
 {
-    public async Task<List<UserNotificationSetting>> GetUserSettingsAsync(int userId) //TODO:When editing settings change cache
+    public async Task<List<UserNotificationSetting>> GetUserSettingsAsync(int userId)
     {
         return await cache.GetOrSetAsync<List<UserNotificationSetting>>(
             $"UserNotifSettings:{userId}", 
@@ -40,12 +40,12 @@ public class CacheService(IFusionCache cache,
         );
     }
 
-    public async Task RemoveUserSettings(int userId)
+    public async Task RemoveUserSettingsAsync(int userId)
     {
         await cache.RemoveAsync($"UserNotifSettings:{userId}");
     }
 
-    public async Task RemoveNotificationType(string key)
+    public async Task RemoveNotificationTypeAsync(string key)
     {
         await cache.RemoveAsync($"NotificationType:{key}");
     }

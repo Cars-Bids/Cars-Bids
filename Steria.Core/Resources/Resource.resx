@@ -352,4 +352,31 @@
   <data name="IdMustBeGreaterThanZero" xml:space="preserve">
     <value>Id {0} must be greater than 0</value>
   </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>This username is already taken.</value>
+  </data>
+  <data name="KeyRequired" xml:space="preserve">
+    <value>Key is required</value>
+  </data>
+  <data name="KeyMaxLength" xml:space="preserve">
+    <value>Key must be at 50 characters long.</value>
+  </data>
+  <data name="DescriptionRequired" xml:space="preserve">
+    <value>Description is required.</value>
+  </data>
+  <data name="DescriptionMaxLength" xml:space="preserve">
+    <value>Description must be at 100 characters long.</value>
+  </data>
+  <data name="RedirectRouteRequired" xml:space="preserve">
+    <value>RedirectRoute is required.</value>
+  </data>
+  <data name="RedirectRouteMaxLength" xml:space="preserve">
+    <value>Route must be at 50 characters long.</value>
+  </data>
+  <data name="InvalidSourceType" xml:space="preserve">
+    <value>Invalid source type.</value>
+  </data>
+  <data name="NotificationTypeIdGreaterZero" xml:space="preserve">
+    <value>Notification type ID must be greater than 0.</value>
+  </data>
 </root>

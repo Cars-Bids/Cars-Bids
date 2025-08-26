@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Steria.Core.Entities;
 
-namespace Steria.Core.CQRS.Profile;
+namespace Steria.Core.CQRS.Account;
 
 public class ResetPasswordCommand : IRequest<bool>
 {

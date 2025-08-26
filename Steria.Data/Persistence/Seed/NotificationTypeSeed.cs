@@ -7,7 +7,7 @@ namespace Steria.Data.Persistence.Seed;
 
 public class NotificationTypeSeed(IGenericRepository<NotificationType> repository)
 {
-    public async Task SeedAsync() //TODO: need to think of more notif. types and create a service to generate them
+    public async Task SeedAsync()
     {
         var existing = await repository.GetItemBySpec(new FirstRecordSpec<NotificationType>());
 

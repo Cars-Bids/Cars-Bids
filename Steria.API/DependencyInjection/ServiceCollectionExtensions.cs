@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using CarsAndBids.Core.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,12 +10,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Steria.API.Filters;
 using Steria.API.HostedServices;
+using Steria.API.Hubs;
 using Steria.API.Middleware;
+using Steria.API.Notifiers;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Interfaces;
 using Steria.Core.Mapping;
-using Steria.Core.Services;
 using Steria.Data.Persistence;
 using Steria.Data.Persistence.Repositories;
 using Steria.Data.Persistence.Seed;
@@ -66,13 +66,17 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<NotificationType>, GenericRepository<NotificationType>>();
         services.AddScoped<IGenericRepository<UserNotificationSetting>, GenericRepository<UserNotificationSetting>>();
         services.AddScoped<IGenericRepository<UserNotification>, GenericRepository<UserNotification>>();
+        
+        services.AddSingleton<IConnectionManager<ChatHub>, ConnectionManager<ChatHub>>();
+        services.AddSingleton<IConnectionManager<NotificationHub>, ConnectionManager<NotificationHub>>();
 
+        services.AddScoped<IRealtimeNotifier, SignalRNotifier>();
+        services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuctionService, AuctionService>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        services.AddScoped<IUserNotificationSettingsCacheService, UserNotificationSettingsCacheService>();
 
         services.AddSingleton<IEmailQueue, EmailQueue>();
         services.AddHostedService<EmailBackgroundService>();

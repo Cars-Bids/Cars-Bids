@@ -1,9 +1,8 @@
-﻿using System.Collections.Concurrent;
-using System.Threading.Channels;
+﻿using System.Threading.Channels;
+using Steria.Core.DTOs;
 using Steria.Core.Interfaces;
-using Steria.Core.Models;
 
-namespace Steria.Core.Services;
+namespace Steria.Data.Services;
 
 public class EmailQueue : IEmailQueue
 {

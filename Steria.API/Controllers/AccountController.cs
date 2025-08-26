@@ -10,7 +10,7 @@ namespace Steria.API.Controllers;
 public class AccountController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Register([FromBody] RegisterCommand cmd) //TODO: need to add userNotificationSettings when creating account
+    public async Task<IActionResult> Register([FromBody] RegisterCommand cmd)
     {
         await mediator.Send(cmd);
         return Ok();
