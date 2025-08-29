@@ -15,4 +15,5 @@ public class AuctionDto
     public DateTime CreatedAt { get; set; }
     public DateTime? ApprovedAt { get; set; }
     public AuctionStatus Status { get; set; }
+    public CarPreviewDto Car { get; set; }
 }

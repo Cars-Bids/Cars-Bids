@@ -18,6 +18,8 @@ public class Car
     public int Speeds { get; set; }
     public CarStatus Status { get; set; } = CarStatus.inPending;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsInspected { get; set; }
+    public bool OnReserve { get; set; }
     public int? AssingId { get; set; }
     public int OwnerId { get; set; }
     public int BodyStyleId { get; set; }

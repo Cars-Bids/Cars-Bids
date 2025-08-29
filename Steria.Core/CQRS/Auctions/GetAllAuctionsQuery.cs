@@ -21,7 +21,7 @@ public class GetAllAuctionsQueryHandler(
 {
     public async Task<PagedResult<AuctionDto>> Handle(GetAllAuctionsQuery request, CancellationToken cancellationToken)
     {
-        var spec = new PagedAuctionSpec(request.PageNumber, request.PageSize);
+        var spec = new AuctionsWithCar(request.PageNumber, request.PageSize);
         var totalCount = await auctionRepository.CountAsync(new Specification<Auction>(), cancellationToken);
 
         var auctions = await auctionRepository.GetListBySpec(spec, cancellationToken);
