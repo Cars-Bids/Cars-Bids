@@ -12,6 +12,14 @@ namespace Steria.Data.Persistence.Seed
             await seederRepository.SeedRolesAsync();
             await seederRepository.SeedBodyStylesAsync();
             await seederRepository.SeedNotificationTypesAsync();
+            await seederRepository.SeedBasicUsersAsync();
+            await seederRepository.SeedFollowsAsync();
+            await seederRepository.SeedMakeAsync();
+            await seederRepository.SeedModelAsync();
+            await seederRepository.SeedCarAuctionsAsync();
+            await seederRepository.SeedBidsAsync();
+            await seederRepository.SeedCommentsAsync();
+            await seederRepository.SeedQuestionAnswerAsync();
         }
 
     }

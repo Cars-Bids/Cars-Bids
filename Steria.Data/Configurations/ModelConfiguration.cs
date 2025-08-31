@@ -14,7 +14,7 @@ public class ModelConfiguration : IEntityTypeConfiguration<Model>
             .HasMaxLength(50)
             .IsRequired();
         
-        builder.HasIndex(m => m.Name)
+        builder.HasIndex(m => new { m.MakeId, m.Name })
             .IsUnique();
         
         builder.HasOne(m => m.Make)
