@@ -11,6 +11,7 @@ using Steria.Core.CQRS.NotificationTypes;
 using Steria.Core.CQRS.Profile;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
+using Steria.Core.Enums;
 
 namespace Steria.Core.Mapping;
 
@@ -18,7 +19,8 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<Auction, AuctionDto>().ReverseMap();
+        CreateMap<Auction, AuctionDto>()
+            .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car));
         CreateMap<Auction, CreateAuctionCommand>().ReverseMap();
         CreateMap<Auction, UpdateAuctionCommand>().ReverseMap();
 
@@ -114,5 +116,15 @@ public class AutoMapperProfile : Profile
 
         CreateMap<UserNotification, UserNotificationDto>()
             .ForMember(dest => dest.TypeKey, opt => opt.MapFrom(src => src.NotificationType.Key));
+        
+        CreateMap<Car, CarPreviewDto>()
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => 
+                $"{src.Engine}, {src.Drivetrain}, {(src.Speeds.HasValue ? $"{src.Speeds}-speed " : "")}{src.TransmissionType}"))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model.Name))
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make.Name))
+            .ForMember(dest => dest.MainImageUrl, opt => opt.MapFrom(src => 
+                src.Images != null && src.Images.Any(img => img.ImageCategory == ImageCategory.Main) 
+                    ? src.Images.First(img => img.ImageCategory == ImageCategory.Main).ImageUrl 
+                    : null));
     }
 }

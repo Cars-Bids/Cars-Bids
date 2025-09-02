@@ -16,4 +16,5 @@ public class Comment
     public User User { get; set; } = null!;
     public Comment? ReplyedTo { get; set; }
     public ICollection<Comment>? Replies { get; set; }
+    public ICollection<CommentUpvote> CommentUpvotes { get; set; }
 }
