@@ -15,6 +15,7 @@ public class Auction
     public AuctionStatus Status { get; set; } = AuctionStatus.Pending;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? ApprovedAt { get; set; }
+    public bool IsInspected { get; set; }
 
     public Car Car { get; set; } = null!;
     public User Seller { get; set; } = null!;

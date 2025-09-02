@@ -16,7 +16,31 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.HasIndex(c => c.Vin)
             .IsUnique();
         
-        builder.Property(c => c.Description)
+        builder.Property(c => c.Highlights)
+            .HasColumnType("text");
+        
+        builder.Property(c => c.ServiceHistory)
+            .HasColumnType("text");
+        
+        builder.Property(c => c.Equipment)
+            .HasColumnType("text");
+        
+        builder.Property(c => c.Flaws)
+            .HasColumnType("text");
+        
+        builder.Property(c => c.Modifications)
+            .HasColumnType("text");
+        
+        builder.Property(c => c.OtherItems)
+            .HasColumnType("text");
+        
+        builder.Property(c => c.OwnershipHistory)
+            .HasColumnType("text");
+        
+        builder.Property(c => c.SellerNotes)
+            .HasColumnType("text");
+
+        builder.Property(c => c.VideoLinks)
             .HasColumnType("text");
         
         builder.Property(c => c.ExteriorColor)
@@ -46,9 +70,9 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.Property(c => c.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-        builder.HasOne(c => c.Assing)
+        builder.HasOne(c => c.Manager)
             .WithMany(u => u.AssingCars)
-            .HasForeignKey(c => c.AssingId);
+            .HasForeignKey(c => c.ManagerId);
 
         builder.HasOne(c => c.Owner)
             .WithMany(u => u.OwnedCars)
