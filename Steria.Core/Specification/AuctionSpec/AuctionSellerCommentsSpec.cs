@@ -12,6 +12,7 @@ public class AuctionSellerCommentsSpec : PagedSpec<Comment>
         Query.Where(c => c.AuctionId == auctionId && c.UserId == sellerId)
             .OrderByDescending(c => c.CreatedAt)
             .ThenByDescending(c => c.Id)
-            .Include(c => c.User);
+            .Include(c => c.User)
+            .Include(c => c.CommentUpvotes);
     }
 }

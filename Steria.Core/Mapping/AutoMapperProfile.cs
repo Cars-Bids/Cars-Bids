@@ -126,5 +126,15 @@ public class AutoMapperProfile : Profile
                 src.Images != null && src.Images.Any(img => img.ImageCategory == ImageCategory.Main) 
                     ? src.Images.First(img => img.ImageCategory == ImageCategory.Main).ImageUrl 
                     : null));
+
+        CreateMap<Comment, AuctionActivityDto>()
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(_ => "Comment"))
+            .ForMember(dest => dest.Upvotes, opt => opt.MapFrom(src => src.CommentUpvotes.Count));
+
+        CreateMap<Bid, AuctionActivityDto>()
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(_ => "Bid"))
+            .ForMember(dest => dest.BidderId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.BidderName, opt => opt.MapFrom(src => src.User.UserName))
+            .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.BidAmount));
     }
 }

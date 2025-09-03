@@ -4,6 +4,8 @@ using Steria.Core.CQRS.Comments;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Steria.Core.CQRS.Auctions;
+using Steria.Core.Enums;
 
 namespace Steria.API.Controllers;
 
@@ -52,5 +54,19 @@ public class CommentController(IMediator mediator) : ControllerBase
     {
         await mediator.Send(new DeleteCommentByIdCommand { Id = id });
         return Ok();
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("activity")]
+    public async Task<IActionResult> GetAuctionActivity(int auctionId, CommentTabEnum tab, int pageNumber = 1, int pageSize = 10)
+    {
+        return tab switch
+        {
+            CommentTabEnum.Newest => Ok(await mediator.Send(new GetNewestActivityQuery { AuctionId = auctionId, PageSize = pageSize, PageNumber = pageNumber })),
+            CommentTabEnum.MostUpvoted => Ok(await mediator.Send(new GetMostUpvotedCommentsQuery { AuctionId = auctionId, PageSize = pageSize, PageNumber = pageNumber})),
+            CommentTabEnum.SellerComments => Ok(await mediator.Send(new GetAuctionSellerCommentsQuery { AuctionId = auctionId, PageSize = pageSize, PageNumber = pageNumber })),
+            CommentTabEnum.BidHistory => Ok(await mediator.Send(new GetAuctionBidsQuery { AuctionId = auctionId, PageSize = pageSize, PageNumber = pageNumber })),
+            _ => BadRequest("Invalid tab")
+        };
     }
 }
