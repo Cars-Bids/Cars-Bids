@@ -10,7 +10,7 @@ public class AuctionMostUpvotedCommentsSpec : PagedSpec<Comment>
         : base(pageNumber, pageSize)
     {
         Query.Where(c => c.AuctionId == auctionId)
-            .OrderByDescending(c => c.CommentUpvotes)
+            .OrderByDescending(c => c.CommentUpvotes.Count)
             .ThenByDescending(c => c.CreatedAt)
             .ThenByDescending(c => c.Id)
             .Include(c => c.User);
