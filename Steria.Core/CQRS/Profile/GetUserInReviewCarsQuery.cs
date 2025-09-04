@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Steria.Core.CQRS.Profile;
 
-public class GetUserInReviewCarsQuery : IRequest<PagedResult<CarDto>>
+public class GetUserInReviewCarsQuery : IRequest<PagedResult<ProfileEndedCarDto>>
 {
     public int UserId { get; set; }
     public int PageNumber { get; set; }
@@ -24,20 +24,20 @@ public class GetUserInReviewCarsQuery : IRequest<PagedResult<CarDto>>
 public class GetUserInReviewCarsHandler(
     IGenericRepository<Car> carRepository,
     IMapper mapper
-    ) : IRequestHandler<GetUserInReviewCarsQuery, PagedResult<CarDto>>
+    ) : IRequestHandler<GetUserInReviewCarsQuery, PagedResult<ProfileEndedCarDto>>
 {
-    public async Task<PagedResult<CarDto>> Handle(GetUserInReviewCarsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<ProfileEndedCarDto>> Handle(GetUserInReviewCarsQuery request, CancellationToken cancellationToken)
     {
         var spec = new UserInReviewCarsSpec(request.UserId, request.PageNumber, request.PageSize);
         var cars = await carRepository.GetListBySpec(spec, cancellationToken);
 
-        var carDtos = mapper.Map<List<CarDto>>(cars);
+        var ProfileEndedCarDtos = mapper.Map<List<ProfileEndedCarDto>>(cars);
 
         var totalCount = await carRepository.CountAsync(spec, cancellationToken);
 
-        return new PagedResult<CarDto>
+        return new PagedResult<ProfileEndedCarDto>
         {
-            Items = carDtos,
+            Items = ProfileEndedCarDtos,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize

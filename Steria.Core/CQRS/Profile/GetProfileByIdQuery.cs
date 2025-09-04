@@ -1,11 +1,11 @@
-using System.Net;
-using System.Security.Claims;
 using AutoMapper;
-using MediatR;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Exceptions;
 using Steria.Core.Interfaces;
+using Steria.Core.Specification.ProfileSpec;
+using MediatR;
+using System.Net;
 
 namespace Steria.Core.CQRS.Profile;
 
@@ -15,15 +15,20 @@ public class GetProfileByIdQuery : IRequest<ProfileDto?>
 }
 
 public class GetProfileByIdHandler(
-    IMapper mapper,
-    IGenericRepository<User> repository
+    IGenericRepository<User> repository,
+    IMapper mapper
     ) : IRequestHandler<GetProfileByIdQuery, ProfileDto?>
 {
     public async Task<ProfileDto?> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
-        var profile = await repository.GetByIdAsync(request.UserId)
-            ?? throw new HttpException("profile not found", HttpStatusCode.NotFound);
+        var spec = new UserProfileSpec(request.UserId);
+        var profile = await repository.GetItemBySpec(spec, cancellationToken);
 
-        return mapper.Map<ProfileDto>(profile);
+        if (profile == null)
+        {
+            throw new HttpException("Profile not found", HttpStatusCode.NotFound);
+        }
+
+        return profile;
     }
 }

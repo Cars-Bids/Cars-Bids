@@ -93,7 +93,7 @@ public class ProfileController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("auction-comments")]
-    public async Task<ActionResult<PagedResult<CommentDto>>> GetUserAuctionComments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<PagedResult<UserCommentDto>>> GetUserAuctionComments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var query = new GetUserAuctionCommentsQuery(userId, pageNumber, pageSize);
@@ -118,10 +118,22 @@ public class ProfileController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("ended-auctions")]
-    public async Task<ActionResult<PagedResult<AuctionDto>>> GetUserEndedAuctions([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<PagedResult<AuctionWithCarDto>>> GetUserEndedAuctions([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var query = new GetUserEndedAuctionsQuery(userId, pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("wishlist")]
+    public async Task<ActionResult<PagedResult<WishlistItemDto>>> GetWishlist(
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10,
+    CancellationToken cancellationToken = default)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetUserWishlistQuery(userId, pageNumber, pageSize);
         var result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }

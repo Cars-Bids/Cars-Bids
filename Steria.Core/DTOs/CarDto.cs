@@ -8,7 +8,6 @@ public class CarDto
     public int Id { get; set; }
     public int Year { get; set; }
     public string? Vin { get; set; }
-    public string? Description { get; set; }
     public string? ExteriorColor { get; set; }
     public string? InteriorColor { get; set; }
     public int Mileage { get; set; }
@@ -19,7 +18,7 @@ public class CarDto
     public int Speeds { get; set; }
     public CarStatus Status { get; set; }   
     public DateTime CreatedAt { get; set; }
-    public int? AssingId { get; set; }
+    public int? ManagerId { get; set; }
     public int OwnerId { get; set; }
     public int BodyStyleId { get; set; }
     public int ModelId { get; set; }

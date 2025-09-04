@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Steria.Core.CQRS.Profile;
 
-public class GetUserAuctionCommentsQuery : IRequest<PagedResult<CommentWithNameDto>>
+public class GetUserAuctionCommentsQuery : IRequest<PagedResult<UserCommentDto>>
 {
     public int UserId { get; set; }
     public int PageNumber { get; set; }
@@ -24,20 +24,20 @@ public class GetUserAuctionCommentsQuery : IRequest<PagedResult<CommentWithNameD
 public class GetUserAuctionCommentsHandler(
     IGenericRepository<Comment> commentRepository,
     IMapper mapper
-    ) : IRequestHandler<GetUserAuctionCommentsQuery, PagedResult<CommentWithNameDto>>
+    ) : IRequestHandler<GetUserAuctionCommentsQuery, PagedResult<UserCommentDto>>
 {
-    public async Task<PagedResult<CommentWithNameDto>> Handle(GetUserAuctionCommentsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<UserCommentDto>> Handle(GetUserAuctionCommentsQuery request, CancellationToken cancellationToken)
     {
         var spec = new UserAuctionCommentsSpec(request.UserId, request.PageNumber, request.PageSize);
         var comments = await commentRepository.GetListBySpec(spec, cancellationToken);
 
-        var сommentWithNameDtos = mapper.Map<List<CommentWithNameDto>>(comments);
+        var userCommentDtos = mapper.Map<List<UserCommentDto>>(comments);
 
         var totalCount = await commentRepository.CountAsync(spec, cancellationToken);
 
-        return new PagedResult<CommentWithNameDto>
+        return new PagedResult<UserCommentDto>
         {
-            Items = сommentWithNameDtos,
+            Items = userCommentDtos,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize

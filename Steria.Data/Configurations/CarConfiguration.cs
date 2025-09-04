@@ -16,9 +16,6 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.HasIndex(c => c.Vin)
             .IsUnique();
         
-        builder.Property(c => c.Description)
-            .HasColumnType("text");
-        
         builder.Property(c => c.ExteriorColor)
             .HasMaxLength(50);
         
@@ -48,7 +45,7 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
 
         builder.HasOne(c => c.Assing)
             .WithMany(u => u.AssingCars)
-            .HasForeignKey(c => c.AssingId);
+            .HasForeignKey(c => c.ManagerId);
 
         builder.HasOne(c => c.Owner)
             .WithMany(u => u.OwnedCars)

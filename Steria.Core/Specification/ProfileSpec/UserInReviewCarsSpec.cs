@@ -11,7 +11,8 @@ public class UserInReviewCarsSpec : PagedSpec<Car>
         : base(pageNumber, pageSize)
     {
         Query
-            .Where(car => car.OwnerId == userId && car.Status == CarStatus.inReview)
+            .Where(car => car.OwnerId == userId &&
+                (car.Status == CarStatus.inReview || car.Status == CarStatus.inPending))
             .Include(car => car.Model)
             .ThenInclude(model => model.Make)
             .Include(car => car.BodyStyle)
