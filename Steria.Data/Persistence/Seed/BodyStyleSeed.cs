@@ -1,6 +1,7 @@
 using Steria.Core.Entities;
 using Steria.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Steria.Core.Specification.СommonSpec;
 
 namespace Steria.Data.Persistence.Seed;
 
@@ -10,12 +11,10 @@ public class BodyStyleSeed(
 {
     public async Task SeedAsync()
     {
-        // Отримуємо всі існуючі стилі з бази
-        var existingStyles = await bodyStyleRepository.GetAsync();
-
-        // Перевіряємо, чи є вже записи в базі
-        if (!existingStyles.Any())
-        {
+        var existing = await bodyStyleRepository.GetItemBySpec(new FirstRecordSpec<BodyStyle>());
+        
+        if (existing is not null) return;
+        
             List<BodyStyle> bodyStyles =
             [
                 new() { StyleName = "Sedan" },
@@ -62,6 +61,5 @@ public class BodyStyleSeed(
             ];
 
             await bodyStyleRepository.InsertRangeAsync(bodyStyles);
-        }
     }
 }

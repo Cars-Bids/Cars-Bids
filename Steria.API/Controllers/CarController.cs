@@ -57,4 +57,12 @@ public class CarController(IMediator mediator) : ControllerBase
         await mediator.Send(new DeleteCarByIdCommand { Id = id });
         return Ok();
     }
+
+    [HttpPost("/uploadImages")]
+    [AllowAnonymous]
+    public async Task<IActionResult> UploadImages([FromForm] UploadImagesQuery query)
+    {
+        var res = await mediator.Send(query);
+        return Ok(res);
+    }
 }

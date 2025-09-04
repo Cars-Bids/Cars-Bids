@@ -2,7 +2,7 @@
 
 namespace Steria.Core.Entities;
 
-public class User : IdentityUser<int> //TODO: add followers and following
+public class User : IdentityUser<int>
 {
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? ProfilePictureUrl { get; set; }
@@ -24,5 +24,6 @@ public class User : IdentityUser<int> //TODO: add followers and following
     public ICollection<UserNotification>? UserNotifications { get; set; }
     public ICollection<UserFollow> Followers { get; set; }
     public ICollection<UserFollow> Following { get; set; }
+    public ICollection<CommentUpvote> CommentUpvotes { get; set; }
     
 }

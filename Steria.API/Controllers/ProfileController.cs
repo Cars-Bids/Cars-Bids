@@ -71,7 +71,7 @@ public class ProfileController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(query, cancellationToken);
         return Ok(result);
     }
-
+    
     [HttpPut("notification-settings")]
     public async Task<IActionResult> UpdateNotificationSettings(UpdateUserNotificationSettingsCommand cmd)
     {
@@ -81,7 +81,6 @@ public class ProfileController(IMediator mediator) : ControllerBase
         await mediator.Send(cmd);
         return Ok();
     }
-    
 
     [HttpGet("in-review-cars")]
     public async Task<ActionResult<PagedResult<CarDto>>> GetInReviewCars([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)

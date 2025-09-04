@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Steria.Data.Persistence;
@@ -11,9 +12,11 @@ using Steria.Data.Persistence;
 namespace Steria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250829131435_CarUpdate")]
+    partial class CarUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,9 +234,6 @@ namespace Steria.Data.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsInspected")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("SellerId")
                         .HasColumnType("integer");
 
@@ -318,10 +318,13 @@ namespace Steria.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BodyStyleId")
+                    b.Property<int?>("AssingId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ChatId")
+                    b.Property<int>("BodyStyleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ChatId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -329,43 +332,37 @@ namespace Steria.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Drivetrain")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
                     b.Property<string>("Engine")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Equipment")
-                        .HasColumnType("text");
 
                     b.Property<string>("ExteriorColor")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Flaws")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Highlights")
-                        .HasColumnType("text");
 
                     b.Property<string>("InteriorColor")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<bool>("IsModified")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsOnSaleElsewhere")
+                    b.Property<bool>("IsInspected")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Mileage")
                         .HasColumnType("integer");
@@ -373,25 +370,13 @@ namespace Steria.Data.Migrations
                     b.Property<int>("ModelId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Modifications")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OtherItems")
-                        .HasColumnType("text");
+                    b.Property<bool>("OnReserve")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("OwnerId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("OwnershipHistory")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SellerNotes")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ServiceHistory")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("Speeds")
+                    b.Property<int>("Speeds")
                         .HasColumnType("integer");
 
                     b.Property<string>("Status")
@@ -404,9 +389,6 @@ namespace Steria.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("VideoLinks")
-                        .HasColumnType("text");
-
                     b.Property<string>("Vin")
                         .IsRequired()
                         .HasMaxLength(17)
@@ -417,12 +399,12 @@ namespace Steria.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AssingId");
+
                     b.HasIndex("BodyStyleId");
 
                     b.HasIndex("ChatId")
                         .IsUnique();
-
-                    b.HasIndex("ManagerId");
 
                     b.HasIndex("ModelId");
 
@@ -569,9 +551,6 @@ namespace Steria.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<int?>("ReplyId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("text");
@@ -583,29 +562,9 @@ namespace Steria.Data.Migrations
 
                     b.HasIndex("AuctionId");
 
-                    b.HasIndex("ReplyId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Steria.Core.Entities.CommentUpvote", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("UserId", "CommentId");
-
-                    b.HasIndex("CommentId");
-
-                    b.ToTable("CommentUpvote");
                 });
 
             modelBuilder.Entity("Steria.Core.Entities.EmojiReaction", b =>
@@ -670,7 +629,9 @@ namespace Steria.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MakeId", "Name")
+                    b.HasIndex("MakeId");
+
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Models");
@@ -1121,17 +1082,21 @@ namespace Steria.Data.Migrations
 
             modelBuilder.Entity("Steria.Core.Entities.Car", b =>
                 {
+                    b.HasOne("Steria.Core.Entities.User", "Assing")
+                        .WithMany("AssingCars")
+                        .HasForeignKey("AssingId");
+
                     b.HasOne("Steria.Core.Entities.BodyStyle", "BodyStyle")
                         .WithMany("Cars")
-                        .HasForeignKey("BodyStyleId");
+                        .HasForeignKey("BodyStyleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Steria.Core.Entities.Chat", "Chat")
                         .WithOne("Car")
-                        .HasForeignKey("Steria.Core.Entities.Car", "ChatId");
-
-                    b.HasOne("Steria.Core.Entities.User", "Manager")
-                        .WithMany("AssingCars")
-                        .HasForeignKey("ManagerId");
+                        .HasForeignKey("Steria.Core.Entities.Car", "ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Steria.Core.Entities.Model", "Model")
                         .WithMany("Cars")
@@ -1145,11 +1110,11 @@ namespace Steria.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Assing");
+
                     b.Navigation("BodyStyle");
 
                     b.Navigation("Chat");
-
-                    b.Navigation("Manager");
 
                     b.Navigation("Model");
 
@@ -1205,11 +1170,6 @@ namespace Steria.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Steria.Core.Entities.Comment", "ReplyedTo")
-                        .WithMany("Replies")
-                        .HasForeignKey("ReplyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Steria.Core.Entities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
@@ -1217,27 +1177,6 @@ namespace Steria.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Auction");
-
-                    b.Navigation("ReplyedTo");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Steria.Core.Entities.CommentUpvote", b =>
-                {
-                    b.HasOne("Steria.Core.Entities.Comment", "Comment")
-                        .WithMany("CommentUpvotes")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Steria.Core.Entities.User", "User")
-                        .WithMany("CommentUpvotes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
 
                     b.Navigation("User");
                 });
@@ -1426,13 +1365,6 @@ namespace Steria.Data.Migrations
                     b.Navigation("UserChatMessageReactions");
                 });
 
-            modelBuilder.Entity("Steria.Core.Entities.Comment", b =>
-                {
-                    b.Navigation("CommentUpvotes");
-
-                    b.Navigation("Replies");
-                });
-
             modelBuilder.Entity("Steria.Core.Entities.Make", b =>
                 {
                     b.Navigation("Models");
@@ -1466,8 +1398,6 @@ namespace Steria.Data.Migrations
                     b.Navigation("Bids");
 
                     b.Navigation("ChatMessages");
-
-                    b.Navigation("CommentUpvotes");
 
                     b.Navigation("Comments");
 

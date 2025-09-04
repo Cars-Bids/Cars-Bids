@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Steria.Data.Persistence;
@@ -11,9 +12,11 @@ using Steria.Data.Persistence;
 namespace Steria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250831203716_ModelFix")]
+    partial class ModelFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -588,24 +591,6 @@ namespace Steria.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Steria.Core.Entities.CommentUpvote", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("UserId", "CommentId");
-
-                    b.HasIndex("CommentId");
-
-                    b.ToTable("CommentUpvote");
                 });
 
             modelBuilder.Entity("Steria.Core.Entities.EmojiReaction", b =>
@@ -1223,25 +1208,6 @@ namespace Steria.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Steria.Core.Entities.CommentUpvote", b =>
-                {
-                    b.HasOne("Steria.Core.Entities.Comment", "Comment")
-                        .WithMany("CommentUpvotes")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Steria.Core.Entities.User", "User")
-                        .WithMany("CommentUpvotes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Steria.Core.Entities.EmojiReaction", b =>
                 {
                     b.HasOne("Steria.Core.Entities.UserChatMessageReaction", "UserChatMessageReaction")
@@ -1428,8 +1394,6 @@ namespace Steria.Data.Migrations
 
             modelBuilder.Entity("Steria.Core.Entities.Comment", b =>
                 {
-                    b.Navigation("CommentUpvotes");
-
                     b.Navigation("Replies");
                 });
 
@@ -1466,8 +1430,6 @@ namespace Steria.Data.Migrations
                     b.Navigation("Bids");
 
                     b.Navigation("ChatMessages");
-
-                    b.Navigation("CommentUpvotes");
 
                     b.Navigation("Comments");
 
