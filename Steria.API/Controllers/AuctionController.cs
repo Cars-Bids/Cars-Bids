@@ -1,8 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Steria.Core.CQRS.Auctions;
+using System.Security.Claims;
 
 namespace Steria.API.Controllers;
 
@@ -28,6 +29,19 @@ public class AuctionsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         var auction = await mediator.Send(new GetAuctionByIdQuery { Id = id });
+        return Ok(auction);
+    }
+
+    [HttpGet("detailed/{id}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetDetailedById([FromRoute] int id)
+    {
+        int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+        var auction = await mediator.Send(new GetAuctionDetailedByIdQuery 
+        { 
+            AuctionId = id,
+            UserId = userId
+        });
         return Ok(auction);
     }
 
