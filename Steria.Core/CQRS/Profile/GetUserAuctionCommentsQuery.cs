@@ -33,7 +33,8 @@ public class GetUserAuctionCommentsHandler(
 
         var userCommentDtos = mapper.Map<List<UserCommentDto>>(comments);
 
-        var totalCount = await commentRepository.CountAsync(spec, cancellationToken);
+        var countSpec = new UserAuctionCommentsCountSpec(request.UserId);
+        var totalCount = await commentRepository.CountAsync(countSpec, cancellationToken);
 
         return new PagedResult<UserCommentDto>
         {

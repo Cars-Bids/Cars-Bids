@@ -12,11 +12,17 @@ public class UserInReviewCarsSpec : PagedSpec<Car>
     {
         Query
             .Where(car => car.OwnerId == userId &&
-                (car.Status == CarStatus.inReview || car.Status == CarStatus.inPending))
+                (
+                    car.Status == CarStatus.inReview
+                    || car.Status == CarStatus.inPending
+                    || (car.Auction.Status == AuctionStatus.Pending && car.Status == CarStatus.Approved)
+                )
+            )
             .Include(car => car.Model)
-            .ThenInclude(model => model.Make)
+                .ThenInclude(model => model.Make)
             .Include(car => car.BodyStyle)
             .Include(car => car.Images.Where(img => img.ImageCategory == ImageCategory.Main).Take(1))
+            .Include(car => car.Auction)
             .AsNoTracking();
 
         Query.OrderByDescending(car => car.CreatedAt);

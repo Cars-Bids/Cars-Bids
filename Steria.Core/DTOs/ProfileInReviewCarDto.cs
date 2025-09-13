@@ -1,7 +1,11 @@
-﻿using Steria.Core.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Steria.Core.Enums;
 
 namespace Steria.Core.DTOs;
-public class ProfileEndedCarDto
+public class ProfileInReviewCarDto
 {
     public int Id { get; set; }
     public int Year { get; set; }
@@ -21,6 +25,7 @@ public class ProfileEndedCarDto
     public string BodyStyle { get; set; }
     public string Model { get; set; }
     public string Make { get; set; }
-    public string MainImage { get; set; } = null!;
-    
+    public string OtherImage { get; set; } = null!;
+
+    public AuctionDto? Auction { get; set; }
 }

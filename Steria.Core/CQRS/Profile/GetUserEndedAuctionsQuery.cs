@@ -33,7 +33,7 @@ public class GetUserEndedAuctionsHandler(
         var spec = new UserEndedAuctionsSpec(request.UserId, request.PageNumber, request.PageSize);
         var auctions = await auctionRepository.GetListBySpec(spec, cancellationToken);
 
-        // Optional: Log raw data for debugging
+        // Логування для дебагу (опціонально)
         foreach (var auction in auctions)
         {
             logger.LogInformation("Auction ID: {Id}, Car ID: {CarId}, Car Name: {CarName}, Main Image: {MainImage}, Status: {Status}",
@@ -46,7 +46,9 @@ public class GetUserEndedAuctionsHandler(
 
         var auctionWithCarDtos = mapper.Map<List<AuctionWithCarDto>>(auctions);
 
-        var totalCount = await auctionRepository.CountAsync(spec, cancellationToken);
+        // Використовуємо специфікацію для підрахунку без пагінації
+        var countSpec = new UserEndedAuctionsCountSpec(request.UserId);
+        var totalCount = await auctionRepository.CountAsync(countSpec, cancellationToken);
 
         return new PagedResult<AuctionWithCarDto>
         {

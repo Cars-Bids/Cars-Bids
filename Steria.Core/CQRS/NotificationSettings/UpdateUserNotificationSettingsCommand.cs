@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Interfaces;
@@ -12,22 +13,25 @@ public class UpdateUserNotificationSettingsCommand : IRequest
 }
 
 public class UpdateUserNotificationSettingsCommandHandler(ICacheService cacheService,
-                                                          IGenericRepository<UserNotificationSetting> settingRepository) : IRequestHandler<UpdateUserNotificationSettingsCommand>
+                                                          IGenericRepository<UserNotificationSetting> settingRepository, IMapper mapper) : IRequestHandler<UpdateUserNotificationSettingsCommand>
 {
     public async Task Handle(UpdateUserNotificationSettingsCommand request, CancellationToken cancellationToken)
     {
         var userSettings = await cacheService.GetUserSettingsAsync(request.UserId);
         var changedSettings = new List<UserNotificationSetting>();
+
         foreach (var dto in request.Settings)
         {
-            var setting = userSettings.FirstOrDefault(s => s.NotificationType.Key == dto.NotificationTypeKey);
+            var settingDto = userSettings.FirstOrDefault(s => s.NotificationType.Key == dto.NotificationTypeKey);
+            if (settingDto is null) continue;
+            if (settingDto.NotificationType.IsMandatory) continue;
 
+            var setting = await settingRepository.GetByIdAsync(settingDto.Id);
             if (setting is null) continue;
-            if (setting.NotificationType.IsMandatory) continue;
 
             setting.SendEmail = dto.SendEmail;
             setting.SendInSite = dto.SendInSite;
-            
+
             changedSettings.Add(setting);
         }
 

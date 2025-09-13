@@ -34,7 +34,7 @@ public class UserWishlistSpec : Specification<Wishlist, WishlistItemDto>
             CurrentPrice = w.Auction.CurrentPrice,
             StartTime = w.Auction.StartTime,
             EndTime = w.Auction.EndTime,
-            Status = w.Auction.Status.ToString(),
+            Status = w.Auction.Status,
             CarId = w.Auction.Car.Id,
             CarName = $"{w.Auction.Car.Model.Make.Name} {w.Auction.Car.Model.Name}",
             Year = w.Auction.Car.Year,
@@ -44,8 +44,8 @@ public class UserWishlistSpec : Specification<Wishlist, WishlistItemDto>
             ExteriorColor = w.Auction.Car.ExteriorColor,
             InteriorColor = w.Auction.Car.InteriorColor,
             Engine = w.Auction.Car.Engine,
-            Drivetrain = w.Auction.Car.Drivetrain.ToString(),
-            TransmissionType = w.Auction.Car.TransmissionType.ToString(),
+            Drivetrain = (DrivetrainType)w.Auction.Car.Drivetrain,
+            TransmissionType = w.Auction.Car.TransmissionType,
             MainImage = w.Auction.Car.Images
                 .Where(img => img.ImageCategory == ImageCategory.Main || img.OrderNumber == 1)
                 .Select(img => img.ImageUrl)

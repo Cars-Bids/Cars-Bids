@@ -1,4 +1,6 @@
-﻿namespace Steria.Core.DTOs;
+﻿using Steria.Core.Enums;
+
+namespace Steria.Core.DTOs;
 
 public class AuctionWithCarDto
 {
@@ -12,5 +14,5 @@ public class AuctionWithCarDto
     public DateTime EndTime { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? ApprovedAt { get; set; }
-    public string Status { get; set; } = null!; // Changed from AuctionStatus to string
+    public AuctionStatus Status { get; set; }
 }
