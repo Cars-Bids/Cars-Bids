@@ -9,6 +9,8 @@ public class NotificationTypeDto
     public string RedirectRoute { get; set; } = null!;
     public NotificationSource SourceType { get; set; }
     public string Description { get; set; } = null!;
-    public bool DefaultSendEmail { get; set; }
-    public bool DefaultSendSite { get; set; }
+    //public bool DefaultSendEmail { get; set; }
+    //public bool DefaultSendSite { get; set; }
+    public bool IsMandatory { get; set; }
+
 }

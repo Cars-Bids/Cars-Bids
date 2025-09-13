@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Storage;
 using Ardalis.Specification;
+using Steria.Core.Entities;
 
 namespace Steria.Core.Interfaces;
 
@@ -30,4 +31,6 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
     Task<int> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default);
     Task<int> CountUniqueCarsAsync(int userId, CancellationToken cancellationToken = default);
+    Task<List<Bid>> GetLatestUniqueBidsByUserAsync(int userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+    Task<Dictionary<int, int>> GetBidCountsForCarIdsAsync(int userId, IEnumerable<int> carIds, CancellationToken cancellationToken = default);
 }

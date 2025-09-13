@@ -170,4 +170,64 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             .CountAsync(cancellationToken);
     }
 
+    public async Task<List<Bid>> GetLatestUniqueBidsByUserAsync(
+    int userId,
+    int pageNumber,
+    int pageSize,
+    CancellationToken cancellationToken = default)
+    {
+        if (typeof(TEntity) != typeof(Bid))
+            throw new InvalidOperationException("GetLatestUniqueBidsByUserAsync is only supported for Bid entities.");
+
+        // Підзапит: останній час ставки по кожній машині
+        var latestBidTimes = context.Set<Bid>()
+            .Where(b => b.UserId == userId)
+            .GroupBy(b => b.Auction.CarId)
+            .Select(g => new
+            {
+                CarId = g.Key,
+                LastBidTime = g.Max(b => b.BidTime)
+            });
+
+        // Join: витягуємо повні Bid, які співпали по CarId + часу
+        var query = from b in context.Set<Bid>()
+                    join lb in latestBidTimes
+                        on new { CarId = b.Auction.CarId, BidTime = b.BidTime }
+                        equals new { CarId = lb.CarId, BidTime = lb.LastBidTime }
+                    where b.UserId == userId
+                    select b;
+
+        query = query
+            .Include(b => b.Auction).ThenInclude(a => a.Car)
+                .ThenInclude(c => c.Images)
+            .Include(b => b.Auction).ThenInclude(a => a.Car)
+                .ThenInclude(c => c.Model).ThenInclude(m => m.Make)
+            .Include(b => b.Auction).ThenInclude(a => a.Car)
+                .ThenInclude(c => c.BodyStyle)
+            .AsNoTracking()
+            .OrderByDescending(b => b.BidTime)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize);
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+
+    public async Task<Dictionary<int, int>> GetBidCountsForCarIdsAsync(int userId, IEnumerable<int> carIds, CancellationToken cancellationToken = default)
+    {
+        if (typeof(TEntity) != typeof(Bid))
+            throw new InvalidOperationException("GetBidCountsForCarIdsAsync is only supported for Bid entities.");
+
+        var ids = carIds.ToList();
+        if (!ids.Any())
+            return new Dictionary<int, int>();
+
+        var counts = await context.Set<Bid>()
+            .Where(b => b.UserId == userId && ids.Contains(b.Auction.CarId))
+            .GroupBy(b => b.Auction.CarId)
+            .Select(g => new { CarId = g.Key, Count = g.Count() })
+            .ToListAsync(cancellationToken);
+
+        return counts.ToDictionary(x => x.CarId, x => x.Count);
+    }
 }

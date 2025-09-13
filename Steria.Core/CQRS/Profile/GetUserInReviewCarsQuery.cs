@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
-using Steria.Core.Enums;
 using Steria.Core.Interfaces;
 using Steria.Core.Specification.Profile;
 using MediatR;
 
 namespace Steria.Core.CQRS.Profile;
 
-public class GetUserInReviewCarsQuery : IRequest<PagedResult<CarDto>>
+public class GetUserInReviewCarsQuery : IRequest<PagedResult<ProfileInReviewCarDto>>
 {
     public int UserId { get; set; }
     public int PageNumber { get; set; }
@@ -24,20 +23,21 @@ public class GetUserInReviewCarsQuery : IRequest<PagedResult<CarDto>>
 public class GetUserInReviewCarsHandler(
     IGenericRepository<Car> carRepository,
     IMapper mapper
-    ) : IRequestHandler<GetUserInReviewCarsQuery, PagedResult<CarDto>>
+    ) : IRequestHandler<GetUserInReviewCarsQuery, PagedResult<ProfileInReviewCarDto>>
 {
-    public async Task<PagedResult<CarDto>> Handle(GetUserInReviewCarsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<ProfileInReviewCarDto>> Handle(GetUserInReviewCarsQuery request, CancellationToken cancellationToken)
     {
         var spec = new UserInReviewCarsSpec(request.UserId, request.PageNumber, request.PageSize);
         var cars = await carRepository.GetListBySpec(spec, cancellationToken);
 
-        var carDtos = mapper.Map<List<CarDto>>(cars);
+        var ProfileInReviewCarDtos = mapper.Map<List<ProfileInReviewCarDto>>(cars);
 
-        var totalCount = await carRepository.CountAsync(spec, cancellationToken);
+        var countSpec = new UserInReviewCarsCountSpec(request.UserId);
+        var totalCount = await carRepository.CountAsync(countSpec, cancellationToken);
 
-        return new PagedResult<CarDto>
+        return new PagedResult<ProfileInReviewCarDto>
         {
-            Items = carDtos,
+            Items = ProfileInReviewCarDtos,
             TotalCount = totalCount,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize

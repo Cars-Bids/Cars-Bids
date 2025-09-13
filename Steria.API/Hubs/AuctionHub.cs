@@ -38,46 +38,6 @@ public class AuctionHub(IAuctionService auctionService, IMapper mapper) : Hub
         });
     }
 
-    public async Task SubscribeToUserAuctions()
-    {
-        var userId = Context.User?.FindFirst("nameid")?.Value;
-        if (!int.TryParse(userId, out var parsedUserId))
-        {
-            await Clients.Caller.SendAsync("SubscriptionFailed", "You are not authorized");
-            return;
-        }
-
-        await Groups.AddToGroupAsync(Context.ConnectionId, $"user-auctions-{parsedUserId}");
-
-        var auctions = await auctionService.GetUserAuctions(parsedUserId);
-        await Clients.Caller.SendAsync("ReceiveUserAuctions", auctions.Select(a => new
-        {
-            AuctionId = a.Id,
-            CarId = a.CarId,
-            StartPrice = a.StartPrice,
-            CurrentPrice = a.CurrentPrice,
-            CurrentBidder = a.CurrentBidder,
-            StartTime = a.StartTime,
-            EndTime = a.EndTime,
-            Status = a.Status,
-            Timestamp = DateTime.UtcNow,
-            Car = new
-            {
-                Year = a.Car.Year,
-                Make = a.Car.Model.Make.Name,
-                Model = a.Car.Model.Name,
-                ExteriorColor = a.Car.ExteriorColor,
-                Mileage = a.Car.Mileage,
-                MainImage = a.Car.Images
-                    .Where(img => img.ImageCategory == ImageCategory.Main)
-                    .Select(img => img.ImageUrl)
-                    .FirstOrDefault() ?? a.Car.Images
-                    .Select(img => img.ImageUrl)
-                    .FirstOrDefault() ?? ""
-            }
-        }));
-    }
-
     public override async Task OnConnectedAsync()
     {
         var auctionId = Context.GetHttpContext()?.Request.Query["auctionId"];

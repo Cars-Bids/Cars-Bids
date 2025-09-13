@@ -23,6 +23,9 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car));
         CreateMap<Auction, CreateAuctionCommand>().ReverseMap();
         CreateMap<Auction, UpdateAuctionCommand>().ReverseMap();
+        CreateMap<Auction, AuctionWithCarDto>()
+            .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
+            .ReverseMap();
 
         CreateMap<BodyStyle, BodyStyleDto>().ReverseMap();
         CreateMap<BodyStyle, UpdateBodyStyleCommand>().ReverseMap();
@@ -48,14 +51,20 @@ public class AutoMapperProfile : Profile
         CreateMap<Car, UpdateCarCommand>().ReverseMap();
         CreateMap<Car, CreateCarCommand>().ReverseMap();
 
-        CreateMap<User, ProfileDto>().ReverseMap();
+        CreateMap<User, ProfileDto>()
+            .ForMember(dest => dest.FollowersCount, opt => opt.MapFrom(src => src.Followers.Count))
+            .ForMember(dest => dest.FollowingCount, opt => opt.MapFrom(src => src.Following.Count))
+            .ReverseMap();
+
         CreateMap<UpdateProfileCommand, User>()
             .ForMember(dest => dest.ProfilePictureUrl, opt => opt.Ignore());
 
         CreateMap<NotificationType, CreateNotificationTypeCommand>().ReverseMap();
         CreateMap<NotificationType, UpdateNotificationTypeCommand>().ReverseMap();
         CreateMap<NotificationType, NotificationTypeDto>().ReverseMap();
-        
+        CreateMap<UserNotificationSetting, UserNotificationSettingDto>().ReverseMap();
+            //.ForMember(dest => dest.NotificationType, opt => opt.MapFrom(src => src.NotificationType));
+
         CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
 
         CreateMap<ChatMessage, ChatMessageDto>()
@@ -94,12 +103,12 @@ public class AutoMapperProfile : Profile
                         }).ToList();
                 }
             });
-            
+
         CreateMap<RegisterCommand, User>();
 
         CreateMap<Bid, UserBiddedCarsDto>()
             .ForMember(dest => dest.CarId, opt => opt.MapFrom(src => src.Auction.CarId))
-            .ForMember(dest => dest.CarName, opt => opt.MapFrom(src => $"{src.Auction.Car.Model.Make.Name} {src.Auction.Car.Model.Name}"))
+            .ForMember(dest => dest.CarName, opt => opt.MapFrom(src => $"{src.Auction.Car.Year} {src.Auction.Car.Model.Make.Name} {src.Auction.Car.Model.Name}"))
             .ForMember(dest => dest.Engine, opt => opt.MapFrom(src => src.Auction.Car.Engine))
             .ForMember(dest => dest.Drivetrain, opt => opt.MapFrom(src => src.Auction.Car.Drivetrain.ToString()))
             .ForMember(dest => dest.Transmission, opt => opt.MapFrom(src => src.Auction.Car.TransmissionType.ToString()))
@@ -108,23 +117,48 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.InteriorColor, opt => opt.MapFrom(src => src.Auction.Car.InteriorColor));
 
         CreateMap<Comment, UserCommentDto>()
-            .ForMember(dest => dest.AuctionId, opt => opt.MapFrom(src => src.AuctionId))
             .ForMember(dest => dest.CarId, opt => opt.MapFrom(src => src.Auction.CarId))
-            .ForMember(dest => dest.CarName, opt => opt.MapFrom(src => $"{src.Auction.Car.Model.Make.Name} {src.Auction.Car.Model.Name}"))
-            .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+            .ForMember(dest => dest.CarName, opt => opt.MapFrom(src => $"{src.Auction.Car.Year} {src.Auction.Car.Model.Make.Name} {src.Auction.Car.Model.Name}"))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+            .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Auction.Car.Year))
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Auction.Car.Model.Make.Name))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Auction.Car.Model.Name))
+            .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.Auction.Car.BodyStyle))
+            .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src => src.Auction.Car.Images
+                .Where(img => img.ImageCategory == ImageCategory.Main || img.OrderNumber == 1)
+                .Select(img => img.ImageUrl)
+                .FirstOrDefault()));
+
+        CreateMap<Wishlist, WishlistItemDto>()
+            //.ForMember(dest => dest.CarName, opt => opt.MapFrom(src => $"{src.Auction.Car.Model.Make.Name} {src.Auction.Car.Model.Name}"))
+            .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Auction.Car.Year))
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Auction.Car.Model.Make.Name))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Auction.Car.Model.Name))
+            .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.Auction.Car.BodyStyle))
+            .ForMember(dest => dest.ExteriorColor, opt => opt.MapFrom(src => src.Auction.Car.ExteriorColor))
+            .ForMember(dest => dest.InteriorColor, opt => opt.MapFrom(src => src.Auction.Car.InteriorColor))
+            .ForMember(dest => dest.Engine, opt => opt.MapFrom(src => src.Auction.Car.Engine))
+            .ForMember(dest => dest.Drivetrain, opt => opt.MapFrom(src => src.Auction.Car.Drivetrain))
+            .ForMember(dest => dest.TransmissionType, opt => opt.MapFrom(src => src.Auction.Car.TransmissionType))
+            .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src => src.Auction.Car.Images
+                .Where(img => img.ImageCategory == ImageCategory.Main || img.OrderNumber == 1)
+                .Select(img => img.ImageUrl)
+                .FirstOrDefault()))
+            .ForMember(dest => dest.AddedAt, opt => opt.MapFrom(src => src.AddedAt));
+
 
         CreateMap<UserNotification, UserNotificationDto>()
             .ForMember(dest => dest.TypeKey, opt => opt.MapFrom(src => src.NotificationType.Key));
-        
+
+
         CreateMap<Car, CarPreviewDto>()
-            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => 
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                 $"{src.Engine}, {src.Drivetrain}, {(src.Speeds.HasValue ? $"{src.Speeds}-speed " : "")}{src.TransmissionType}"))
             .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model.Name))
             .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make.Name))
-            .ForMember(dest => dest.MainImageUrl, opt => opt.MapFrom(src => 
-                src.Images != null && src.Images.Any(img => img.ImageCategory == ImageCategory.Main) 
-                    ? src.Images.First(img => img.ImageCategory == ImageCategory.Main).ImageUrl 
+            .ForMember(dest => dest.MainImageUrl, opt => opt.MapFrom(src =>
+                src.Images != null && src.Images.Any(img => img.ImageCategory == ImageCategory.Main)
+                    ? src.Images.First(img => img.ImageCategory == ImageCategory.Main).ImageUrl
                     : null));
 
         CreateMap<Comment, AuctionActivityDto>()
@@ -136,5 +170,31 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.BidderId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.BidderName, opt => opt.MapFrom(src => src.User.UserName))
             .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.BidAmount));
+
+        CreateMap<Auction, AuctionWithCarDto>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
+        CreateMap<Car, ProfileEndedCarDto>()
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make.Name))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model.Name))
+            .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.BodyStyle.StyleName))
+            //.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src => src.Images
+                .Where(img => img.ImageCategory == ImageCategory.Main || img.OrderNumber == 1)
+                .Select(img => img.ImageUrl)
+                .FirstOrDefault() ?? "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"));
+
+        CreateMap<Car, ProfileInReviewCarDto>()
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make.Name))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model.Name))
+            .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.BodyStyle.StyleName))
+            //.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.OtherImage, opt => opt.MapFrom(src => src.Images
+                .Where(img => img.ImageCategory == ImageCategory.Other || img.OrderNumber == 1)
+                .Select(img => img.ImageUrl)
+                .FirstOrDefault() ?? "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
+            .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction));
+
+
     }
 }

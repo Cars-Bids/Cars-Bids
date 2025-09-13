@@ -11,12 +11,15 @@ public class UserEndedAuctionsSpec : PagedSpec<Auction>
         : base(pageNumber, pageSize)
     {
         Query
-            .Where(auction => auction.SellerId == userId && (auction.Status == AuctionStatus.Sold || auction.Status == AuctionStatus.Cancelled || auction.Status == AuctionStatus.NotSold))
+            .Where(auction => auction.SellerId == userId &&
+                (auction.Status == AuctionStatus.Sold ||
+                 auction.Status == AuctionStatus.Cancelled ||
+                 auction.Status == AuctionStatus.NotSold))
             .Include(auction => auction.Car)
-            .ThenInclude(car => car.Model)
-            .ThenInclude(model => model.Make)
+                .ThenInclude(car => car.Model)
+                    .ThenInclude(model => model.Make)
             .Include(auction => auction.Car)
-            .ThenInclude(car => car.Images)
+                .ThenInclude(car => car.Images.Where(img => img.ImageCategory == ImageCategory.Main || img.OrderNumber == 1))
             .AsNoTracking();
 
         Query.OrderByDescending(auction => auction.EndTime);
