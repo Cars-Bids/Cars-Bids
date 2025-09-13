@@ -7,6 +7,7 @@ using Steria.Core.CQRS.NotificationSettings;
 using Steria.Core.CQRS.Profile;
 using Steria.Core.DTOs;
 using Steria.Core.Interfaces;
+using Steria.Core.CQRS.Manager;
 
 namespace Steria.API.Controllers;
 
@@ -164,5 +165,21 @@ public class ProfileController(IMediator mediator, ICacheService cacheService) :
 
         return Ok(settings);
 
+    }
+    [HttpGet("in-pending-cars")]
+    public async Task<ActionResult<PagedResult<ProfileInReviewCarDto>>> GetInPendingCars([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var query = new GetAllInPendingCarsQuery(pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("managed-cars")]
+    public async Task<ActionResult<PagedResult<AuctionWithCarDto>>> GetManagedCars([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetManagedCarsQuery(userId, pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return Ok(result);
     }
 }
