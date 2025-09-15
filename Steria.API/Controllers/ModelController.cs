@@ -20,6 +20,14 @@ public class ModelController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("makeId={makeId}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAllByMakeId([FromRoute] int makeId)
+    {
+        var result = await mediator.Send(new GetAllModelsByMakeIdQuery { MakeId = makeId});
+        return Ok(result);
+    }
+
     [HttpGet("{id}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetById([FromRoute] int id)

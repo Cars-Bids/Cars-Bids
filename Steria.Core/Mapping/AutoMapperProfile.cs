@@ -136,5 +136,9 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.BidderId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.BidderName, opt => opt.MapFrom(src => src.User.UserName))
             .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.BidAmount));
+        
+        CreateMap<RequestNewCarCommand, Car>()
+            .ForMember(dest => dest.TransmissionType, opt => opt.MapFrom(src => (TransmissionType)src.transmissionId))
+            .ForMember(dest => dest.Images, opt => opt.Ignore());
     }
 }

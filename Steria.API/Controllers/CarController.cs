@@ -65,4 +65,13 @@ public class CarController(IMediator mediator) : ControllerBase
         var res = await mediator.Send(query);
         return Ok(res);
     }
+
+    [HttpPost("requestNewCar")]
+    public async Task<IActionResult> RequestNewCar([FromForm] RequestNewCarCommand command)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        command.userId = userId;
+        await mediator.Send(command);
+        return Ok();
+    }
 }
