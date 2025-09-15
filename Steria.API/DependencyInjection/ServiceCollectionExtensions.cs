@@ -32,6 +32,11 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddDbContextFactory<ApplicationDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")),
+            lifetime: ServiceLifetime.Scoped
+        );
+
         services.AddScoped<DataSeeder>();
 
 
@@ -45,7 +50,8 @@ public static class ServiceCollectionExtensions
                 });
       
         services.AddScoped<IDataSeederRepository, DataSeederRepository>();
-      
+        services.AddScoped<IAuctionRepository, AuctionRepository>();
+
         services.AddScoped<IGenericRepository<Auction>, GenericRepository<Auction>>();
         services.AddScoped<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
         services.AddScoped<IGenericRepository<BodyStyle>, GenericRepository<BodyStyle>>();

@@ -12,6 +12,12 @@ public class UserAuctionCommentsSpec : PagedSpec<Comment>
         Query
             .Where(comment => comment.Auction.SellerId == userId)
             .Include(comment => comment.Auction)
+                .ThenInclude(auction => auction.Car)
+                    .ThenInclude(car => car.Model)
+                        .ThenInclude(model => model.Make)
+            .Include(comment => comment.Auction)
+                .ThenInclude(auction => auction.Car)
+                    .ThenInclude(car => car.Images)
             .Include(comment => comment.User)
             .AsNoTracking();
 

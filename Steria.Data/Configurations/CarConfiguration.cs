@@ -12,57 +12,57 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.Property(c => c.Vin)
             .HasMaxLength(17)
             .IsRequired();
-        
+
         builder.HasIndex(c => c.Vin)
             .IsUnique();
-        
+
         builder.Property(c => c.Highlights)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.ServiceHistory)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.Equipment)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.Flaws)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.Modifications)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.OtherItems)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.OwnershipHistory)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.SellerNotes)
             .HasColumnType("text");
 
         builder.Property(c => c.VideoLinks)
             .HasColumnType("text");
-        
+
         builder.Property(c => c.ExteriorColor)
             .HasMaxLength(50);
-        
+
         builder.Property(c => c.InteriorColor)
             .HasMaxLength(50);
-        
+
         builder.Property(c => c.Location)
             .HasMaxLength(100);
-        
+
         builder.Property(c => c.Drivetrain)
             .HasConversion<string>()
             .HasMaxLength(10);
-        
+
         builder.Property(c => c.Engine)
             .HasMaxLength(50);
-        
+
         builder.Property(c => c.TransmissionType)
             .HasConversion<string>()
             .HasMaxLength(50);
-        
+
         builder.Property(c => c.Status)
             .HasConversion<string>()
             .HasMaxLength(50);
@@ -77,11 +77,11 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.HasOne(c => c.Owner)
             .WithMany(u => u.OwnedCars)
             .HasForeignKey(c => c.OwnerId);
-        
+
         builder.HasOne(c => c.BodyStyle)
             .WithMany(bs => bs.Cars)
             .HasForeignKey(c => c.BodyStyleId);
-        
+
         builder.HasOne(c => c.Model)
             .WithMany(m => m.Cars)
             .HasForeignKey(c => c.ModelId);

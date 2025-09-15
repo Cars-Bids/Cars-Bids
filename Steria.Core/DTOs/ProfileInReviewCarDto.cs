@@ -1,8 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Steria.Core.Enums;
 
 namespace Steria.Core.DTOs;
-
-public class CarDto
+public class ProfileInReviewCarDto
 {
     public int Id { get; set; }
     public int Year { get; set; }
@@ -15,11 +18,14 @@ public class CarDto
     public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int Speeds { get; set; }
-    public CarStatus Status { get; set; }   
+    public CarStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public int? ManagerId { get; set; }
     public int OwnerId { get; set; }
-    public int BodyStyleId { get; set; }
-    public int ModelId { get; set; }
-    public ICollection<CarImageDto>? Images { get; set; }
+    public string BodyStyle { get; set; }
+    public string Model { get; set; }
+    public string Make { get; set; }
+    public string OtherImage { get; set; } = null!;
+
+    public AuctionDto? Auction { get; set; }
 }

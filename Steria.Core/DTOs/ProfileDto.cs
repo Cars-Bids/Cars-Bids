@@ -1,4 +1,5 @@
 namespace Steria.Core.DTOs;
+
 public class ProfileDto
 {
     public int Id { get; set; }
@@ -7,4 +8,6 @@ public class ProfileDto
     public string? Bio { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int FollowersCount { get; set; }
+    public int FollowingCount { get; set; }
 }

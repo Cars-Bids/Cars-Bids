@@ -3,21 +3,15 @@ using Steria.Core.Entities;
 using Steria.Core.Enums;
 using Steria.Core.Specification.СommonSpec;
 
-namespace Steria.Core.Specification.Profile;
+namespace Steria.Core.Specification.Manager;
 
-public class UserInReviewCarsSpec : PagedSpec<Car>
+public class AllInPendingCarsSpec : PagedSpec<Car>
 {
-    public UserInReviewCarsSpec(int userId, int pageNumber, int pageSize)
+    public AllInPendingCarsSpec(int pageNumber, int pageSize)
         : base(pageNumber, pageSize)
     {
         Query
-            .Where(car => car.OwnerId == userId &&
-                (
-                    car.Status == CarStatus.inReview
-                    || car.Status == CarStatus.inPending
-                    || (car.Auction.Status == AuctionStatus.Pending && car.Status == CarStatus.Approved)
-                )
-            )
+            .Where(car => car.Status == CarStatus.inPending)
             .Include(car => car.Model)
                 .ThenInclude(model => model.Make)
             .Include(car => car.BodyStyle)
