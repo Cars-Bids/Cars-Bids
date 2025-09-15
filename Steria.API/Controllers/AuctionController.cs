@@ -68,4 +68,15 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         await mediator.Send(new DeleteAuctionByIdCommand { Id = id });
         return Ok();
     }
+
+    [HttpGet("active")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetActiveAuctions([FromQuery] int count = 10)
+    {
+        var auctions = await mediator.Send(new GetActiveAuctionsQuery
+        {
+            Count = count
+        });
+        return Ok(auctions);
+    }
 }
