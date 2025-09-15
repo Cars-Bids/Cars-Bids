@@ -17,6 +17,7 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
             {
                 Id = x.Id,
                 CarId = x.CarId,
+                Status = x.Status.ToString(),
                 BidsCount = x.Bids!.Count,
                 Seller = x.Seller.UserName,
                 SellerPhoto = x.Seller.ProfilePictureUrl,
@@ -25,7 +26,9 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
                 CurrentPrice = x.CurrentPrice,
                 EndTime = x.EndTime,
                 WatchersCount = x.Wishlists!.Count,
-                ViewsCount = 100,
+                ViewsCount = 0,
+                IsSeller = x.Seller.Id == userId,
+                IsInspected = x.IsInspected,
                 IsWatched = x.Wishlists!.Any(x => x.UserId == userId)
             })
             .FirstOrDefaultAsync();
@@ -153,6 +156,7 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
                 CurrentPrice = x.CurrentPrice,
                 StartTime = x.StartTime,
                 EndTime = x.EndTime,
+                IsInspected = x.IsInspected,
                 IsWatched = x.Wishlists!.Any(x => x.UserId == userId),
                 Location = x.Car.Location,
                 Title = $"{x.Car.Year} {x.Car.Model.Make.Name} {x.Car.Model.Name}",

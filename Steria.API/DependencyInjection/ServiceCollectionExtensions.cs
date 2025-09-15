@@ -1,5 +1,4 @@
-﻿using System.Text;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +20,7 @@ using Steria.Data.Persistence;
 using Steria.Data.Persistence.Repositories;
 using Steria.Data.Persistence.Seed;
 using Steria.Data.Services;
+using System.Text;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Steria.API.DependencyInjection;
@@ -88,6 +88,18 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IEmailQueue, EmailQueue>();
         services.AddHostedService<EmailBackgroundService>();
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                    .WithOrigins("http://localhost:8080")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials(); //SignalR
+            });
+        });
 
         services.AddSignalR();
         services.AddHostedService<AuctionHostedService>();

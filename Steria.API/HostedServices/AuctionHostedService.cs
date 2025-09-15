@@ -1,7 +1,7 @@
-﻿using Steria.Core.Enums;
+﻿using Steria.API.Hubs;
+using Steria.Core.Enums;
 using Steria.Core.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using Steria.API.Hubs;
 
 namespace Steria.API.HostedServices;
 
@@ -22,22 +22,19 @@ public class AuctionHostedService(
             foreach (var auction in auctions)
             {
                 //start pending auctions
-                if (auction.Status == AuctionStatus.Pending && auction.StartTime <= DateTime.UtcNow)
+                if (auction.Status is AuctionStatus.Pending && auction.StartTime <= DateTime.UtcNow)
                 {
                     auctionService.UpdateStatus(auction.Id, AuctionStatus.Active);
 
-                    await hubContext.Clients.Group(auction.Id.ToString()).SendAsync(
-                        "AuctionStarted",
-                        new {
-                            AuctionId = auction.Id,
-                            StartPrice = auction.StartPrice,
-                            EndTime = auction.EndTime
-                        }, 
-                        cancellationToken);
+                    await hubContext.Clients.Group($"auction-{auction.Id}").SendAsync("AuctionStarted",
+                        auction.Id,
+                        auction.StartPrice,
+                        auction.EndTime, 
+                    cancellationToken);
                 }
 
                 //finish expired auctions
-                if (auction.Status == AuctionStatus.Active && auction.EndTime <= DateTime.UtcNow)
+                if (auction.Status is AuctionStatus.Active && auction.EndTime <= DateTime.UtcNow)
                 {
                     var finalStatus = auction.CurrentPrice >= auction.StartPrice && auction.CurrentBidder is not null
                         ? AuctionStatus.Sold
@@ -45,15 +42,12 @@ public class AuctionHostedService(
 
                     auctionService.UpdateStatus(auction.Id, finalStatus);
 
-                    await hubContext.Clients.Group(auction.Id.ToString()).SendAsync(
-                        "AuctionEnded",
-                        new
-                        {
-                            AuctionId = auction.Id,
-                            FinalBid = auction.CurrentPrice,
-                            Winner = auction.CurrentBidder
-                        },
-                        cancellationToken);
+                    await hubContext.Clients.Group($"auction-{auction.Id}").SendAsync("AuctionFinished",
+                        auction.Id,
+                        auction.CurrentPrice,
+                        auction.CurrentBidder ?? "no winner",
+                        auction.EndTime,
+                    cancellationToken);
                 }
             }
             await Task.Delay(1000, cancellationToken);

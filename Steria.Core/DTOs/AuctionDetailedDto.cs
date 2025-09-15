@@ -18,6 +18,7 @@ public class OtherAuction
     public required DateTime StartTime { get; set; }
     public required DateTime EndTime { get; set; }
     public required bool IsWatched { get; set; }
+    public required bool IsInspected { get; set; }
     public required string? Location { get; set; }
     public required string Title { get; set; }
     public required string Subtitle { get; set; }
@@ -27,6 +28,7 @@ public class AuctionData
 {
     public required int Id { get; set; }
     public required int CarId { get; set; }
+    public required string Status { get; set; }
     public required string? Seller { get; set; }
     public required string? SellerPhoto { get; set; }
     public required decimal CurrentPrice { get; set; }
@@ -37,6 +39,8 @@ public class AuctionData
     public required int ViewsCount { get; set; }
     public required int WatchersCount { get; set; }
     public required bool IsWatched { get; set; }
+    public required bool IsSeller { get; set; }
+    public required bool IsInspected { get; set; }
 }
 
 public class CarData
