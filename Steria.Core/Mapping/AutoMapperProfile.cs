@@ -170,6 +170,10 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.BidderId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.BidderName, opt => opt.MapFrom(src => src.User.UserName))
             .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.BidAmount));
+        
+        CreateMap<RequestNewCarCommand, Car>()
+            .ForMember(dest => dest.TransmissionType, opt => opt.MapFrom(src => (TransmissionType)src.transmissionId))
+            .ForMember(dest => dest.Images, opt => opt.Ignore());
 
         CreateMap<Auction, AuctionWithCarDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
@@ -194,7 +198,5 @@ public class AutoMapperProfile : Profile
                 .Select(img => img.ImageUrl)
                 .FirstOrDefault() ?? "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
             .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction));
-
-
     }
 }

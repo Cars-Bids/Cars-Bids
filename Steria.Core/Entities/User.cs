@@ -7,6 +7,8 @@ public class User : IdentityUser<int>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? ProfilePictureUrl { get; set; }
     public string? Bio { get; set; }
+    public string? FullName { get; set; }
+    public string? PhoneNumber { get; set; }
 
     public ICollection<Car>? AssingCars { get; set; }
     public ICollection<Car>? OwnedCars { get; set; }
