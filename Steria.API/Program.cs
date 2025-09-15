@@ -19,24 +19,24 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 
-app.UseCors(cfg =>
-{
-    cfg.AllowAnyHeader();
-    cfg.AllowAnyMethod();
-    cfg.AllowAnyOrigin();
-});
+//app.UseCors(cfg =>
+//{
+//    cfg.AllowAnyHeader();
+//    cfg.AllowAnyMethod();
+//    cfg.AllowAnyOrigin();
+//});
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapHub<AuctionHub>("/auctionHub").RequireAuthorization();
 
 // app.Use(async (context, next) =>
 // {
 //     Console.WriteLine("Request path: " + context.Request.Path);
 //     await next.Invoke();
 // });
-
+app.MapHub<AuctionHub>("/hub/auction");
 app.MapHub<ChatHub>("/hub/chat");
 app.MapHub<NotificationHub>("/hub/notifications");
 
