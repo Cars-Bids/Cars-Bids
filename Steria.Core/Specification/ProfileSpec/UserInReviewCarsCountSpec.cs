@@ -15,7 +15,9 @@ public class UserInReviewCarsCountSpec : CountSpec<Car>
                 (
                     car.Status == CarStatus.inReview
                     || car.Status == CarStatus.inPending
-                    || (car.Auction.Status == AuctionStatus.Pending && car.Status == CarStatus.Approved)
+                    || car.Auction.Status == AuctionStatus.Pending
+                    || car.Auction.Status == AuctionStatus.New
+                    || car.Auction.Status == AuctionStatus.Approved
                 ))
             .AsNoTracking();
     }

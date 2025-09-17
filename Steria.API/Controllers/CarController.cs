@@ -74,4 +74,18 @@ public class CarController(IMediator mediator) : ControllerBase
         await mediator.Send(command);
         return Ok();
     }
+
+    [HttpPost("{carId}/assign-and-start-auction")]
+    [Authorize(Roles = "Manager")]
+    public async Task<IActionResult> AssignAndStartAuction([FromRoute] int carId)
+    {
+        var managerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var command = new AssignCarAndCreateAuctionCommand
+        {
+            CarId = carId,
+            ManagerId = managerId
+        };
+        await mediator.Send(command);
+        return Ok();
+    }
 }
