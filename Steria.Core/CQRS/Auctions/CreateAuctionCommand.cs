@@ -13,6 +13,7 @@ public class CreateAuctionCommand : IRequest
     public decimal StartPrice { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
+    public AuctionStatus Status { get; set; } = AuctionStatus.Pending;
 }
 
 public class CreateAuctionCommandHandler(
@@ -24,8 +25,9 @@ public class CreateAuctionCommandHandler(
     {
 
         var auction = mapper.Map<Auction>(cmd);
-        auction.CurrentPrice = 0;
-        auction.Status = AuctionStatus.Pending;
+        //auction.CurrentPrice = 0;
+        auction.CurrentPrice = cmd.StartPrice;
+        //auction.Status = AuctionStatus.Pending;
         auction.CreatedAt = DateTime.UtcNow;
 
         await auctionRepository.InsertAsync(auction);
