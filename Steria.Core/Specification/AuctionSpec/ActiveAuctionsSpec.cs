@@ -13,6 +13,11 @@ public class ActiveAuctionsSpec : Specification<Auction, Auction>
             .OrderByDescending(a => a.CreatedAt)
             .Take(count)
             .Include(a => a.Car)
+                .ThenInclude(c => c.Images
+                    .Where(img => img.ImageCategory == ImageCategory.Main || img.ImageCategory == ImageCategory.Exterior))
+            .Include(a => a.Car)
+                .ThenInclude(c => c.Model)
+                    .ThenInclude(m => m.Make)
             .Select(a => a);
     }
 }

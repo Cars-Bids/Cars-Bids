@@ -9,7 +9,7 @@ using Steria.Core.Specification.AuctionSpec;
 
 namespace Steria.Core.CQRS.Auctions;
 
-public class GetActiveAuctionsQuery : IRequest<List<AuctionWithCarDto>>
+public class GetActiveAuctionsQuery : IRequest<List<AuctionWithCarDtoNewest>>
 {
     public int Count { get; set; } = 10;
 }
@@ -17,12 +17,12 @@ public class GetActiveAuctionsQuery : IRequest<List<AuctionWithCarDto>>
 public class GetActiveAuctionsQueryHandler(
     IMapper mapper,
     IGenericRepository<Auction> auctionRepository
-    ) : IRequestHandler<GetActiveAuctionsQuery, List<AuctionWithCarDto>>
+    ) : IRequestHandler<GetActiveAuctionsQuery, List<AuctionWithCarDtoNewest>>
 {
-    public async Task<List<AuctionWithCarDto>> Handle(GetActiveAuctionsQuery request, CancellationToken cancellationToken)
+    public async Task<List<AuctionWithCarDtoNewest>> Handle(GetActiveAuctionsQuery request, CancellationToken cancellationToken)
     {
         var spec = new ActiveAuctionsSpec(request.Count);
         var auctions = await auctionRepository.GetListBySpec(spec, cancellationToken);
-        return mapper.Map<List<AuctionWithCarDto>>(auctions);
+        return mapper.Map<List<AuctionWithCarDtoNewest>>(auctions);
     }
 }
