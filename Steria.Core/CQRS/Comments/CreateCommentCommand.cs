@@ -8,6 +8,7 @@ public class CreateCommentCommand : IRequest
 {
     public int AuctionId { get; set; }
     public int UserId { get; set; }
+    public int? ReplyId { get; set; }
     public string Text { get; set; } = null!;
 }
 
