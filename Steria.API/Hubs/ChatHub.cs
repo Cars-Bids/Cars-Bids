@@ -18,12 +18,13 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
     {
         var userId = GetUserId(Context);
         var isUserInChat = await mediator.Send(new IsUserInChatQuery { ChatId = chatId, UserId = userId});
-        if (!isUserInChat) throw new HubException("User is not a participant of this chat.");
+        if (!isUserInChat) 
+        {
+            await Clients.Caller.SendAsync("JoinRejected", "User is not a participant of this chat.");
+            return;
+        }
         
-        await Groups.AddToGroupAsync(Context.ConnectionId, "Chat"+chatId);
-
-        var res = await mediator.Send(new GetChatMessagesQuery { ChatId = chatId, CurrentUserId = userId});
-        await Clients.Caller.SendAsync("ReceiveChatHistory", res);
+        await Groups.AddToGroupAsync(Context.ConnectionId, "Chat" + chatId);
     }
     
     public async Task LeaveChat(int chatId)
@@ -31,7 +32,7 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Chat"+chatId);
     }
 
-    public async Task SendMessage(int chatId, string message, List<IFormFile> images)
+    public async Task SendMessage(int chatId, string message, List<string>? attachmentUrls = null)
     {
         var senderId = GetUserId(Context);
 
@@ -39,7 +40,7 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
         {
             var newMessage = await mediator.Send(new SendChatMessageCommand
             {
-                Attachments = images,
+                AttachmentUrls = attachmentUrls,
                 ChatId = chatId,
                 Message = message,
                 SenderId = senderId
@@ -47,9 +48,9 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
 
             await Clients.Group("Chat" + chatId).SendAsync("ReceiveMessage", newMessage);
         }
-        catch (ValidationException ex)
+        catch (Exception ex)
         {
-            throw new HubException(ex.Message);
+            await Clients.Caller.SendAsync("MessageRejected", "Unexpected error: " + ex.Message);
         }
     }
 
@@ -57,43 +58,76 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
     {
         var userId = GetUserId(Context);
 
-        var editedMessage = await mediator.Send(new EditChatMessageCommand
+        try
         {
-            UserId = userId,
-            ChatId = chatId, 
-            MessageId = messageId,
-            NewMessage = newMessage
-        });
-        
-        await Clients.Group("Chat"+chatId).SendAsync("EditMessage", editedMessage);
+            var editedMessage = await mediator.Send(new EditChatMessageCommand
+            {
+                UserId = userId,
+                ChatId = chatId, 
+                MessageId = messageId,
+                NewMessage = newMessage
+            });
+            
+            await Clients.Group("Chat"+chatId).SendAsync("EditMessage", editedMessage);
+        }
+        catch (ValidationException ex)
+        {
+            await Clients.Caller.SendAsync("EditRejected", ex.Message);
+        }
+        catch (Exception ex)
+        {
+            await Clients.Caller.SendAsync("EditRejected", "An unexpected error occurred while editing the message.");
+        }
     }
     
     public async Task DeleteMessage(int messageId, int chatId)
     {
         var requesterId = GetUserId(Context);
 
-        await mediator.Send(new DeleteMessageCommand
+        try
         {
-            MessageId = messageId,
-            ChatId = chatId,
-            RequesterId = requesterId
-        });
+            await mediator.Send(new DeleteMessageCommand
+            {
+                MessageId = messageId,
+                ChatId = chatId,
+                RequesterId = requesterId
+            });
 
-        await Clients.Group("Chat"+chatId).SendAsync("DeleteMessage", messageId);
+            await Clients.Group("Chat"+chatId).SendAsync("DeleteMessage", messageId);
+        }
+        catch (ValidationException ex)
+        {
+            await Clients.Caller.SendAsync("DeleteRejected", ex.Message);
+        }
+        catch (Exception ex)
+        {
+            await Clients.Caller.SendAsync("DeleteRejected", "An unexpected error occurred while deleting the message.");
+        }
     }
 
     public async Task DeleteAttachments(List<int> attachmentsId, int chatId)
     {
         var userId = GetUserId(Context);
         
-        var command = new DeleteAttachmentsCommand
+        try
         {
-            ChatId = chatId,
-            AttachmentIds = attachmentsId,
-            UserId = userId
-        };
-        var deletedAttachmentIds = await mediator.Send(command);
-        await Clients.Group("Chat" + chatId).SendAsync("AttachmentsDeleted", deletedAttachmentIds);
+            var command = new DeleteAttachmentsCommand
+            {
+                ChatId = chatId,
+                AttachmentIds = attachmentsId,
+                UserId = userId
+            };
+            var deletedAttachmentIds = await mediator.Send(command);
+            await Clients.Group("Chat" + chatId).SendAsync("AttachmentsDeleted", deletedAttachmentIds);
+        }
+        catch (ValidationException ex)
+        {
+            await Clients.Caller.SendAsync("DeleteAttachmentsRejected", ex.Message);
+        }
+        catch (Exception ex)
+        {
+            await Clients.Caller.SendAsync("DeleteAttachmentsRejected", "An unexpected error occurred while deleting attachments.");
+        }
     }
 
     public async Task SendTypingStatus(int chatId, bool isTyping)
@@ -108,21 +142,40 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
     {
         int userId = GetUserId(Context);
 
-        var command = new CreateMessageReactionCommand { ChatId = chatId, MessageId = messageId, ReaderId = userId };
-        var msgSenderId = await mediator.Send(command);
+        try
+        {
+            var command = new CreateMessageReactionCommand { ChatId = chatId, MessageId = messageId, ReaderId = userId };
+            var msgSenderId = await mediator.Send(command);
 
-        await Clients.Clients(_userConnections.Where(userId => userId.Key == msgSenderId).Select(p => p.Value))
-                     .SendAsync("MessageSeen", new { ChatId = chatId, MessageId = messageId, ReaderId = userId });
+            await Clients.Clients(_userConnections.Where(userId => userId.Key == msgSenderId).Select(p => p.Value))
+                         .SendAsync("MessageSeen", new { ChatId = chatId, MessageId = messageId, ReaderId = userId });
+        }
+        catch (Exception ex)
+        {
+            // Log error, but no client notification for read
+            Console.WriteLine($"Error marking message as read: {ex.Message}");
+        }
     }
 
     public async Task ToggleEmoji(string emoji, int messageId, int chatId)
     {
         int userId = GetUserId(Context);
 
-        var command = new ToggleEmojiCommand { UserId = userId, Emoji = emoji, MessageId = messageId, ChatId = chatId };
-        var isCreated = await mediator.Send(command);
+        try
+        {
+            var command = new ToggleEmojiCommand { UserId = userId, Emoji = emoji, MessageId = messageId, ChatId = chatId };
+            var isCreated = await mediator.Send(command);
 
-        await Clients.Group("Chat" + chatId).SendAsync("ReactionChange", new { isCreated = isCreated, emoji = emoji });
+            await Clients.Group("Chat" + chatId).SendAsync("ReactionChange", new { isCreated = isCreated, emoji = emoji });
+        }
+        catch (ValidationException ex)
+        {
+            await Clients.Caller.SendAsync("ReactionRejected", ex.Message);
+        }
+        catch (Exception ex)
+        {
+            await Clients.Caller.SendAsync("ReactionRejected", "An unexpected error occurred while toggling reaction.");
+        }
     }
     
     public override async Task OnConnectedAsync()
@@ -164,5 +217,4 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
     {
         return int.Parse(context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     }
-    
 }

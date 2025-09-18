@@ -36,6 +36,7 @@ public class RequestNewCarCommandHandler(UserManager<User> userManager,
     public async Task Handle(RequestNewCarCommand request, CancellationToken cancellationToken)
     {
         var car = mapper.Map<Car>(request);
+        car.Status = CarStatus.inPending;
         
         var user = await userManager.FindByIdAsync(request.userId.ToString());
         if (user == null)

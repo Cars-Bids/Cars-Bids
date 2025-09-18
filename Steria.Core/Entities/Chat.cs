@@ -9,5 +9,6 @@ public class Chat
 
     public ICollection<User>? Participants { get; set; }
     public ICollection<ChatMessage>? Messages { get; set; }
+    public ICollection<ChatRequirements> ChatRequirements { get; set; }
     public Car? Car { get; set; }
 }

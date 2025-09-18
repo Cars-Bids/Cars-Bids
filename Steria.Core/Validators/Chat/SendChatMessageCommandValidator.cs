@@ -20,11 +20,11 @@ public class SendChatMessageCommandValidator : AbstractValidator<SendChatMessage
 
         RuleFor(x => x.Message)
             .NotEmpty()
-            .When(x => x.Attachments is null || x.Attachments.Count == 0)
+            .When(x => x.AttachmentUrls is null || x.AttachmentUrls.Count == 0)
             .WithMessage(Resource.MessageOrAttachmentsRequired);
 
-        RuleFor(x => x.Attachments)
-            .Must(files => files == null || files.Count <= MaxAttachments)
+        RuleFor(x => x.AttachmentUrls)
+            .Must(urls => urls == null || urls.Count <= MaxAttachments)
             .WithMessage(string.Format(Resource.MaxAttachmentsAllowed, MaxAttachments));
     }
 }

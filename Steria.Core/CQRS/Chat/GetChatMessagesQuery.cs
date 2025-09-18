@@ -11,6 +11,8 @@ public class GetChatMessagesQuery : IRequest<List<ChatMessageDto>>
 {
     public int ChatId { get; set; }
     public int CurrentUserId { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 50;
 }
 
 public class GetChatMessagesQueryHandler(
@@ -20,8 +22,8 @@ public class GetChatMessagesQueryHandler(
 {
     public async Task<List<ChatMessageDto>> Handle(GetChatMessagesQuery request, CancellationToken cancellationToken)
     {
-        var spec = new GetAllChatMessagesSpec(request.ChatId);
-        var messages = await chatMessageRepository.GetListBySpec(spec);
+        var spec = new ChatMessagesSpec(request.ChatId, request.Page, request.PageSize);
+        var messages = await chatMessageRepository.GetListBySpec(spec, cancellationToken);
         
         var res = mapper.Map<List<ChatMessageDto>>(messages, opt =>
         {
