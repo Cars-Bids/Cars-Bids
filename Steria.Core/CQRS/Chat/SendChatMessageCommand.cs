@@ -14,7 +14,7 @@ public class SendChatMessageCommand : IRequest<ChatMessageDto>
     public int ChatId { get; set; }
     public int SenderId { get; set; }
     public string? Message { get; set; }
-    public List<IFormFile>? Attachments { get; set; }
+    public List<string>? AttachmentUrls { get; set; }
 }
 
 public class SendChatMessageCommandHandler(
@@ -36,16 +36,15 @@ public class SendChatMessageCommandHandler(
         }
 
         var message = mapper.Map<ChatMessage>(request);
-        message.HasAttachments = request.Attachments?.Count > 0;
+        message.HasAttachments = request.AttachmentUrls?.Count > 0;
         
         await chatMessageRepository.InsertAsync(message);
 
-        var newMessage = mapper.Map<ChatMessageDto>(message);
+        var newMessage = mapper.Map<ChatMessageDto>(message, opt => opt.Items["UserId"] = request.SenderId);
         
         if (message.HasAttachments)
         {
-            var attachmentUrls = await fileService.UploadImagesAsync(request.Attachments!);
-            var attachments = attachmentUrls.Select(url => new ChatAttachment
+            var attachments = request.AttachmentUrls.Select(url => new ChatAttachment
             {
                 MessageId = message.Id,
                 ImageUrl = url
@@ -53,7 +52,7 @@ public class SendChatMessageCommandHandler(
 
             await chatAttachmentRepository.InsertRangeAsync(attachments);
             
-            newMessage.Attachment = attachmentUrls;
+            newMessage.Attachment = request.AttachmentUrls;
         }
 
         return newMessage;

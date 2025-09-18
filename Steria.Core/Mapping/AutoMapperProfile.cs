@@ -97,17 +97,19 @@ public class AutoMapperProfile : Profile
         CreateMap<UserNotificationSetting, UserNotificationSettingDto>().ReverseMap();
             //.ForMember(dest => dest.NotificationType, opt => opt.MapFrom(src => src.NotificationType));
 
-        CreateMap<ChatMessage, SendChatMessageCommand>().ReverseMap();
+        CreateMap<SendChatMessageCommand, ChatMessage>();
+        CreateMap<ChatRequirements, ChatRequirementDto>();
 
         CreateMap<ChatMessage, ChatMessageDto>()
             .ForMember(dest => dest.Attachment,
                 opt => opt.MapFrom(src => src.Attachments != null
                     ? src.Attachments.Select(a => a.ImageUrl).ToList()
                     : new List<string>()))
+            .ForMember(dest => dest.SentAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.ReactionSummaryDtos, opt => opt.Ignore())
             .AfterMap((src, dest, ctx) =>
             {
-                var currentUserId = ctx.Items.ContainsKey("UserId") ? (int)ctx.Items["UserId"] : 0;
+                var currentUserId = ctx.Items.TryGetValue("UserId", out object? value) ? (int)value : 0;
                 var isOwner = src.SenderId == currentUserId;
 
                 // mapping grouped reactions

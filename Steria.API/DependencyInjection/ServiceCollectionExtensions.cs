@@ -74,6 +74,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<UserNotification>, GenericRepository<UserNotification>>();
         services.AddScoped<IGenericRepository<UserFollow>, GenericRepository<UserFollow>>();
         services.AddScoped<IGenericRepository<Answer>, GenericRepository<Answer>>();
+        services.AddScoped<IGenericRepository<ChatRequirements>, GenericRepository<ChatRequirements>>();
+        
         
         services.AddSingleton<IConnectionManager<ChatHub>, ConnectionManager<ChatHub>>();
         services.AddSingleton<IConnectionManager<NotificationHub>, ConnectionManager<NotificationHub>>();
