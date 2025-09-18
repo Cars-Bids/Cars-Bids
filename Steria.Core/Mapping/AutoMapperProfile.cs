@@ -25,6 +25,11 @@ public class AutoMapperProfile : Profile
         CreateMap<Auction, UpdateAuctionCommand>().ReverseMap();
         CreateMap<Auction, AuctionWithCarDto>()
             .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ReverseMap();
+        CreateMap<Auction, AuctionWithCarDtoNewest>()
+            .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ReverseMap();
 
         CreateMap<BodyStyle, BodyStyleDto>().ReverseMap();
@@ -50,6 +55,33 @@ public class AutoMapperProfile : Profile
         CreateMap<Car, CarDto>().ReverseMap();
         CreateMap<Car, UpdateCarCommand>().ReverseMap();
         CreateMap<Car, CreateCarCommand>().ReverseMap();
+        CreateMap<Car, CarNewestDto>()
+            .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src =>
+                src.Images != null && src.Images.Any(img => img.ImageCategory == ImageCategory.Main)
+                    ? src.Images.First(img => img.ImageCategory == ImageCategory.Main).ImageUrl
+                    : "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
+            .ForMember(dest => dest.ExteriorImage1, opt => opt.MapFrom(src =>
+                src.Images != null && src.Images.Any(img => img.ImageCategory == ImageCategory.Exterior)
+                    ? src.Images.Where(img => img.ImageCategory == ImageCategory.Exterior)
+                               .OrderBy(img => img.OrderNumber)
+                               .Select(img => img.ImageUrl)
+                               .FirstOrDefault()
+                    : "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
+            .ForMember(dest => dest.ExteriorImage2, opt => opt.MapFrom(src =>
+                src.Images != null && src.Images.Any(img => img.ImageCategory == ImageCategory.Exterior)
+                    ? src.Images.Where(img => img.ImageCategory == ImageCategory.Exterior)
+                               .OrderBy(img => img.OrderNumber)
+                               .Skip(1)
+                               .Select(img => img.ImageUrl)
+                               .FirstOrDefault()
+                    : "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
+            .ForMember(dest => dest.MakeName, opt => opt.MapFrom(src => src.Model != null && src.Model.Make != null ? src.Model.Make.Name : null))
+            .ForMember(dest => dest.ModelName, opt => opt.MapFrom(src => src.Model != null ? src.Model.Name : null));
+
+        CreateMap<User, ProfileDto>()
+            .ForMember(dest => dest.FollowersCount, opt => opt.MapFrom(src => src.Followers.Count))
+            .ForMember(dest => dest.FollowingCount, opt => opt.MapFrom(src => src.Following.Count))
+            .ReverseMap();
 
         CreateMap<User, ProfileDto>()
             .ForMember(dest => dest.FollowersCount, opt => opt.MapFrom(src => src.Followers.Count))
