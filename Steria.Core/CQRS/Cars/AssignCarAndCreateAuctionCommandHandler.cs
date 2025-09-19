@@ -29,10 +29,10 @@ public class AssignCarAndCreateAuctionCommandHandler(
         var car = await carRepository.GetByIdAsync(cmd.CarId)
             ?? throw new HttpException(string.Format(Resource.CarNotFoundById, cmd.CarId), HttpStatusCode.NotFound);
 
-        if (car.Status != CarStatus.inPending)
-        {
-            throw new HttpException("Car must be in pending status to assign and start auction.", HttpStatusCode.BadRequest);
-        }
+        //if (car.Status != CarStatus.inPending)
+        //{
+        //    throw new HttpException("Car must be in pending status to assign and start auction.", HttpStatusCode.BadRequest);
+        //}
 
         if (car.ManagerId != null)
         {
