@@ -19,13 +19,7 @@ public class UpdateCarCommandValidator : AbstractValidator<UpdateCarCommand>
 
         RuleFor(x => x.Mileage)
             .GreaterThanOrEqualTo(0).WithMessage(Resource.MileageMin);
-
-        RuleFor(x => x.Drivetrain)
-            .IsInEnum().WithMessage(Resource.DrivetrainInvalid);
-
-        RuleFor(x => x.TransmissionType)
-            .IsInEnum().WithMessage(Resource.TransmissionTypeInvalid);
-
+        
         RuleFor(x => x.Speeds)
             .GreaterThan(0).WithMessage(Resource.SpeedsGreaterThanZero);
 
@@ -34,11 +28,6 @@ public class UpdateCarCommandValidator : AbstractValidator<UpdateCarCommand>
 
         RuleFor(x => x.ModelId)
             .GreaterThan(0).WithMessage(Resource.ModelIdRequired);
-
-        RuleFor(x => x.OwnerId)
-            .GreaterThan(0).WithMessage(Resource.OwnerIdRequired);
-
-        RuleFor(x => x.Status)
-            .IsInEnum().WithMessage(Resource.CarStatusInvalid);
+        
     }
 }

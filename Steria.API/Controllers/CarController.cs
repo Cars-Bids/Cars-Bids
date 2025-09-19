@@ -1,9 +1,11 @@
 ﻿using System.Security.Claims;
+using CloudinaryDotNet.Actions;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Steria.Core.CQRS.Cars;
+using Steria.Core.Enums;
 
 namespace Steria.API.Controllers;
 
@@ -86,6 +88,38 @@ public class CarController(IMediator mediator) : ControllerBase
             ManagerId = managerId
         };
         await mediator.Send(command);
+        return Ok();
+    }
+
+    [Authorize(Roles = "Manager")]
+    [HttpPost("{carId}/images")]
+    public async Task<IActionResult> AddImages(int carId, [FromForm] List<IFormFile> files,
+        [FromQuery] ImageCategory category)
+    {
+        var cmd = new AddImagesCommand { CarId = carId, Files = files, ImageCategory = category };
+        await mediator.Send(cmd);
+        return Ok();
+    }
+
+    [Authorize(Roles = "Manager")]
+    [HttpDelete("{carId}/images/{imageId}")]
+    public async Task<IActionResult> DeleteImages(int carId, int imageId)
+    {
+        var cmd = new DeleteImagesCommand { CarId = carId, ImageId = imageId };
+        await mediator.Send(cmd);
+
+        return Ok();
+    }
+
+    [Authorize(Roles = "Manager")]
+    [HttpPut("{carId}/images/order")]
+    public async Task<IActionResult> UpdateOrder(int carId, [FromBody] List<int> orderedImageIds)
+    {
+        await mediator.Send(new UpdateCarImagesOrderCommand
+        {
+            CarId = carId,
+            OrderedImageIds = orderedImageIds
+        });
         return Ok();
     }
 }

@@ -53,7 +53,7 @@ public class AutoMapperProfile : Profile
         CreateMap<CarImage, CarImageDto>().ReverseMap();
 
         CreateMap<Car, CarDto>().ReverseMap();
-        CreateMap<Car, UpdateCarCommand>().ReverseMap();
+        CreateMap<UpdateCarCommand, Car>().ForMember(dest => dest.Auction, opt => opt.Ignore());
         CreateMap<Car, CreateCarCommand>().ReverseMap();
         CreateMap<Car, CarNewestDto>()
             .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src =>

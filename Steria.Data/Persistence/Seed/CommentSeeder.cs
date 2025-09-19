@@ -27,8 +27,8 @@ public class CommentSeeder(IGenericRepository<Auction> auctionRepository,
         foreach (var auction in auctions)
         {
             int numComments = random.Next(25, 35);
-            DateTime start = auction.StartTime;
-            DateTime end = auction.Status == AuctionStatus.Active ? DateTime.UtcNow : auction.EndTime;
+            DateTime start = (DateTime)auction.StartTime;
+            DateTime end = (DateTime)(auction.Status == AuctionStatus.Active ? DateTime.UtcNow : auction.EndTime);
             TimeSpan duration = end - start;
 
             var rootComments = new List<Comment>();

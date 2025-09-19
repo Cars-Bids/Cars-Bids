@@ -27,10 +27,10 @@ public class BidSeeder(IGenericRepository<Bid> bidRepository,
             
             int numBids = random.Next(15, 25);
 
-            decimal currentBid = auction.StartPrice;
+            decimal currentBid = (decimal)auction.StartPrice;
 
-            DateTime start = auction.StartTime;
-            DateTime end = auction.Status == AuctionStatus.Active ? DateTime.UtcNow : auction.EndTime;
+            DateTime start = (DateTime)auction.StartTime;
+            DateTime end = (DateTime)(auction.Status == AuctionStatus.Active ? DateTime.UtcNow : auction.EndTime);
             TimeSpan duration = end - start;
 
             for (int i = 0; i < numBids; i++)

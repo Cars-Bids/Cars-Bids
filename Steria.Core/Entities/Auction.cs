@@ -7,12 +7,12 @@ public class Auction
     public int Id { get; set; }
     public int CarId { get; set; }
     public int SellerId { get; set; }
-    public decimal StartPrice { get; set; }
-    public decimal CurrentPrice { get; set; }
+    public decimal? StartPrice { get; set; }
+    public decimal? CurrentPrice { get; set; }
     public string? CurrentBidder { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
-    public AuctionStatus Status { get; set; } = AuctionStatus.Pending;
+    public DateTime? StartTime { get; set; }
+    public DateTime? EndTime { get; set; }
+    public AuctionStatus Status { get; set; } = AuctionStatus.New;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? ApprovedAt { get; set; }
     public bool IsInspected { get; set; }

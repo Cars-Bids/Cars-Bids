@@ -52,7 +52,7 @@ public class AuctionService(
 
             //Антиснайпер: подовжуємо, якщо менше 1 хв
             var remaining = auction.EndTime - DateTime.UtcNow;
-            if (remaining.TotalMinutes < 1)
+            if (((TimeSpan)remaining).TotalMinutes < 1)
             {
                 auction.EndTime = DateTime.UtcNow.AddMinutes(1);
             }
