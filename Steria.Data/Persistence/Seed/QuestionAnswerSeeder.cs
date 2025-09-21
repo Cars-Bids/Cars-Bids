@@ -31,8 +31,8 @@ public class QuestionAnswerSeeder(IGenericRepository<Auction> auctionRepository,
 
             int numQuestions = random.Next(3, 5);
 
-            DateTime start = auction.StartTime;
-            DateTime end = auction.Status == AuctionStatus.Active ? DateTime.UtcNow : auction.EndTime;
+            DateTime start = (DateTime)auction.StartTime;
+            DateTime end = (DateTime)(auction.Status == AuctionStatus.Active ? DateTime.UtcNow : auction.EndTime);
             TimeSpan duration = end - start;
 
             var questions = new List<Question>();

@@ -30,10 +30,10 @@ public class UserWishlistSpec : Specification<Wishlist, WishlistItemDto>
         Query.Select(w => new WishlistItemDto
         {
             AuctionId = w.Auction.Id,
-            StartPrice = w.Auction.StartPrice,
+            StartPrice = (decimal)w.Auction.StartPrice,
             CurrentPrice = w.Auction.CurrentPrice,
-            StartTime = w.Auction.StartTime,
-            EndTime = w.Auction.EndTime,
+            StartTime = (DateTime)w.Auction.StartTime,
+            EndTime = (DateTime)w.Auction.EndTime,
             Status = w.Auction.Status,
             CarId = w.Auction.Car.Id,
             CarName = $"{w.Auction.Car.Model.Make.Name} {w.Auction.Car.Model.Name}",
