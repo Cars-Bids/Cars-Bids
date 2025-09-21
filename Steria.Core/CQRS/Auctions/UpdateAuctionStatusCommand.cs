@@ -20,8 +20,6 @@ public class UpdateAuctionStatusCommandHandler(
 {
     public async Task Handle(UpdateAuctionStatusCommand cmd, CancellationToken cancellationToken)
     {
-        Console.WriteLine(cmd.Id + " " + cmd.Status);
-
         var existingAuction = await auctionRepository.GetByIdAsync(cmd.Id)
             ?? throw new HttpException(string.Format(Resource.AuctionNotFoundById, cmd.Id), HttpStatusCode.NotFound);
 
