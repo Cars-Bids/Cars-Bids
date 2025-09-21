@@ -27,5 +27,7 @@ public class ProfileInReviewCarDto
     public string Make { get; set; }
     public string OtherImage { get; set; } = null!;
 
+    public int? ChatId { get; set; }
+
     public AuctionDto? Auction { get; set; }
 }
