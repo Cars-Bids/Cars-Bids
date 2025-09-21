@@ -21,6 +21,8 @@ using Steria.Data.Persistence.Repositories;
 using Steria.Data.Persistence.Seed;
 using Steria.Data.Services;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Steria.API.DependencyInjection;
@@ -106,7 +108,10 @@ public static class ServiceCollectionExtensions
         services.AddSignalR();
         services.AddHostedService<AuctionHostedService>();
 
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+        });
 
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 

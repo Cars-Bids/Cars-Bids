@@ -61,6 +61,13 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
+    [HttpPut("update-status")]
+    public async Task<IActionResult> UpdateStatus([FromBody] UpdateAuctionStatusCommand request)
+    {
+        await mediator.Send(request);
+        return Ok();
+    }
+
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
