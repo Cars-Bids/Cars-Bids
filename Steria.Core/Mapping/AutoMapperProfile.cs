@@ -233,5 +233,8 @@ public class AutoMapperProfile : Profile
                 .FirstOrDefault() ?? "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
             .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction))
             .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId));
+
+        CreateMap<Answer, AddAnswerCommand>().ReverseMap();
+        CreateMap<Question, AddQuestionCommand>().ReverseMap();
     }
 }
