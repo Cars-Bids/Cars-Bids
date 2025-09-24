@@ -9,7 +9,10 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
     public void Configure(EntityTypeBuilder<Chat> builder)
     {
         builder.HasKey(c => c.Id);
-        
+
+        builder.Property(c => c.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(c => c.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
         

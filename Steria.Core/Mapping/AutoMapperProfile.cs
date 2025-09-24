@@ -233,5 +233,13 @@ public class AutoMapperProfile : Profile
                 .FirstOrDefault() ?? "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
             .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction))
             .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId));
+
+        CreateMap<Car, CarManagerDto>()
+            .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner.UserName))
+            .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.BodyStyle != null ? src.BodyStyle.StyleName : string.Empty))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model != null ? src.Model.Name : string.Empty))
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make != null ? src.Model.Make.Name : string.Empty))
+            .ReverseMap();
+
     }
 }

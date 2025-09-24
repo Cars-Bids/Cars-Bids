@@ -45,44 +45,38 @@ public class AssignCarAndCreateAuctionCommandHandler(
         await carRepository.UpdateAsync(car);
 
         // 2. Delete all photos from this car
-        var imagesSpec = new CarImagesObjectByCarIdSpec(cmd.CarId); // Ensure spec returns List<CarImage>
+        var imagesSpec = new CarImagesObjectByCarIdSpec(cmd.CarId);
         var images = await carImageRepository.GetListBySpec(imagesSpec, cancellationToken);
         if (images.Any())
         {
-            var imageUrls = images.Select(img => img.ImageUrl!).ToList(); // CarImage has ImageUrl property
+            var imageUrls = images.Select(img => img.ImageUrl!).ToList();
             await fileService.DeleteImagesByUrlsAsync(imageUrls);
             foreach (var image in images)
             {
-                await carImageRepository.DeleteAsync(image.Id); // CarImage has Id property
+                await carImageRepository.DeleteAsync(image.Id); 
             }
         }
 
         // 3. Create auction with status New
-        var startTime = DateTime.UtcNow;
-        var endTime = startTime.AddDays(7);
+        //var startTime = DateTime.UtcNow;
+        //var endTime = startTime.AddDays(7);
         var createAuctionCommand = new CreateAuctionCommand
         {
             CarId = car.Id,
             SellerId = car.OwnerId,
             StartPrice = 1000m,
-            StartTime = startTime,
-            EndTime = endTime,
-            Status = AuctionStatus.New // Ensure AuctionStatus.New exists in your enum
+            StartTime = null,
+            EndTime = null,
+            Status = AuctionStatus.New 
         };
         await mediator.Send(createAuctionCommand);
 
-        // 4. Status change already handled in step 1
-
-        // 5. Auction status set to New in step 3
-
-        // 6. Create chat between owner (seller) and manager
         var createChatCommand = new CreateChatCommand
         {
             ParticipantIds = new List<int> { car.OwnerId, cmd.ManagerId }
         };
         var chatId = await mediator.Send(createChatCommand);
 
-        // Update car with chat_id
         car.ChatId = chatId;
         await carRepository.UpdateAsync(car);
     }
