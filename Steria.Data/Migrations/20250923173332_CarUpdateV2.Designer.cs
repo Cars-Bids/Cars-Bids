@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Steria.Data.Persistence;
@@ -11,9 +12,11 @@ using Steria.Data.Persistence;
 namespace Steria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250923173332_CarUpdateV2")]
+    partial class CarUpdateV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -813,34 +816,6 @@ namespace Steria.Data.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Steria.Core.Entities.SavedSearch", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MakeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ModelId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MakeId");
-
-                    b.HasIndex("ModelId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SavedSearch");
-                });
-
             modelBuilder.Entity("Steria.Core.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -1380,31 +1355,6 @@ namespace Steria.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Steria.Core.Entities.SavedSearch", b =>
-                {
-                    b.HasOne("Steria.Core.Entities.Make", "Make")
-                        .WithMany("SavedSearches")
-                        .HasForeignKey("MakeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Steria.Core.Entities.Model", "Model")
-                        .WithMany("SavedSearches")
-                        .HasForeignKey("ModelId");
-
-                    b.HasOne("Steria.Core.Entities.User", "User")
-                        .WithMany("SavedSearches")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Make");
-
-                    b.Navigation("Model");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Steria.Core.Entities.UserChatMessageReaction", b =>
                 {
                     b.HasOne("Steria.Core.Entities.ChatMessage", "ChatMessage")
@@ -1549,15 +1499,11 @@ namespace Steria.Data.Migrations
             modelBuilder.Entity("Steria.Core.Entities.Make", b =>
                 {
                     b.Navigation("Models");
-
-                    b.Navigation("SavedSearches");
                 });
 
             modelBuilder.Entity("Steria.Core.Entities.Model", b =>
                 {
                     b.Navigation("Cars");
-
-                    b.Navigation("SavedSearches");
                 });
 
             modelBuilder.Entity("Steria.Core.Entities.NotificationType", b =>
@@ -1599,8 +1545,6 @@ namespace Steria.Data.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("RefreshTokens");
-
-                    b.Navigation("SavedSearches");
 
                     b.Navigation("UserChatMessageReactions");
 

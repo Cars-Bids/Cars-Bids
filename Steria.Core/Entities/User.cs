@@ -28,5 +28,6 @@ public class User : IdentityUser<int>
     public ICollection<UserFollow>? Following { get; set; }
     public ICollection<CommentUpvote>? CommentUpvotes { get; set; }
     public ICollection<ChatRequirements>? ChatRequirements { get; set; }
+    public ICollection<SavedSearch> SavedSearches { get; set; }
     
 }

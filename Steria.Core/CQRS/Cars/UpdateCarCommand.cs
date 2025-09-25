@@ -35,6 +35,7 @@ public class UpdateCarCommand : IRequest
     public string? OwnershipHistory { get; set; }
     public string? SellerNotes { get; set; }
     public string? VideoLinks { get; set; }
+    public string? About { get; set; }
     
     // auction part
 
@@ -58,6 +59,7 @@ public class UpdateCarCommandHandler(
                 string.Format(Resource.CarNotFoundById, cmd.Id), HttpStatusCode.NotFound);
 
         mapper.Map(cmd, existingCar);
+        existingCar.Drivetrain = (DrivetrainType?)cmd.DrivetrainId;
         await carRepository.UpdateAsync(existingCar);
 
         var existingAuction = await auctionRepository.GetByIdAsync(cmd.AuctionId)

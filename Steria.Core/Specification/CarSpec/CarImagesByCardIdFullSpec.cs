@@ -3,12 +3,12 @@ using Steria.Core.Entities;
 
 namespace Steria.Core.Specification.CarSpec;
 
-public class CarImagesObjectByCarIdSpec : Specification<CarImage, CarImage>
+public class CarImagesByCardIdFullSpec : Specification<CarImage, CarImage>
 {
-    public CarImagesObjectByCarIdSpec(int carId)
+    public CarImagesByCardIdFullSpec(int carId)
     {
         Query
-            .Where(ci => ci.CarId == carId)
+            .Where(img => img.CarId == carId)
             .AsNoTracking()
             .Select(x => x);
     }

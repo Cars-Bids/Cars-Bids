@@ -8,4 +8,5 @@ public class Model
 
     public Make Make { get; set; } = null!;
     public ICollection<Car>? Cars { get; set; }
+    public ICollection<SavedSearch> SavedSearches { get; set; }
 }

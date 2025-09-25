@@ -39,6 +39,9 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
 
         builder.Property(c => c.SellerNotes)
             .HasColumnType("text");
+        
+        builder.Property(c => c.About)
+            .HasColumnType("text");
 
         builder.Property(c => c.VideoLinks)
             .HasColumnType("text");

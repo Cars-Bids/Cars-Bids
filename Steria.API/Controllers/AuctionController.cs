@@ -79,4 +79,12 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         });
         return Ok(auctions);
     }
+
+    [Authorize(Roles = "Manager")]
+    [HttpGet("managing/{auctionId}")]
+    public async Task<IActionResult> GetAuctionForManager([FromRoute] int auctionId)
+    {
+        var auction = await mediator.Send(new GetManagingAuctionQuery { AutionId = auctionId });
+        return Ok(auction);
+    }
 }

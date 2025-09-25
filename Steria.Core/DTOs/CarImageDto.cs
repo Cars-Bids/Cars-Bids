@@ -9,5 +9,4 @@ public class CarImageDto
     public string? ImageUrl { get; set; }
     public ImageCategory ImageCategory { get; set; }
     public int OrderNumber { get; set; }
-    public DateTime UploadedAt { get; set; }
 }
