@@ -1,7 +1,6 @@
 ﻿using Ardalis.Specification;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Steria.Core.Entities;
-
-namespace Steria.Core.Specification.CarSpec;
 
 public class CarImagesObjectByCarIdSpec : Specification<CarImage, CarImage>
 {
@@ -10,6 +9,7 @@ public class CarImagesObjectByCarIdSpec : Specification<CarImage, CarImage>
         Query
             .Where(ci => ci.CarId == carId)
             .AsNoTracking()
-            .Select(x => x);
+
+            .Select(ci => ci);
     }
 }

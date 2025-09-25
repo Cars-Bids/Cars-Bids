@@ -21,7 +21,8 @@ public class UserInReviewCarsSpec : PagedSpec<Car>
             .Include(car => car.Model)
                 .ThenInclude(model => model.Make)
             .Include(car => car.BodyStyle)
-            .Include(car => car.Images.Where(img => img.ImageCategory == ImageCategory.Main).Take(1))
+            .Include(car => car.Images.Where(img => img.ImageCategory == ImageCategory.Main || img.ImageCategory == ImageCategory.Other))
+            .Include(car => car.Chat)
             .Include(car => car.Auction)
             .AsNoTracking();
 

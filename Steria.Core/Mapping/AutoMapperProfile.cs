@@ -237,11 +237,15 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make.Name))
             .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model.Name))
             .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.BodyStyle.StyleName))
-            //.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.OtherImage, opt => opt.MapFrom(src => src.Images
-                .Where(img => img.ImageCategory == ImageCategory.Other || img.OrderNumber == 1)
+                .Where(img => img.ImageCategory == ImageCategory.Other)
+                .OrderBy(img => img.OrderNumber)
                 .Select(img => img.ImageUrl)
                 .FirstOrDefault() ?? "https://wsa3.pakwheels.com/assets/default-display-image-car-6873f23250596c4daa082e7223e5bbb5d1fbcaf7bb5d7113003daa9ebd3c66a8.png"))
-            .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction));
+            .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction))
+            .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId));
+
+        CreateMap<Answer, AddAnswerCommand>().ReverseMap();
+        CreateMap<Question, AddQuestionCommand>().ReverseMap();
     }
 }

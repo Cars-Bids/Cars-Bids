@@ -61,6 +61,13 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
+    [HttpPut("update-status")]
+    public async Task<IActionResult> UpdateStatus([FromBody] UpdateAuctionStatusCommand request)
+    {
+        await mediator.Send(request);
+        return Ok();
+    }
+
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById([FromRoute] int id)
@@ -86,5 +93,23 @@ public class AuctionsController(IMediator mediator) : ControllerBase
     {
         var auction = await mediator.Send(new GetManagingAuctionQuery { AutionId = auctionId });
         return Ok(auction);
+    }
+    
+    [HttpPost("add-question")]
+    public async Task<IActionResult> AddQuestion([FromBody] AddQuestionCommand request)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        request.UserId = userId;
+        await mediator.Send(request);
+        return Created();
+    }
+
+    [HttpPost("add-answer")]
+    public async Task<IActionResult> AddAnswer([FromBody] AddAnswerCommand request)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        request.UserId = userId;
+        await mediator.Send(request);
+        return Created();
     }
 }
