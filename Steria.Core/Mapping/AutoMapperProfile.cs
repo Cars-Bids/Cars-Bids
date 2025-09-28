@@ -234,7 +234,15 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction))
             .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId));
 
+        CreateMap<Car, CarManagerDto>()
+            .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner.UserName))
+            .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.BodyStyle != null ? src.BodyStyle.StyleName : string.Empty))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model != null ? src.Model.Name : string.Empty))
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make != null ? src.Model.Make.Name : string.Empty))
+            .ReverseMap();
+
         CreateMap<Answer, AddAnswerCommand>().ReverseMap();
         CreateMap<Question, AddQuestionCommand>().ReverseMap();
+
     }
 }
