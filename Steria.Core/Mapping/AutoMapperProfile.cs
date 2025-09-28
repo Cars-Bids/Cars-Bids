@@ -255,5 +255,27 @@ public class AutoMapperProfile : Profile
         CreateMap<Answer, AddAnswerCommand>().ReverseMap();
         CreateMap<Question, AddQuestionCommand>().ReverseMap();
 
+        CreateMap<Auction, AuctionFilteredDto>()//Не чіпайте цей блок чогось не мапить якщо вручну не пропишеш
+            .ForMember(dest => dest.AuctionId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src => src.Car.Images.FirstOrDefault(img => img.ImageCategory == ImageCategory.Main) != null
+                ? src.Car.Images.FirstOrDefault(img => img.ImageCategory == ImageCategory.Main).ImageUrl
+                : null))
+            .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Car.Year))
+            .ForMember(dest => dest.ModelId, opt => opt.MapFrom(src => src.Car.ModelId))
+            .ForMember(dest => dest.ModelName, opt => opt.MapFrom(src => src.Car.Model.Name))
+            .ForMember(dest => dest.MakeId, opt => opt.MapFrom(src => src.Car.Model.MakeId))
+            .ForMember(dest => dest.MakeName, opt => opt.MapFrom(src => src.Car.Model.Make.Name))
+            .ForMember(dest => dest.Inspected, opt => opt.MapFrom(src => src.IsInspected))
+            .ForMember(dest => dest.Transmission, opt => opt.MapFrom(src => src.Car.TransmissionType.ToString()))
+            .ForMember(dest => dest.Mileage, opt => opt.MapFrom(src => src.Car.Mileage))
+            .ForMember(dest => dest.NumberOfGears, opt => opt.MapFrom(src => src.Car.Speeds))
+            .ForMember(dest => dest.Engine, opt => opt.MapFrom(src => src.Car.Engine))
+            .ForMember(dest => dest.BodyStyleName, opt => opt.MapFrom(src => src.Car.BodyStyle.StyleName))
+            .ForMember(dest => dest.Interior, opt => opt.MapFrom(src => src.Car.InteriorColor))
+            .ForMember(dest => dest.Exterior, opt => opt.MapFrom(src => src.Car.ExteriorColor))
+            .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Car.Location))
+            .ReverseMap();
+        
+
     }
 }
