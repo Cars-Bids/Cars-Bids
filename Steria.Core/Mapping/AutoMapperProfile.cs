@@ -9,6 +9,7 @@ using Steria.Core.CQRS.Makes;
 using Steria.Core.CQRS.Models;
 using Steria.Core.CQRS.NotificationTypes;
 using Steria.Core.CQRS.Profile;
+using Steria.Core.CQRS.Wishlists;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Enums;
@@ -254,6 +255,6 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Answer, AddAnswerCommand>().ReverseMap();
         CreateMap<Question, AddQuestionCommand>().ReverseMap();
-
+        CreateMap<Wishlist, CreateWishlistCommand>().ReverseMap();
     }
 }

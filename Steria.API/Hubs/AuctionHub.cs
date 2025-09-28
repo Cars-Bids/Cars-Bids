@@ -30,17 +30,12 @@ public class AuctionHub(IAuctionService auctionService) : Hub
         var auction = await auctionService.GetById(auctionId);
 
         await Clients.Caller.SendAsync("BidPlaced",
-            auctionId,
-            auction!.CurrentPrice,
-            auction.CurrentBidder ?? "unknown",
-            auction.EndTime
+            auctionId
         );
 
         await Clients.OthersInGroup($"auction-{auctionId}").SendAsync("NewBidReceived",
             auctionId,
-            auction!.CurrentPrice,
-            auction.CurrentBidder ?? "unknown",
-            auction.EndTime
+            auction!.CurrentPrice
         );
     }
 

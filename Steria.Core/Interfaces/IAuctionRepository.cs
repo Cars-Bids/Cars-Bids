@@ -9,5 +9,6 @@ public interface IAuctionRepository
     Task<List<CarImageData>> GetCarImagesByCarIdAsync(int carId);
     Task<List<QAData>> GetQaByAuctionIdAsync(int auctionId);
     Task<List<CommentData>> GetCommentsByAuctionIdAsync(int auctionId);
+    Task<List<CommentData>> GetBidsByAuctionIdAsync(int auctionId);
     Task<List<OtherAuction>> GetOtherAuctionsAsync(int auctionId, int userId);
 }
