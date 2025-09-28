@@ -6,4 +6,5 @@ public class Make
     public string Name { get; set; } = null!;
 
     public ICollection<Model>? Models { get; set; }
+    public ICollection<SavedSearch> SavedSearches { get; set; }
 }

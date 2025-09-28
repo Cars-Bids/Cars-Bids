@@ -7,23 +7,24 @@ public class Car
     public int Id { get; set; }
     public int Year { get; set; }
     public string Vin { get; set; } = null!;
-    public string? Highlights { get; set; } = null!;
-    public string? ServiceHistory { get; set; } = null!;
-    public string? Equipment { get; set; } = null!;
-    public string? Flaws { get; set; } = null!;
-    public string? Modifications { get; set; } = null!;
-    public string? OtherItems { get; set; } = null!;
-    public string? OwnershipHistory { get; set; } = null!;
-    public string? SellerNotes { get; set; } = null!;
-    public string? VideoLinks { get; set; } = null!;
-    public string? ExteriorColor { get; set; } = null!;
-    public string? InteriorColor { get; set; } = null!;
+    public string? Highlights { get; set; }
+    public string? ServiceHistory { get; set; }
+    public string? Equipment { get; set; }
+    public string? Flaws { get; set; }
+    public string? Modifications { get; set; }
+    public string? OtherItems { get; set; }
+    public string? OwnershipHistory { get; set; }
+    public string? SellerNotes { get; set; }
+    public string? About { get; set; }
+    public string? VideoLinks { get; set; }
+    public string? ExteriorColor { get; set; }
+    public string? InteriorColor { get; set; }
     public int Mileage { get; set; }
-    public string? Location { get; set; } = null!;
+    public string? Location { get; set; }
     public bool IsOnSaleElsewhere { get; set; }
     public bool IsModified { get; set; }
     public DrivetrainType? Drivetrain { get; set; }
-    public string? Engine { get; set; } = null!;
+    public string? Engine { get; set; }
     public TransmissionType TransmissionType { get; set; }
     public int? Speeds { get; set; }
     public CarStatus Status { get; set; } = CarStatus.inPending;

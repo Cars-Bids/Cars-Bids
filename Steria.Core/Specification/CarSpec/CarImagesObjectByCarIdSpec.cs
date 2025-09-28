@@ -9,6 +9,7 @@ public class CarImagesObjectByCarIdSpec : Specification<CarImage, CarImage>
         Query
             .Where(ci => ci.CarId == carId)
             .AsNoTracking()
-            .Select(ci => ci); // Add identity selector
+
+            .Select(ci => ci);
     }
 }

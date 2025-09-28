@@ -25,7 +25,7 @@ public class GetCarByIdHandler(
         var car = await carRepository.GetByIdAsync(request.Id)
             ?? throw new HttpException(string.Format(Resource.CarNotFoundById, request.Id),HttpStatusCode.NotFound);
 
-        var images = await carImageRepository.GetAsync(filter: img => img.CarId == request.Id);
+        var images = await carImageRepository.GetAsync(filter: img => img.CarId == request.Id, cancellationToken: cancellationToken);
 
         var carDto = mapper.Map<CarDto>(car);
 

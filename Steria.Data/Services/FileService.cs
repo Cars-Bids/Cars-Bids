@@ -79,26 +79,25 @@ public class FileService: IFileService
 
     public async Task<List<string>> UploadImagesAsync(IList<IFormFile> files)
     {
-        if (files is not { Count: > 0})
+        if (files is not { Count: > 0 })
             throw new ArgumentException("No files provided.");
 
         if (files.Count > 500)
             throw new ArgumentException("Too many files. Maximum allowed is 500.");
 
-        var urls = new ConcurrentBag<string>();
         var semaphore = new SemaphoreSlim(MaxParallelUploads);
-
-        var uploadTasks = files.Select(async file =>
+        var uploadTasks = files.Select(async (file, index) =>
         {
             await semaphore.WaitAsync();
             try
             {
                 var url = await UploadImageAsync(file);
-                urls.Add(url);
+                return (Index: index, Url: url);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to upload {file.FileName}: {ex.Message}");
+                return (Index: index, Url: (string?)null);
             }
             finally
             {
@@ -106,11 +105,15 @@ public class FileService: IFileService
             }
         });
 
-        await Task.WhenAll(uploadTasks);
-
-        return urls.ToList();
+        var results = await Task.WhenAll(uploadTasks);
+        
+        return results
+            .OrderBy(r => r.Index)
+            .Where(r => r.Url != null)
+            .Select(r => r.Url!)
+            .ToList();
     }
-
+    
     public async Task<bool> DeleteImageAsync(string publicId)
     {
         if (string.IsNullOrWhiteSpace(publicId))

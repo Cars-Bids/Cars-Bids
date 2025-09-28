@@ -31,7 +31,18 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ReverseMap();
-
+        CreateMap<Auction, ManagingAuctionPageDto>()
+            .ForMember(dest => dest.CarBrandId,
+                opt => opt.MapFrom(src => src.Car.Model.MakeId))
+            .ForMember(dest => dest.CarDriveTrainId,
+                opt => opt.MapFrom(src => src.Car.Drivetrain.HasValue
+                    ? (int?)src.Car.Drivetrain.Value
+                    : null))
+            .ForMember(dest => dest.CarTransmissionId,
+                opt => opt.MapFrom(src => (int)src.Car.TransmissionType))
+            .ForMember(dest => dest.CarBodyStyleId,
+                opt => opt.MapFrom(src => src.Car.BodyStyleId));
+        
         CreateMap<BodyStyle, BodyStyleDto>().ReverseMap();
         CreateMap<BodyStyle, UpdateBodyStyleCommand>().ReverseMap();
         CreateMap<BodyStyle, CreateBodyStyleCommand>().ReverseMap();

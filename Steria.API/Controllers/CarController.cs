@@ -105,8 +105,8 @@ public class CarController(IMediator mediator) : ControllerBase
         [FromQuery] ImageCategory category)
     {
         var cmd = new AddImagesCommand { CarId = carId, Files = files, ImageCategory = category };
-        await mediator.Send(cmd);
-        return Ok();
+        var links = await mediator.Send(cmd);
+        return Ok(links);
     }
 
     [Authorize(Roles = "Manager")]
@@ -121,12 +121,13 @@ public class CarController(IMediator mediator) : ControllerBase
 
     [Authorize(Roles = "Manager")]
     [HttpPut("{carId}/images/order")]
-    public async Task<IActionResult> UpdateOrder(int carId, [FromBody] List<int> orderedImageIds)
+    public async Task<IActionResult> UpdateOrder(int carId, [FromBody] List<int> orderedImageIds, [FromQuery] ImageCategory category)
     {
         await mediator.Send(new UpdateCarImagesOrderCommand
         {
             CarId = carId,
-            OrderedImageIds = orderedImageIds
+            OrderedImageIds = orderedImageIds,
+            Category = category
         });
         return Ok();
     }
