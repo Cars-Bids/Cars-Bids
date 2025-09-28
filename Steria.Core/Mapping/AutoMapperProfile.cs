@@ -241,5 +241,8 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make != null ? src.Model.Make.Name : string.Empty))
             .ReverseMap();
 
+        CreateMap<Answer, AddAnswerCommand>().ReverseMap();
+        CreateMap<Question, AddQuestionCommand>().ReverseMap();
+
     }
 }

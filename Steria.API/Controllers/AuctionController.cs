@@ -86,4 +86,22 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         });
         return Ok(auctions);
     }
+
+    [HttpPost("add-question")]
+    public async Task<IActionResult> AddQuestion([FromBody] AddQuestionCommand request)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        request.UserId = userId;
+        await mediator.Send(request);
+        return Created();
+    }
+
+    [HttpPost("add-answer")]
+    public async Task<IActionResult> AddAnswer([FromBody] AddAnswerCommand request)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        request.UserId = userId;
+        await mediator.Send(request);
+        return Created();
+    }
 }
