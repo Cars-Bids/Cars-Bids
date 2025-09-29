@@ -78,8 +78,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenericRepository<Answer>, GenericRepository<Answer>>();
         services.AddScoped<IGenericRepository<Question>, GenericRepository<Question>>();
         services.AddScoped<IGenericRepository<ChatRequirements>, GenericRepository<ChatRequirements>>();
-        
-        
+        services.AddScoped<IGenericRepository<SavedSearch>, GenericRepository<SavedSearch>>();
+
+
+
         services.AddSingleton<IConnectionManager<ChatHub>, ConnectionManager<ChatHub>>();
         services.AddSingleton<IConnectionManager<NotificationHub>, ConnectionManager<NotificationHub>>();
 

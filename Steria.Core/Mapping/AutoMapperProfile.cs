@@ -9,6 +9,7 @@ using Steria.Core.CQRS.Makes;
 using Steria.Core.CQRS.Models;
 using Steria.Core.CQRS.NotificationTypes;
 using Steria.Core.CQRS.Profile;
+using Steria.Core.CQRS.Wishlists;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Enums;
@@ -191,6 +192,8 @@ public class AutoMapperProfile : Profile
                 .FirstOrDefault()))
             .ForMember(dest => dest.AddedAt, opt => opt.MapFrom(src => src.AddedAt));
 
+        CreateMap<CreateSavedSearchCommand, SavedSearch>();
+
 
         CreateMap<UserNotification, UserNotificationDto>()
             .ForMember(dest => dest.TypeKey, opt => opt.MapFrom(src => src.NotificationType.Key));
@@ -274,8 +277,18 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Interior, opt => opt.MapFrom(src => src.Car.InteriorColor))
             .ForMember(dest => dest.Exterior, opt => opt.MapFrom(src => src.Car.ExteriorColor))
             .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Car.Location))
+            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
+            .ForMember(dest => dest.CurrentBid, opt => opt.MapFrom(src => src.CurrentPrice))
             .ReverseMap();
-        
+
+        CreateMap<SavedSearch, SavedSearchDto>()
+            .ForMember(dest => dest.ModelName, opt => opt.MapFrom(src => src.Model != null ? src.Model.Name : null))
+            .ForMember(dest => dest.MakeName, opt => opt.MapFrom(src => src.Make.Name));
+
+        CreateMap<Wishlist, WishlistFilteredDto>()
+            .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction));
+
+        CreateMap<CreateWishlistCommand, Wishlist>();
 
     }
 }
