@@ -1,9 +1,9 @@
-﻿using Steria.Core.Constants;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Steria.Core.CQRS.Wishlists;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Steria.Core.Constants;
+using Steria.Core.CQRS.Wishlists;
 using System.Security.Claims;
 
 
@@ -33,8 +33,19 @@ public class WishlistController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateWishlistCommand request)
     {
+        int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+        request.UserId = userId;
         await mediator.Send(request);
         return Created();
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteByAuction([FromBody] DeleteWishlistByAuctionCommand request)
+    {
+        int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+        request.UserId = userId;
+        await mediator.Send(request);
+        return Ok();
     }
 
     [HttpPut]

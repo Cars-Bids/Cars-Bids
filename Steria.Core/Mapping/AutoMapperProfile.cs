@@ -289,6 +289,5 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction));
 
         CreateMap<CreateWishlistCommand, Wishlist>();
-
     }
 }
