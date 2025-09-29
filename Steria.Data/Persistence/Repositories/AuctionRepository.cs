@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Steria.Core.DTOs;
+﻿using Steria.Core.DTOs;
 using Steria.Core.Enums;
 using Steria.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Steria.Data.Persistence.Repositories;
 
@@ -17,17 +17,20 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
             {
                 Id = x.Id,
                 CarId = x.CarId,
+                SellerId = x.SellerId,
                 Status = x.Status.ToString(),
                 BidsCount = x.Bids!.Count,
                 Seller = x.Seller.UserName,
                 SellerPhoto = x.Seller.ProfilePictureUrl,
                 CurrentBidder = x.CurrentBidder,
-                CurrentBidderPhoto = x.Bids!.OrderBy(x => x.BidAmount).LastOrDefault()!.User.ProfilePictureUrl,
-                CurrentPrice = (decimal)x.CurrentPrice,
-                EndTime = (DateTime)x.EndTime,
+                CurrentBidderPhoto = x.Bids!.OrderByDescending(x => x.BidAmount).FirstOrDefault()!.User.ProfilePictureUrl,
+                CurrentPrice = x.CurrentPrice ?? x.StartPrice ?? 0,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime,
+                CurrentBidderId = x.Bids!.OrderByDescending(x => x.BidAmount).FirstOrDefault()!.UserId,
                 WatchersCount = x.Wishlists!.Count,
-                ViewsCount = 0,
-                IsSeller = x.Seller.Id == userId,
+                ViewsCount = x.Wishlists!.Count,
+                IsSeller = x.SellerId == userId,
                 IsInspected = x.IsInspected,
                 IsWatched = x.Wishlists!.Any(x => x.UserId == userId)
             })
@@ -70,6 +73,7 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
                 VideoLinks = x.VideoLinks!.Split(',', StringSplitOptions.TrimEntries),
                 Vin = x.Vin,
                 Year = x.Year,
+                About = x.About,
                 Title = $"{x.Year} {x.Model.Make.Name} {x.Model.Name}",
                 Subtitle = $"{x.Engine}, {x.Mileage} Miles, {x.Model.Name}, {x.TransmissionType.ToString()}, {x.Drivetrain.ToString()}"
             })
@@ -104,12 +108,12 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
         var res = await context.Questions.AsNoTracking()
             .Where(x => x.AuctionId == auctionId)
             .OrderByDescending(x => x.CreatedAt)
-            .Take(10)
             .Select(x => new QAData
             {
                 Id = x.Id,
                 Question = x.QuestionText,
                 Answer = x.Answer!.AnswerText,
+                AuthorId = x.UserId,
                 Author = x.User!.UserName,
                 AuthorPhoto = x.User.ProfilePictureUrl
             })
@@ -124,16 +128,40 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
 
         var res = await context.Comments.AsNoTracking()
             .Where(x => x.AuctionId == auctionId)
-            .OrderByDescending(x => x.CreatedAt)
-            .Take(10)
             .Select(x => new CommentData
             {
                 Id = x.Id,
+                AuthorId = x.UserId,
                 Author = x.User!.UserName,
                 AuthorPhoto = x.User.ProfilePictureUrl,
                 CreatedAt = x.CreatedAt,
                 Text = x.Text,
-                ReplyTo = x.ReplyedTo!.User.UserName
+                Bid = 0,
+                ReplyTo = x.ReplyedTo!.User.UserName,
+                Upvotes = x.CommentUpvotes.Count
+            })
+            .ToListAsync();
+
+        return res;
+    }
+
+    public async Task<List<CommentData>> GetBidsByAuctionIdAsync(int auctionId)
+    {
+        await using var context = await dbContextFactory.CreateDbContextAsync();
+
+        var res = await context.Bids.AsNoTracking()
+            .Where(x => x.AuctionId == auctionId)
+            .Select(x => new CommentData
+            {
+                Id = -x.Id,
+                AuthorId = x.UserId,
+                Author = x.User!.UserName,
+                AuthorPhoto = x.User.ProfilePictureUrl,
+                CreatedAt = x.BidTime,
+                Text = "",
+                Bid = x.BidAmount,
+                ReplyTo = null,
+                Upvotes = 0
             })
             .ToListAsync();
 
@@ -153,9 +181,9 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
             {
                 Id = x.Id,
                 MainPhoto = x.Car.Images!.OrderBy(x => x.ImageCategory).ThenBy(x => x.OrderNumber).FirstOrDefault()!.ImageUrl,
-                CurrentPrice = (decimal)x.CurrentPrice,
-                StartTime = (DateTime)x.StartTime,
-                EndTime = (DateTime)x.EndTime,
+                CurrentPrice = x.CurrentPrice ?? x.StartPrice ?? 0,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime,
                 IsInspected = x.IsInspected,
                 IsWatched = x.Wishlists!.Any(x => x.UserId == userId),
                 Location = x.Car.Location,
