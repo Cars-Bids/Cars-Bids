@@ -52,7 +52,7 @@ public class AuctionService(
 
             //Антиснайпер: подовжуємо, якщо менше 1 хв
             var remaining = auction.EndTime - DateTime.UtcNow;
-            if (((TimeSpan)remaining).TotalMinutes < 1)
+            if (remaining?.TotalMinutes < 1)
             {
                 auction.EndTime = DateTime.UtcNow.AddMinutes(1);
             }
@@ -84,7 +84,7 @@ public class AuctionService(
         return await auctionRepository.GetListBySpec<Auction>(spec);
     }
 
-    public async void UpdateStatus(int auctionId, AuctionStatus newStatus)
+    public async Task UpdateStatus(int auctionId, AuctionStatus newStatus)
     {
         var auction = await auctionRepository.GetByIdAsync(auctionId);
         if (auction is null) return;
