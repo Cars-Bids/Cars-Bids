@@ -54,23 +54,23 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
                 Drivetrain = x.Drivetrain.ToString(),
                 Brand = x.Model.Make.Name,
                 Engine = x.Engine,
-                Equipment = x.Equipment!.Split('\n', StringSplitOptions.TrimEntries),
-                Flaws = x.Flaws!.Split('\n', StringSplitOptions.TrimEntries),
-                Highlights = x.Highlights!.Split('\n', StringSplitOptions.TrimEntries),
-                SellerNotes = x.SellerNotes!.Split('\n', StringSplitOptions.TrimEntries),
+                Equipment = SplitString(x.Equipment, '\n'),
+                Flaws = SplitString(x.Flaws, '\n'),
+                Highlights = SplitString(x.Highlights, '\n'),
+                SellerNotes = SplitString(x.SellerNotes, '\n'),
                 InteriorColor = x.InteriorColor,
                 SellerPhoto = x.Owner.ProfilePictureUrl,
                 Location = x.Location,
                 SellerType = "Dealer",
-                OwnershipHistory = x.OwnershipHistory!.Split('\n', StringSplitOptions.TrimEntries),
+                OwnershipHistory = SplitString(x.OwnershipHistory, '\n'),
                 Mileage = x.Mileage,
-                ServiceHistory = x.ServiceHistory!.Split('\n', StringSplitOptions.TrimEntries),
+                ServiceHistory = SplitString(x.ServiceHistory, '\n'),
                 Model = x.Model.Name,
-                Modifications = x.Modifications!.Split('\n', StringSplitOptions.TrimEntries),
+                Modifications = SplitString(x.Modifications, '\n'),
                 TitleStatus = "Clean (WA)",
-                OtherItems = x.OtherItems!.Split('\n', StringSplitOptions.TrimEntries),
+                OtherItems = SplitString(x.OtherItems, '\n'),
                 TransmissionType = x.TransmissionType.ToString(),
-                VideoLinks = x.VideoLinks!.Split(',', StringSplitOptions.TrimEntries),
+                VideoLinks = SplitString(x.VideoLinks, ','),
                 Vin = x.Vin,
                 Year = x.Year,
                 About = x.About,
@@ -80,6 +80,13 @@ public class AuctionRepository(IDbContextFactory<ApplicationDbContext> dbContext
             .FirstOrDefaultAsync();
 
         return res;
+    }
+
+    private static string[] SplitString(string? text, char c)
+    {
+        return string.IsNullOrWhiteSpace(text)
+            ? []
+            : text.Split(c, StringSplitOptions.TrimEntries);
     }
 
     public async Task<List<CarImageData>> GetCarImagesByCarIdAsync(int carId)
