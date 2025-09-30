@@ -28,7 +28,8 @@ public class GetManagingAuctionQueryHandler(IMapper mapper,
         var imgSpec = new CarImagesByCardIdFullSpec(auction.CarId);
         var images = await imageRepository.GetListBySpec(imgSpec, cancellationToken);
 
-        dto.CarMainPhotoUrl = images.FirstOrDefault(x => x.ImageCategory == ImageCategory.Main).ImageUrl;
+        dto.CarMainPhotoUrl = images.FirstOrDefault(x => x.ImageCategory == ImageCategory.Main)?.ImageUrl;
+ 
 
         dto.CarExteriorPhotoUrls =
             mapper.Map<List<CarImageDto>>(images.Where(x => x.ImageCategory == ImageCategory.Exterior));

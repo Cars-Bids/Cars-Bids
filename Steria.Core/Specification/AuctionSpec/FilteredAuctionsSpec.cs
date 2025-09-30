@@ -2,11 +2,7 @@
 using Steria.Core.CQRS.Auctions;
 using Steria.Core.Entities;
 using Steria.Core.Enums;
-using Steria.Core.Specification.CommonSpec;
 using Steria.Core.Specification.СommonSpec;
-using System;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
 namespace Steria.Core.Specification.AuctionSpec;
 
 public class FilteredAuctionsSpec : PagedSpec<Auction>
@@ -23,10 +19,8 @@ public class FilteredAuctionsSpec : PagedSpec<Auction>
             .ThenInclude(c => c.BodyStyle)
             .AsNoTracking();
 
-        // Фільтрація по статусу (активні аукціони)
         //Query.Where(a => a.Status == AuctionStatus.Active);
 
-        // Фільтрація по Transmission
         if (!string.IsNullOrWhiteSpace(query.Transmission))
         {
             if (Enum.TryParse<TransmissionType>(query.Transmission, true, out var transmissionType))
@@ -35,13 +29,11 @@ public class FilteredAuctionsSpec : PagedSpec<Auction>
             }
         }
 
-        // Фільтрація по BodyStyle
         if (!string.IsNullOrWhiteSpace(query.BodyStyle))
         {
             Query.Where(a => a.Car.BodyStyle.StyleName == query.BodyStyle);
         }
 
-        // Фільтрація по Mileage
         if (query.MinMileage.HasValue)
         {
             Query.Where(a => a.Car.Mileage >= query.MinMileage.Value);
@@ -51,7 +43,6 @@ public class FilteredAuctionsSpec : PagedSpec<Auction>
             Query.Where(a => a.Car.Mileage <= query.MaxMileage.Value);
         }
 
-        // Фільтрація по Make/Model
         if (!string.IsNullOrWhiteSpace(query.MakeModelSearch))
         {
             var searchTerms = query.MakeModelSearch.Trim().ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -62,20 +53,42 @@ public class FilteredAuctionsSpec : PagedSpec<Auction>
             }
         }
 
-        // Сортування
-        if (string.IsNullOrWhiteSpace(query.SortBy) || query.SortBy == "CreatedAt")
+        switch (query.SortBy)
         {
-            if (query.SortDescending)
-                Query.OrderByDescending(a => a.CreatedAt);
-            else
-                Query.OrderBy(a => a.CreatedAt);
-        }
-        else if (query.SortBy == "Year")
-        {
-            if (query.SortDescending)
-                Query.OrderByDescending(a => a.Car.Year);
-            else
-                Query.OrderBy(a => a.Car.Year);
+            case "EndingSoon":
+                if (query.SortDescending)
+                    Query.OrderByDescending(a => a.EndTime);
+                else
+                    Query.OrderBy(a => a.EndTime);
+                break;
+
+            case "NewCars":
+                if (query.SortDescending)
+                    Query.OrderByDescending(a => a.CreatedAt);
+                else
+                    Query.OrderBy(a => a.CreatedAt);
+                break;
+
+            case "Inspected":
+                if (query.SortDescending)
+                    Query.OrderByDescending(a => a.IsInspected);
+                else
+                    Query.OrderBy(a => a.IsInspected);
+                break;
+
+            case "Year":
+                if (query.SortDescending)
+                    Query.OrderByDescending(a => a.Car.Year);
+                else
+                    Query.OrderBy(a => a.Car.Year);
+                break;
+
+            default:
+                if (query.SortDescending)
+                    Query.OrderByDescending(a => a.CreatedAt);
+                else
+                    Query.OrderBy(a => a.CreatedAt);
+                break;
         }
     }
 }
