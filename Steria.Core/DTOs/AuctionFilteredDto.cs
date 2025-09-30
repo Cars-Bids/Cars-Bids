@@ -19,5 +19,7 @@ public class AuctionFilteredDto
     public string? Exterior { get; set; }
     public string? Location { get; set; }
     public DateTime? EndTime { get; set; } = null!;
+    public DateTime? StartTime { get; set; } = null!;
+
     public decimal? CurrentBid { get; set; }
 }

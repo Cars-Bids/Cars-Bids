@@ -278,6 +278,7 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Exterior, opt => opt.MapFrom(src => src.Car.ExteriorColor))
             .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Car.Location))
             .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
+            .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
             .ForMember(dest => dest.CurrentBid, opt => opt.MapFrom(src => src.CurrentPrice))
             .ReverseMap();
 
