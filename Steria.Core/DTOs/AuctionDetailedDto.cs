@@ -68,14 +68,14 @@ public class CarData
     public required string[] VideoLinks { get; set; }
 
 
-    public required string[] Highlights { get; set; }
-    public required string[] ServiceHistory { get; set; }
-    public required string[] Equipment { get; set; }
-    public required string[] Flaws { get; set; }
-    public required string[] Modifications { get; set; }
-    public required string[] OtherItems { get; set; }
-    public required string[] OwnershipHistory { get; set; }
-    public required string[] SellerNotes { get; set; }
+    public required string? Highlights { get; set; }
+    public required string? ServiceHistory { get; set; }
+    public required string? Equipment { get; set; }
+    public required string? Flaws { get; set; }
+    public required string? Modifications { get; set; }
+    public required string? OtherItems { get; set; }
+    public required string? OwnershipHistory { get; set; }
+    public required string? SellerNotes { get; set; }
 
     public required string Title { get; set; }
     public required string Subtitle { get; set; }
