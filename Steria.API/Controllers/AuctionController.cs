@@ -120,4 +120,34 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         await mediator.Send(new ApproveAuctionByManagerQuery { AuctionId = auctionId });
         return Ok();
     }
+    
+    [HttpGet("filtered")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetFilteredAuctions(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? makeModelSearch = null,
+        [FromQuery] string? transmission = null,
+        [FromQuery] string? bodyStyle = null,
+        [FromQuery] int? minMileage = null,
+        [FromQuery] int? maxMileage = null,
+        [FromQuery] string? sortBy = "CreatedAt",
+        [FromQuery] bool sortDescending = true)
+    {
+        var query = new GetFilteredAuctionsQuery
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            MakeModelSearch = makeModelSearch,
+            Transmission = transmission,
+            BodyStyle = bodyStyle,
+            MinMileage = minMileage,
+            MaxMileage = maxMileage,
+            SortBy = sortBy,
+            SortDescending = sortDescending
+        };
+
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
 }

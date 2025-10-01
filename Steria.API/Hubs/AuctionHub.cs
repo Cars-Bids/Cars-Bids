@@ -39,17 +39,12 @@ public class AuctionHub(IAuctionService auctionService,
         var auction = await auctionService.GetById(auctionId);
 
         await Clients.Caller.SendAsync("BidPlaced",
-            auctionId,
-            auction!.CurrentPrice,
-            auction.CurrentBidder ?? "unknown",
-            auction.EndTime
+            auctionId
         );
 
         await Clients.OthersInGroup($"auction-{auctionId}").SendAsync("NewBidReceived",
             auctionId,
-            auction!.CurrentPrice,
-            auction.CurrentBidder ?? "unknown",
-            auction.EndTime
+            auction!.CurrentPrice
         );
 
         var auc = (await repository.GetAsync(filter: x => x.Id == auctionId, includeProperties: "Car.Model.Make")).FirstOrDefault();

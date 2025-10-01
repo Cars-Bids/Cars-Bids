@@ -13,9 +13,10 @@ public class UserInReviewCarsSpec : PagedSpec<Car>
         Query
             .Where(car => car.OwnerId == userId &&
                 (
-                    car.Status == CarStatus.inReview
+                    (car.Status == CarStatus.inReview 
                     || car.Status == CarStatus.inPending
-                    || (car.Auction.Status == AuctionStatus.Pending && car.Status == CarStatus.Approved)
+                    || (car.Auction.Status == AuctionStatus.Pending && car.Status == CarStatus.Approved)) 
+                    && car.Auction.Status != AuctionStatus.Active
                 )
             )
             .Include(car => car.Model)

@@ -24,12 +24,14 @@ public class GetAuctionDetailedByIdQueryHandler(
 
         CarData? car = null;
         List<CommentData> comments = [];
+        List<CommentData> bids = [];
         List<OtherAuction> auctions = [];
         List<CarImageData> images = [];
         List<QAData> qa = [];
 
         async Task LoadCar() => car = await repo.GetAuctionCarByIdAsync(action.CarId);
         async Task LoadComments() => comments = await repo.GetCommentsByAuctionIdAsync(request.AuctionId);
+        async Task LoadBids() => bids = await repo.GetBidsByAuctionIdAsync(request.AuctionId);
         async Task LoadImages() => images = await repo.GetCarImagesByCarIdAsync(action.CarId);
         async Task LoadQA() => qa = await repo.GetQaByAuctionIdAsync(request.AuctionId);
         async Task LoadOtherAuctions() => auctions = await repo.GetOtherAuctionsAsync(request.AuctionId, request.UserId);
@@ -37,6 +39,7 @@ public class GetAuctionDetailedByIdQueryHandler(
         await Task.WhenAll(
             LoadCar(),
             LoadComments(),
+            LoadBids(),
             LoadImages(),
             LoadQA(),
             LoadOtherAuctions()
@@ -46,7 +49,7 @@ public class GetAuctionDetailedByIdQueryHandler(
         {
             Auction = action,
             Car = car!,
-            Comments = comments,
+            Comments = comments.Concat(bids).OrderByDescending(x => x.CreatedAt).ToList(),
             Auctions = auctions,
             Images = images,
             Qa = qa

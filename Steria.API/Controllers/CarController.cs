@@ -35,6 +35,14 @@ public class CarController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("manager/{id}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> GetManagerById([FromRoute] int id)
+    {
+        var result = await mediator.Send(new GetCarByIdManagerQuery { Id = id });
+        return Ok(result);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] CreateCarCommand request)
     {

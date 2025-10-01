@@ -11,8 +11,8 @@ public class CreateAuctionCommand : IRequest
     public int CarId { get; set; }
     public int SellerId { get; set; }
     public decimal StartPrice { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public DateTime? StartTime { get; set; }
+    public DateTime? EndTime { get; set; }
     public AuctionStatus Status { get; set; } = AuctionStatus.Pending;
 }
 

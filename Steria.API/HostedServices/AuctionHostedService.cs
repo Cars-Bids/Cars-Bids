@@ -24,13 +24,13 @@ public class AuctionHostedService(
                 //start pending auctions
                 if (auction.Status is AuctionStatus.Pending && auction.StartTime <= DateTime.UtcNow)
                 {
-                    auctionService.UpdateStatus(auction.Id, AuctionStatus.Active);
+                    await auctionService.UpdateStatus(auction.Id, AuctionStatus.Active);
 
                     await hubContext.Clients.Group($"auction-{auction.Id}").SendAsync("AuctionStarted",
                         auction.Id,
                         auction.StartPrice,
-                        auction.EndTime, 
-                    cancellationToken);
+                        auction.EndTime,
+                    cancellationToken);                   
                 }
 
                 //finish expired auctions
@@ -40,7 +40,7 @@ public class AuctionHostedService(
                         ? AuctionStatus.Sold
                         : AuctionStatus.NotSold;
 
-                    auctionService.UpdateStatus(auction.Id, finalStatus);
+                    await auctionService.UpdateStatus(auction.Id, finalStatus);
 
                     await hubContext.Clients.Group($"auction-{auction.Id}").SendAsync("AuctionFinished",
                         auction.Id,

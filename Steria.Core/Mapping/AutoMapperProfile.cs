@@ -11,6 +11,7 @@ using Steria.Core.CQRS.Makes;
 using Steria.Core.CQRS.Models;
 using Steria.Core.CQRS.NotificationTypes;
 using Steria.Core.CQRS.Profile;
+using Steria.Core.CQRS.Wishlists;
 using Steria.Core.DTOs;
 using Steria.Core.Entities;
 using Steria.Core.Enums;
@@ -193,6 +194,8 @@ public class AutoMapperProfile : Profile
                 .FirstOrDefault()))
             .ForMember(dest => dest.AddedAt, opt => opt.MapFrom(src => src.AddedAt));
 
+        CreateMap<CreateSavedSearchCommand, SavedSearch>();
+
 
         CreateMap<UserNotification, UserNotificationDto>()
             .ForMember(dest => dest.TypeKey, opt => opt.MapFrom(src => src.NotificationType.Key))
@@ -250,7 +253,47 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction))
             .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId));
 
+        CreateMap<Car, CarManagerDto>()
+            .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner.UserName))
+            .ForMember(dest => dest.BodyStyle, opt => opt.MapFrom(src => src.BodyStyle != null ? src.BodyStyle.StyleName : string.Empty))
+            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model != null ? src.Model.Name : string.Empty))
+            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make != null ? src.Model.Make.Name : string.Empty))
+            .ReverseMap();
+
         CreateMap<Answer, AddAnswerCommand>().ReverseMap();
         CreateMap<Question, AddQuestionCommand>().ReverseMap();
+
+        CreateMap<Auction, AuctionFilteredDto>()//Не чіпайте цей блок чогось не мапить якщо вручну не пропишеш
+            .ForMember(dest => dest.AuctionId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src => src.Car.Images.FirstOrDefault(img => img.ImageCategory == ImageCategory.Main) != null
+                ? src.Car.Images.FirstOrDefault(img => img.ImageCategory == ImageCategory.Main).ImageUrl
+                : null))
+            .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Car.Year))
+            .ForMember(dest => dest.ModelId, opt => opt.MapFrom(src => src.Car.ModelId))
+            .ForMember(dest => dest.ModelName, opt => opt.MapFrom(src => src.Car.Model.Name))
+            .ForMember(dest => dest.MakeId, opt => opt.MapFrom(src => src.Car.Model.MakeId))
+            .ForMember(dest => dest.MakeName, opt => opt.MapFrom(src => src.Car.Model.Make.Name))
+            .ForMember(dest => dest.Inspected, opt => opt.MapFrom(src => src.IsInspected))
+            .ForMember(dest => dest.Transmission, opt => opt.MapFrom(src => src.Car.TransmissionType.ToString()))
+            .ForMember(dest => dest.Mileage, opt => opt.MapFrom(src => src.Car.Mileage))
+            .ForMember(dest => dest.NumberOfGears, opt => opt.MapFrom(src => src.Car.Speeds))
+            .ForMember(dest => dest.Engine, opt => opt.MapFrom(src => src.Car.Engine))
+            .ForMember(dest => dest.BodyStyleName, opt => opt.MapFrom(src => src.Car.BodyStyle.StyleName))
+            .ForMember(dest => dest.Interior, opt => opt.MapFrom(src => src.Car.InteriorColor))
+            .ForMember(dest => dest.Exterior, opt => opt.MapFrom(src => src.Car.ExteriorColor))
+            .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Car.Location))
+            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
+            .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
+            .ForMember(dest => dest.CurrentBid, opt => opt.MapFrom(src => src.CurrentPrice))
+            .ReverseMap();
+
+        CreateMap<SavedSearch, SavedSearchDto>()
+            .ForMember(dest => dest.ModelName, opt => opt.MapFrom(src => src.Model != null ? src.Model.Name : null))
+            .ForMember(dest => dest.MakeName, opt => opt.MapFrom(src => src.Make.Name));
+
+        CreateMap<Wishlist, WishlistFilteredDto>()
+            .ForMember(dest => dest.Auction, opt => opt.MapFrom(src => src.Auction));
+
+        CreateMap<CreateWishlistCommand, Wishlist>();
     }
 }
