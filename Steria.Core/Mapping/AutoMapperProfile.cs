@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using AutoMapper;
 using Steria.Core.CQRS.Account;
 using Steria.Core.CQRS.Auctions;
 using Steria.Core.CQRS.BodyStyles;
@@ -193,7 +195,9 @@ public class AutoMapperProfile : Profile
 
 
         CreateMap<UserNotification, UserNotificationDto>()
-            .ForMember(dest => dest.TypeKey, opt => opt.MapFrom(src => src.NotificationType.Key));
+            .ForMember(dest => dest.TypeKey, opt => opt.MapFrom(src => src.NotificationType.Key))
+            .ForMember(dest => dest.RedirectRoute, opt => opt.MapFrom(src => src.NotificationType.RedirectRoute))
+            .ForMember(dest => dest.CustomData, opt => opt.MapFrom(src => src.CustomDataJson));
 
 
         CreateMap<Car, CarPreviewDto>()
@@ -215,10 +219,11 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.BidderId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.BidderName, opt => opt.MapFrom(src => src.User.UserName))
             .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.BidAmount));
-        
+
         CreateMap<RequestNewCarCommand, Car>()
             .ForMember(dest => dest.TransmissionType, opt => opt.MapFrom(src => (TransmissionType)src.transmissionId))
-            .ForMember(dest => dest.Images, opt => opt.Ignore());
+            .ForMember(dest => dest.Images, opt => opt.Ignore())
+            .ForMember(dest => dest.SellerNotes, opt => opt.MapFrom(src => src.description));
 
         CreateMap<Auction, AuctionWithCarDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));

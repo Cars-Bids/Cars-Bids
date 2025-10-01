@@ -115,5 +115,22 @@ public class ChatController(IMediator mediator, IHubContext<ChatHub> chatHubCont
         
         return Ok();
     }
+    
+    [Authorize]
+    [HttpGet("{chatId}/ChatInfo")]
+    public async Task<IActionResult> GetChatInfo(int chatId)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        
+        var isUserInChat = await mediator.Send(new IsUserInChatQuery { ChatId = chatId, UserId = userId });
+        if (!isUserInChat)
+        {
+            return Forbid("User is not a participant of this chat.");
+        }
+
+        var info = await mediator.Send(new ChatInfoQuery { ChatId = chatId, CurentUser = userId });
+
+        return Ok(info);
+    }
 
 }

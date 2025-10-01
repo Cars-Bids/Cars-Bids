@@ -25,8 +25,6 @@ public class ProfileController(IMediator mediator, ICacheService cacheService) :
         return Ok(result);
     }
 
-
-
     [HttpPut]
     public async Task<IActionResult> Update([FromForm] UpdateProfileCommand request)
     {

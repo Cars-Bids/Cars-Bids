@@ -1,11 +1,16 @@
 using System.Collections.Concurrent;
 using System.Security.Claims;
+using System.Text.Json;
 using Steria.Core.CQRS.Chat;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Steria.Core.CQRS.Notification;
+using Steria.Core.Entities;
+using Steria.Core.Enums;
+using Steria.Core.Notifications_Custom_Data;
 
 namespace Steria.API.Hubs;
 
@@ -47,6 +52,31 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
             });
 
             await Clients.Group("Chat" + chatId).SendAsync("ReceiveMessage", newMessage);
+            
+            /*var chatUserIds = await mediator.Send(new GetChatUserIdsQuery { ChatId = chatId });
+            var otherUserIds = chatUserIds.Where(id => id != senderId).ToList();
+
+            var chat = await mediator.Send(new ChatInfoQuery { ChatId = chatId, CurentUser = senderId });
+            
+            var onlineOtherUsers = _userConnections.Keys.Intersect(otherUserIds).ToList();
+
+            if (onlineOtherUsers.Count > 0)
+            {
+                await Clients.Group("Chat" + chatId).SendAsync("ReceiveMessage", newMessage);
+            }
+            else
+            {
+                foreach (var userId in otherUserIds)
+                {
+                    var customData = new ChatData
+                    { 
+                        ChatId = chatId, 
+                        AuctionTitle = $"{chat.Make} {chat.Model}"
+                    };
+                    
+                    await mediator.Send(new CreateNotificationCommand { NotificationTypeKey = "ChatMessage", CustomData = customData, UserId = userId});
+                }
+            }*/
         }
         catch (Exception ex)
         {
@@ -133,9 +163,10 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
     public async Task SendTypingStatus(int chatId, bool isTyping)
     {
         int userId = GetUserId(Context);
+        string? username = GetUsername(Context);
 
         await Clients.OthersInGroup("Chat" + chatId).SendAsync("ReceiveTypingStatus",
-            new { ChatId = chatId, UserId = userId, isTyping = isTyping });
+            new { ChatId = chatId, UserId = userId, isTyping = isTyping, username = username });
     }
 
     public async Task ReadMessage(int chatId, int messageId)
@@ -178,6 +209,43 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
         }
     }
     
+    public async Task ReadAllMessages(int chatId)
+    {
+        var userId = GetUserId(Context);
+
+        try
+        {
+            var command = new ReadAllMessagesCommand { ChatId = chatId, UserId = userId };
+            var readMessageIds = await mediator.Send(command);
+
+            // Notify other users in the chat that this user has read all messages
+            await Clients.OthersInGroup("Chat" + chatId).SendAsync("AllMessagesRead", 
+                new { ChatId = chatId, UserId = userId, MessageIds = readMessageIds });
+        }
+        catch (Exception ex)
+        {
+            await Clients.Caller.SendAsync("ReadAllRejected", "An unexpected error occurred while marking messages as read.");
+            Console.WriteLine($"Error marking all messages as read: {ex.Message}");
+        }
+    }
+    
+    public async Task GetUnreadCount(int chatId)
+    {
+        var userId = GetUserId(Context);
+
+        try
+        {
+            var query = new GetUnreadMessageCountQuery { ChatId = chatId, UserId = userId };
+            var unreadCount = await mediator.Send(query);
+
+            await Clients.Caller.SendAsync("UnreadCount", new { ChatId = chatId, Count = unreadCount });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error getting unread count: {ex.Message}");
+        }
+    }
+    
     public override async Task OnConnectedAsync()
     {
         var userId = GetUserId(Context);
@@ -217,4 +285,10 @@ public class ChatHub(IMediator mediator) : Hub //TODO: add connectionManager ins
     {
         return int.Parse(context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     }
+    
+    private string? GetUsername(HubCallerContext context)
+    {
+        return context.User?.FindFirst("username")?.Value;
+    }
+
 }

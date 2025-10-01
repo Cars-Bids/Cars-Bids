@@ -18,14 +18,6 @@ public class UserNotification
 
     public User User { get; set; } = null!;
     public NotificationType NotificationType { get; set; } = null!;
-   
-    
-    [NotMapped]
-    public INotificationCustomData? CustomData
-    {
-        get => DeserializeCustomData();
-        set => CustomDataJson = JsonSerializer.Serialize(value);
-    }
     
     private INotificationCustomData? DeserializeCustomData()
     {

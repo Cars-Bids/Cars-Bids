@@ -28,7 +28,7 @@ public class CreateMessageReactionCommandHandler(
 
         var spec = new GetChatMessageWithUserReactionSpec(request.ReaderId, request.MessageId);
         
-        var msg = await chatMessageRepository.GetItemBySpec(spec)
+        var msg = await chatMessageRepository.GetItemBySpec(spec, cancellationToken)
             ?? throw new HubException(Resource.MessageNotFound);
         
         if (msg.SenderId == request.ReaderId)

@@ -7,6 +7,7 @@ public enum NotificationSource
     AuctionComment,
     Profile,
     Search,
+    Chat,
     Community,
     CommunityComment,
     None

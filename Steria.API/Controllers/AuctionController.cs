@@ -112,4 +112,12 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         await mediator.Send(request);
         return Created();
     }
+
+    [Authorize(Roles = "Manager")]
+    [HttpPost("approve-auction/{auctionId}")]
+    public async Task<IActionResult> ManagerApprove([FromRoute] int auctionId)
+    {
+        await mediator.Send(new ApproveAuctionByManagerQuery { AuctionId = auctionId });
+        return Ok();
+    }
 }
