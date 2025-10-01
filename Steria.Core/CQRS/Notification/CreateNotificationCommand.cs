@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -40,7 +41,7 @@ public class CreateNotificationCommandHandler(IGenericRepository<NotificationTyp
             {
                 UserId = request.UserId,
                 NotificationTypeId = notifType.Id,
-                CustomData = request.CustomData
+                CustomDataJson = JsonSerializer.Serialize(request.CustomData, request.CustomData.GetType())
             };
 
             await userNotifRepository.InsertAsync(notification);

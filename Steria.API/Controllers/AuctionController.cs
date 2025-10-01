@@ -113,6 +113,14 @@ public class AuctionsController(IMediator mediator) : ControllerBase
         return Created();
     }
 
+    [Authorize(Roles = "Manager")]
+    [HttpPost("approve-auction/{auctionId}")]
+    public async Task<IActionResult> ManagerApprove([FromRoute] int auctionId)
+    {
+        await mediator.Send(new ApproveAuctionByManagerQuery { AuctionId = auctionId });
+        return Ok();
+    }
+    
     [HttpGet("filtered")]
     [AllowAnonymous]
     public async Task<IActionResult> GetFilteredAuctions(

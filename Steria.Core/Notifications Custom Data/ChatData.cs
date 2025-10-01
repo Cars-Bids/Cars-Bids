@@ -2,8 +2,8 @@
 
 namespace Steria.Core.Notifications_Custom_Data;
 
-public class AuctionData : INotificationCustomData
+public class ChatData : INotificationCustomData
 {
-    public int AuctionId { get; set; }
+    public int ChatId { get; set; }
     public string AuctionTitle { get; set; }
 }

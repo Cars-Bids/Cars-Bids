@@ -3,11 +3,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Steria.Core.Interfaces;
 using System.Security.Claims;
+using MediatR;
+using Steria.Core.CQRS.Auctions;
+using Steria.Core.CQRS.Notification;
+using Steria.Core.Entities;
+using Steria.Core.Notifications_Custom_Data;
 
 namespace Steria.API.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class AuctionHub(IAuctionService auctionService) : Hub
+public class AuctionHub(IAuctionService auctionService,
+                        IMediator mediator,
+                        IGenericRepository<Auction> repository) : Hub
 {
     public async Task PlaceBid(int auctionId, decimal amount)
     {
@@ -18,6 +25,8 @@ public class AuctionHub(IAuctionService auctionService) : Hub
             await Clients.Caller.SendAsync("BidRejected", "You are not authorized to participate in the auction");
             return;
         }
+
+        var previousUserId = await mediator.Send(new LastAuctionBidderIdQuery { AuctionId = auctionId });
 
         var (isSuccess, error) = await auctionService.TryPlaceBid(auctionId, amount, userName, userId.Value);
 
@@ -37,6 +46,17 @@ public class AuctionHub(IAuctionService auctionService) : Hub
             auctionId,
             auction!.CurrentPrice
         );
+
+        var auc = (await repository.GetAsync(filter: x => x.Id == auctionId, includeProperties: "Car.Model.Make")).FirstOrDefault();
+        
+        var auctionData = new AuctionData
+        {
+            AuctionId = auctionId,
+            AuctionTitle = $"{auc?.Car.Model.Make.Name} {auc?.Car.Model.Name}"
+        };
+        
+        await mediator.Send(new CreateNotificationCommand
+            { CustomData = auctionData, UserId = previousUserId, NotificationTypeKey = "Outbid" });
     }
 
     public override async Task OnConnectedAsync()

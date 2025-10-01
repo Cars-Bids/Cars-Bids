@@ -9,5 +9,5 @@ public class UserNotificationDto
     public string RedirectRoute { get; set; } = null!;
     public bool IsRead { get; set; }
     public DateTime CreatedAt { get; set; }
-    public INotificationCustomData? CustomData { get; set; }
+    public string? CustomData { get; set; }
 }

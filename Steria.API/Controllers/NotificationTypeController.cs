@@ -9,7 +9,7 @@ namespace Steria.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Manager")]
 public class NotificationTypeController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
