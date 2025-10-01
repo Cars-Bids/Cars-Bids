@@ -20,6 +20,12 @@ public class FilteredAuctionsSpec : PagedSpec<Auction>
             .AsNoTracking();
 
         //Query.Where(a => a.Status == AuctionStatus.Active);
+        Query.Where(a =>
+            a.Status == AuctionStatus.Active ||
+            a.Status == AuctionStatus.Pending ||
+            a.Status == AuctionStatus.NotSold ||
+            a.Status == AuctionStatus.Sold
+        );
 
         if (!string.IsNullOrWhiteSpace(query.Transmission))
         {
